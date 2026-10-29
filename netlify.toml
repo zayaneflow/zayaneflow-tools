@@ -1,0 +1,14 @@
+[build]
+  publish = "."
+
+[[headers]]
+  for = "/media/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
+# the build source is for GitHub, not for visitors
+[[redirects]]
+  from = "/source/*"
+  to = "/404.html"
+  status = 404
+  force = true

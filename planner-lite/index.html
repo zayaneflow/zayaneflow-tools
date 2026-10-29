@@ -1,0 +1,850 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}#nl-badge-frame{display:none!important}</style>
+<meta name="description" content="The booked meetings planner without the 3D view. Loads fast on any phone. Free.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Zayaneflow Tools">
+<meta property="og:title" content="60-Day Booked Meetings Planner (light)">
+<meta property="og:description" content="The booked meetings planner without the 3D view. Loads fast on any phone. Free.">
+<meta property="og:url" content="https://zayaneflow-tools.netlify.app/planner-lite/">
+<meta property="og:image" content="https://zayaneflow-tools.netlify.app/media/og-planner.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://zayaneflow-tools.netlify.app/planner-lite/">
+<title>60-Day Booked Meetings Planner (light)</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22plg%22%20x1%3D%220%22%20y1%3D%221%22%20x2%3D%221%22%20y2%3D%220%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22%2341b6cc%22/%3E%3Cstop%20offset%3D%22.55%22%20stop-color%3D%22%23f0a03c%22/%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23ffd57f%22/%3E%3C/linearGradient%3E%3ClinearGradient%20id%3D%22plb%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%220%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22%231b2228%22/%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%230d1115%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20x%3D%221%22%20y%3D%221%22%20width%3D%2246%22%20height%3D%2246%22%20rx%3D%2212%22%20fill%3D%22url%28%23plb%29%22%20stroke%3D%22%232f3a43%22/%3E%3Cpath%20d%3D%22M9%2016V9h7M32%209h7v7M39%2032v7h-7M16%2039H9v-7%22%20fill%3D%22none%22%20stroke%3D%22%235f6b75%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22/%3E%3Cpath%20d%3D%22M13%2033h6v-5h6v-5h6v-5h3%22%20fill%3D%22none%22%20stroke%3D%22url%28%23plg%29%22%20stroke-width%3D%223.2%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3Ccircle%20cx%3D%2235.5%22%20cy%3D%2218%22%20r%3D%223.4%22%20fill%3D%22%23ffd57f%22/%3E%3Ccircle%20cx%3D%2235.5%22%20cy%3D%2218%22%20r%3D%226%22%20fill%3D%22%23ffd57f%22%20opacity%3D%22.18%22/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Martian+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: an editing-suite screen. Viewfinder hero with the answer (meetings → projects → revenue),
+   faders on the left, a 12-month timeline on the right, the engine room below in Full plan.
+   Teal-to-amber grade: cold leads warm up into signed projects. Single dark theme by choice. */
+:root{
+  color-scheme:dark;
+  --bg:#0b0e11; --panel:#13181c; --panel-2:#192026; --inset:#080a0d;
+  --line:#232b32; --line-2:#34404a;
+  --fg:#eaedef; --muted:#8e99a1; --faint:#5f6b75;
+  --deep:#4a8db5; --mid:#44a6c6; --cold:#41b6cc; --warm:#f0a03c; --hot:#ffd57f;
+  --on-warm:#1c1206; --warm-soft:rgba(240,160,60,.12);
+  --display:"Big Shoulders Display","Arial Narrow","Roboto Condensed",Impact,sans-serif;
+  --sans:"Instrument Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --mono:"Martian Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box}
+html{background:var(--bg)}
+body{
+  background:
+    radial-gradient(1100px 560px at 0% -10%, rgba(65,182,204,.13), transparent 62%),
+    radial-gradient(1000px 640px at 100% 110%, rgba(240,160,60,.10), transparent 62%),
+    var(--bg);
+  color:var(--fg);font-family:var(--sans);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  padding-block:22px 56px;min-height:100vh;
+}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:60;opacity:.07;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+.wrap{max-width:1200px;margin:0 auto;display:grid;gap:22px}
+button,select,input{font:inherit}
+:focus-visible{outline:2px solid var(--hot);outline-offset:2px}
+
+/* top bar */
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.logo{width:30px;height:30px;flex:none;filter:drop-shadow(0 4px 14px rgba(0,0,0,.5))}
+.mark{display:flex;align-items:center;gap:12px;font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase}
+.mark i{width:8px;height:8px;border-radius:50%;background:#ff4d3d;box-shadow:0 0 12px #ff4d3d;animation:rec 1.6s ease-in-out infinite}
+@keyframes rec{50%{opacity:.25}}
+.ctrls{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.seg{display:inline-flex;background:var(--inset);border:1px solid var(--line);border-radius:999px;padding:3px}
+.seg button{font-size:13px;font-weight:500;color:var(--muted);background:none;border:0;border-radius:999px;padding:6px 14px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--panel-2);color:var(--fg);box-shadow:inset 0 0 0 1px var(--line-2)}
+.sel{appearance:none;-webkit-appearance:none;background:var(--inset) url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6'><path d='M1 1l4 4 4-4' fill='none' stroke='%238e99a1' stroke-width='1.5'/></svg>") no-repeat right 12px center;
+  border:1px solid var(--line);border-radius:999px;color:var(--fg);font-size:13px;font-weight:500;padding:7px 30px 7px 12px;max-width:200px;cursor:pointer}
+.sel option,.sel optgroup{background:#13181c;color:var(--fg)}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* hero: the answer, in a viewfinder */
+.hero{position:relative;display:grid;gap:18px;padding:26px clamp(16px,3vw,30px) 24px}
+.hero::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background:
+    linear-gradient(var(--line-2),var(--line-2)) top left/22px 1.5px no-repeat,
+    linear-gradient(var(--line-2),var(--line-2)) top left/1.5px 22px no-repeat,
+    linear-gradient(var(--line-2),var(--line-2)) top right/22px 1.5px no-repeat,
+    linear-gradient(var(--line-2),var(--line-2)) top right/1.5px 22px no-repeat,
+    linear-gradient(var(--line-2),var(--line-2)) bottom left/22px 1.5px no-repeat,
+    linear-gradient(var(--line-2),var(--line-2)) bottom left/1.5px 22px no-repeat,
+    linear-gradient(var(--line-2),var(--line-2)) bottom right/22px 1.5px no-repeat,
+    linear-gradient(var(--line-2),var(--line-2)) bottom right/1.5px 22px no-repeat}
+.hero-top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.eyebrow{margin:0;font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.presets{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.presets span{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);margin-right:4px}
+.chip{border:1px solid var(--line-2);background:var(--inset);color:var(--muted);border-radius:999px;padding:5px 12px;font-family:var(--mono);font-size:12px;cursor:pointer;transition:all .15s}
+.chip:hover{color:var(--fg);border-color:var(--muted)}
+.chip[aria-pressed="true"]{border-color:var(--warm);color:var(--hot);background:var(--warm-soft)}
+.chain{display:grid;grid-template-columns:auto minmax(min-content,1fr) auto minmax(min-content,1fr) auto;align-items:center}
+.link{display:grid;gap:12px;min-width:0}
+.link b{display:block;font-family:var(--display);font-weight:900;font-size:clamp(64px,10.5vw,152px);line-height:.8;font-variant-numeric:tabular-nums;white-space:nowrap;
+  -webkit-background-clip:text;background-clip:text;color:transparent;padding-bottom:4px}
+.link span{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.k-meet b{background-image:linear-gradient(180deg,#9aeaf6 0%,var(--cold) 55%,#2a7f95 100%)}
+.k-proj b{background-image:linear-gradient(180deg,#ffd9a1 0%,var(--warm) 55%,#b8661a 100%)}
+.k-rev b{background-image:linear-gradient(180deg,#fff6dc 0%,var(--hot) 50%,#e39a33 100%);filter:drop-shadow(0 0 38px rgba(255,213,127,.32))}
+.op{position:relative;height:30px;margin:0 clamp(8px,1.4vw,20px) 24px;display:grid;place-items:center}
+.op::before{content:"";position:absolute;left:0;right:6px;top:50%;height:1px;background:linear-gradient(90deg,var(--a),var(--b));opacity:.75}
+.op::after{content:"";position:absolute;right:1px;top:50%;width:8px;height:8px;border-top:1.5px solid var(--b);border-right:1.5px solid var(--b);transform:translateY(-50%) rotate(45deg)}
+.op em{position:relative;font-style:normal;font-family:var(--mono);font-size:11px;color:var(--fg);background:var(--panel);border:1px solid var(--line-2);border-radius:999px;padding:4px 10px;white-space:nowrap}
+.op1{--a:var(--cold);--b:var(--warm)} .op2{--a:var(--warm);--b:var(--hot)}
+.sub{margin:0;color:var(--muted);font-size:15px}
+@media (max-width:760px){
+  .chain{grid-template-columns:minmax(0,1fr);gap:6px}
+  .link{grid-template-columns:auto minmax(0,1fr);align-items:end;column-gap:14px}
+  .link b{font-size:clamp(56px,18vw,96px)}
+  .link span{padding-bottom:8px}
+  .op{margin:0 0 4px;height:auto;place-items:start}
+  .op::before,.op::after{display:none}
+  .op em::before{content:"↓ ";color:var(--muted)}
+}
+
+/* panels */
+.main{display:grid;grid-template-columns:minmax(0,380px) minmax(0,1fr);gap:18px;align-items:start}
+@media (max-width:940px){.main{grid-template-columns:minmax(0,1fr)}}
+.panel{background:linear-gradient(180deg,var(--panel-2),var(--panel));border:1px solid var(--line);border-radius:14px;min-width:0;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.04),0 24px 60px -28px rgba(0,0,0,.75)}
+.panel-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding:12px 16px;border-bottom:1px solid var(--line)}
+.panel-head h2{margin:0;font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+
+/* faders */
+.faders .body{padding:20px 18px 22px;display:grid;gap:26px}
+.ctl{display:grid;gap:8px}
+.ctl-top{display:flex;justify-content:space-between;align-items:flex-end;gap:12px}
+.ctl label{font-weight:600;font-size:15px;line-height:1.3}
+.ctl .hint{display:block;font-weight:400;font-size:12.5px;color:var(--muted);margin-top:2px}
+.val{display:flex;align-items:baseline;gap:2px;font-family:var(--display);font-weight:700;font-size:34px;line-height:1;color:var(--fg);flex:none}
+.val .u{color:var(--faint);font-size:24px}
+.val input{width:8.6ch;font:inherit;color:inherit;background:transparent;border:0;border-bottom:1px dashed var(--line-2);text-align:right;padding:0 0 2px;font-variant-numeric:tabular-nums}
+.val input.short{width:3.2ch}
+.val input:focus{outline:none;border-bottom-color:var(--hot)}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:32px;background:transparent;margin:0;cursor:pointer}
+input[type=range]:focus-visible{outline:none}
+input[type=range]::-webkit-slider-runnable-track{height:4px;border-radius:4px;background:linear-gradient(90deg,var(--cold),var(--warm)) 0 0/var(--p,50%) 100% no-repeat,var(--line-2)}
+input[type=range]::-moz-range-track{height:4px;border-radius:4px;background:var(--line-2)}
+input[type=range]::-moz-range-progress{height:4px;border-radius:4px;background:linear-gradient(90deg,var(--cold),var(--warm))}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:30px;margin-top:-13px;border:0;border-radius:4px;
+  background:linear-gradient(180deg,#f3f5f7 0 45%,#272d34 45% 55%,#c6cdd3 55% 100%);box-shadow:0 2px 8px rgba(0,0,0,.6),0 0 0 1px rgba(0,0,0,.45)}
+input[type=range]::-moz-range-thumb{width:18px;height:30px;border:0;border-radius:4px;
+  background:linear-gradient(180deg,#f3f5f7 0 45%,#272d34 45% 55%,#c6cdd3 55% 100%);box-shadow:0 2px 8px rgba(0,0,0,.6),0 0 0 1px rgba(0,0,0,.45)}
+input[type=range]:focus-visible::-webkit-slider-thumb{box-shadow:0 0 0 3px var(--bg),0 0 0 5px var(--hot)}
+.ticks{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;color:var(--faint);margin-top:-4px}
+
+/* timeline */
+.transport{display:flex;align-items:center;gap:8px}
+.tc{display:grid;gap:1px;background:var(--inset);border:1px solid var(--line);border-radius:6px;padding:4px 10px 5px;min-width:58px}
+.tc span{font-family:var(--mono);font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
+.tc b{font-family:var(--mono);font-size:14px;font-weight:500;color:var(--hot);font-variant-numeric:tabular-nums;white-space:nowrap}
+.tc.r{min-width:110px}
+.play{width:38px;height:38px;border-radius:50%;border:1px solid var(--warm);background:var(--warm-soft);color:var(--hot);display:grid;place-items:center;cursor:pointer;transition:background .15s}
+.play:hover{background:rgba(240,160,60,.24)}
+.play svg{width:13px;height:13px;margin-left:2px;fill:currentColor}
+.stage{padding:14px 14px 2px;min-width:0}
+.stage svg{display:block}
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;padding:8px 16px 14px;font-family:var(--mono);font-size:10.5px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:8px}
+.legend i{display:inline-block;width:7px;height:14px;border-radius:2px;background:var(--cold)}
+.legend i.g{background:var(--hot)}
+.legend i.r{width:16px;height:2px;background:var(--hot)}
+.legend #unit-note:empty{display:none}
+.legend i.w{width:16px;background:repeating-linear-gradient(135deg,var(--warm) 0 2px,transparent 2px 5px);border:1px solid rgba(240,160,60,.5)}
+.ph-warm{fill:url(#hatch);stroke:var(--warm);stroke-opacity:.5}
+.ph-send{fill:rgba(65,182,204,.13);stroke:var(--cold);stroke-opacity:.55}
+.phtxt{font-family:var(--mono);font-size:9.5px;letter-spacing:.08em}
+.phtxt.w{fill:var(--warm)} .phtxt.s{fill:var(--cold)}
+.mk.part{fill:none;stroke:var(--cold);stroke-dasharray:2 2}
+.wnote{fill:var(--faint);font-family:var(--mono);font-size:9.5px;letter-spacing:.04em}
+.fsend{stroke:var(--cold);stroke-dasharray:3 4;opacity:.55}
+.bed{fill:rgba(255,255,255,.022);stroke:var(--line)}
+.band{fill:rgba(255,255,255,.025)}
+.rl{stroke:var(--line-2)} .tick{stroke:var(--faint)} .tick.mn{stroke:var(--line-2)}
+.rlab{fill:var(--muted);font-family:var(--mono);font-size:9.5px}
+.gl{fill:var(--faint);font-family:var(--mono);font-size:9px;letter-spacing:.12em}
+.tcode{fill:var(--faint);font-family:var(--mono);font-size:9px}
+.tname{fill:var(--fg);font-family:var(--sans);font-size:12px;font-weight:500}
+.mk{fill:var(--cold)}
+.mk.sig{fill:var(--hot);filter:drop-shadow(0 0 5px rgba(255,213,127,.75))}
+.con{stroke:var(--hot);stroke-width:1;stroke-dasharray:2 3;opacity:.55}
+.clip rect{fill:var(--warm)}
+.clip text{fill:var(--on-warm);font-family:var(--mono);font-size:9.5px;font-weight:500}
+.clip.part rect{fill:var(--warm-soft);stroke:var(--warm);stroke-dasharray:3 2}
+.clip.part text{fill:var(--warm)}
+.base{stroke:var(--line-2)}
+.goal{stroke:var(--muted);stroke-width:1;stroke-dasharray:4 4;opacity:.7}
+.glabel{fill:var(--muted);font-family:var(--mono);font-size:9.5px;letter-spacing:.06em}
+.area{fill:url(#revfill)}
+.rev{fill:none;stroke:var(--hot);stroke-width:2;stroke-linejoin:round}
+.dimlayer{opacity:.16}
+.enddot{fill:var(--hot);filter:drop-shadow(0 0 6px rgba(255,213,127,.8))}
+.phl{stroke:var(--hot);stroke-width:1.5}
+.phh{fill:var(--hot)}
+.mk,.clip,.con,.enddot{transition:opacity .15s}
+.ahead{opacity:.16}
+
+/* engine room */
+.engine{display:grid;gap:16px;padding-top:22px;border-top:1px dashed var(--line-2)}
+.sec-label{margin:0;font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.sentence{margin:6px 0 0;font-size:clamp(18px,2.2vw,24px);font-weight:500;line-height:1.35;text-wrap:balance;max-width:62ch}
+.sentence b{color:var(--hot);font-weight:600}
+.flow{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr) auto minmax(0,1fr) auto minmax(0,1fr);align-items:center}
+.fcell{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;display:grid;gap:6px;min-width:0}
+.fcell b{font-family:var(--display);font-weight:800;font-size:clamp(32px,3.8vw,48px);line-height:.85;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.fcell span{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.c0 b{color:var(--deep)} .c1 b{color:var(--mid)} .c2 b{color:var(--cold)} .c3 b{color:var(--warm)}
+.fop{padding:0 8px;display:grid;place-items:center}
+.fop em{font-style:normal;font-family:var(--mono);font-size:11px;color:var(--fg);border:1px solid var(--line-2);border-radius:999px;padding:3px 9px;white-space:nowrap;background:var(--inset)}
+@media (max-width:840px){
+  .flow{grid-template-columns:minmax(0,1fr)}
+  .fop{place-items:start;padding:6px 0 6px 18px}
+  .fop em::before{content:"↓ ";color:var(--muted)}
+}
+.kit{display:flex;flex-wrap:wrap;gap:12px}
+.tile{flex:1 1 170px;min-width:0;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;display:grid;gap:6px;align-content:start}
+.tile .k{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.tile b{font-family:var(--display);font-weight:800;font-size:clamp(38px,4.4vw,52px);line-height:.85;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.tile em{font-style:normal;font-size:12.5px;color:var(--muted)}
+details.box{background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+details.box summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 18px;font-weight:600}
+details.box summary::-webkit-details-marker{display:none}
+details.box summary::after{content:"+";font-family:var(--mono);color:var(--muted)}
+details.box[open] summary::after{content:"−"}
+.advlist{display:grid;border-top:1px solid var(--line)}
+.arow{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 18px;min-height:52px}
+.arow + .arow{border-top:1px solid var(--line)}
+.arow label{flex:1;min-width:0;font-size:14px}
+.arow label span{display:block;font-size:12px;color:var(--muted)}
+.arow .f{display:flex;align-items:center;gap:6px;color:var(--muted);font-family:var(--mono);font-size:12px}
+.arow input[type=number]{width:76px;text-align:right;font-family:var(--mono);font-size:13px;color:var(--fg);background:var(--inset);border:1px solid var(--line);border-radius:6px;padding:6px 8px;font-variant-numeric:tabular-nums}
+.switch{position:relative;width:46px;height:28px;flex:none}
+.switch input{position:absolute;inset:0;opacity:0;margin:0;cursor:pointer;z-index:1}
+.switch i{position:absolute;inset:0;background:var(--line-2);border-radius:28px;transition:background .2s}
+.switch i::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:var(--fg);transition:transform .2s}
+.switch input:checked + i{background:var(--warm)}
+.switch input:checked + i::after{transform:translateX(18px)}
+.switch input:focus-visible + i{outline:2px solid var(--hot);outline-offset:2px}
+.reset{margin:12px 18px 16px;font-size:13px;color:var(--warm);background:none;border:0;padding:4px 0;cursor:pointer}
+.tbl{overflow-x:auto;border-top:1px solid var(--line)}
+table{width:100%;border-collapse:collapse;font-size:14px;min-width:580px}
+th,td{text-align:left;padding:11px 18px}
+th{font-family:var(--mono);font-size:10px;font-weight:500;color:var(--faint);letter-spacing:.12em;text-transform:uppercase}
+tbody tr{border-top:1px solid var(--line)}
+td.f{color:var(--muted);font-family:var(--mono);font-size:12px}
+td.r{text-align:right;font-family:var(--mono);font-weight:500;white-space:nowrap;font-variant-numeric:tabular-nums}
+td.r.hl{color:var(--hot)}
+.foot{margin:0;font-size:12.5px;color:var(--faint);max-width:72ch}
+@media (prefers-reduced-motion:reduce){.mk,.clip,.con,.enddot,.switch i,.switch i::after,.play,.chip{transition:none}.mark i{animation:none}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top">
+    <div class="mark"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" class="logo" aria-hidden="true"><defs><linearGradient id="plg" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#41b6cc"/><stop offset=".55" stop-color="#f0a03c"/><stop offset="1" stop-color="#ffd57f"/></linearGradient><linearGradient id="plb" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1b2228"/><stop offset="1" stop-color="#0d1115"/></linearGradient></defs><rect x="1" y="1" width="46" height="46" rx="12" fill="url(#plb)" stroke="#2f3a43"/><path d="M9 16V9h7M32 9h7v7M39 32v7h-7M16 39H9v-7" fill="none" stroke="#5f6b75" stroke-width="2" stroke-linecap="round"/><path d="M13 33h6v-5h6v-5h6v-5h3" fill="none" stroke="url(#plg)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="35.5" cy="18" r="3.4" fill="#ffd57f"/><circle cx="35.5" cy="18" r="6" fill="#ffd57f" opacity=".18"/></svg><span data-i18n="brand">60-Day Booked Meetings Planner</span></div>
+    <div class="ctrls">
+      <label class="vh" for="lang" data-i18n="lang">Language</label>
+      <select id="lang" class="sel"></select>
+      <label class="vh" for="cur" data-i18n="cur">Currency</label>
+      <select id="cur" class="sel"></select>
+      <div class="seg" role="group">
+        <button type="button" data-view="client" aria-pressed="true" data-i18n="overview">Overview</button>
+        <button type="button" data-view="full" aria-pressed="false" data-i18n="full">Full plan</button>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero" aria-live="polite">
+    <div class="hero-top">
+      <p class="eyebrow" data-i18n="eyebrow">Your next 12 months</p>
+      <div class="presets" id="presets"><span data-i18n="quick">Quick start</span></div>
+    </div>
+    <div class="chain">
+      <div class="link k-meet"><b id="h-meet">40</b><span id="h-meet-l">meetings booked</span></div>
+      <div class="op op1"><em id="h-close">× 10%</em></div>
+      <div class="link k-proj"><b id="h-proj">4</b><span id="h-proj-l">projects signed</span></div>
+      <div class="op op2"><em id="h-deal">× 30K</em></div>
+      <div class="link k-rev"><b id="h-rev">12K</b><span data-i18n="pipe_l">pipeline by day 60</span></div>
+    </div>
+    <p class="sub" id="h-sub"></p>
+  </section>
+
+  <div class="main">
+    <section class="panel faders">
+      <div class="panel-head"><h2 data-i18n="your_numbers">Your numbers</h2></div>
+      <div class="body">
+        <div class="ctl">
+          <div class="ctl-top">
+            <label for="gapR"><span data-i18n="gap_l">Extra revenue a year</span><span class="hint" data-i18n="gap_h"></span></label>
+            <div class="val"><span class="u cb"></span><input id="gap" type="text" inputmode="numeric" value="120000"><span class="u ca"></span></div>
+          </div>
+          <input id="gapR" type="range" min="0" max="1000" step="1">
+          <div class="ticks"><span id="gap-min"></span><span id="gap-max"></span></div>
+        </div>
+        <div class="ctl">
+          <div class="ctl-top">
+            <label for="dealR"><span data-i18n="deal_l">Average project</span><span class="hint" data-i18n="deal_h"></span></label>
+            <div class="val"><span class="u cb"></span><input id="deal" type="text" inputmode="numeric" value="30000"><span class="u ca"></span></div>
+          </div>
+          <input id="dealR" type="range" min="0" max="1000" step="1">
+          <div class="ticks"><span id="deal-min"></span><span id="deal-max"></span></div>
+        </div>
+        <div class="ctl">
+          <div class="ctl-top">
+            <label for="closeR"><span data-i18n="close_l">Close rate</span><span class="hint" data-i18n="close_h"></span></label>
+            <div class="val"><input id="close" class="short" type="text" inputmode="decimal" value="10"><span class="u">%</span></div>
+          </div>
+          <input id="closeR" type="range" min="1" max="80" step="1" value="10">
+          <div class="ticks"><span>1%</span><span>80%</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel tl">
+      <div class="panel-head">
+        <h2 data-i18n="year60">Your first 60 days, day by day</h2>
+        <div class="transport">
+          <div class="tc"><span data-i18n="day">Day</span><b id="tc-m">60</b></div>
+          <div class="tc r"><span data-i18n="pipeline">Pipeline</span><b id="tc-r"></b></div>
+          <button class="play" id="play" type="button"><svg viewBox="0 0 12 14" aria-hidden="true"><path d="M0 0 L12 7 L0 14 Z"/></svg></button>
+        </div>
+      </div>
+      <div class="stage" id="stage"><svg id="tlsvg" role="img"></svg></div>
+      <div class="legend">
+        <span><i class="w"></i><span data-i18n="lg_warm">Inbox warm-up</span></span>
+        <span><i></i><span data-i18n="lg_meet">Booked meeting</span></span>
+        <span><i class="r"></i><span data-i18n="lg_pipe">Pipeline</span></span>
+        <span id="unit-note"></span>
+      </div>
+    </section>
+  </div>
+
+  <section class="engine" data-full hidden>
+    <div>
+      <p class="sec-label" data-i18n="behind60">Behind the scenes · first 60 days</p>
+      <p class="sentence" id="sentence"></p>
+    </div>
+    <p class="sec-label" data-i18n="every_month">Every month once sending</p>
+    <div class="flow" id="flow"></div>
+    <div class="kit">
+      <div class="tile"><span class="k" data-i18n="k_boxes">Mailboxes</span><b id="o-boxes">0</b><em id="o-boxes-note"></em></div>
+      <div class="tile"><span class="k" data-i18n="k_doms">Domains</span><b id="o-doms">0</b><em id="o-doms-note"></em></div>
+      <div class="tile"><span class="k" data-i18n="k_epd">Emails / day</span><b id="o-epd">0</b><em data-i18n="n_epd"></em></div>
+      <div class="tile"><span class="k" data-i18n="k_epm">Emails / month</span><b id="o-epm">0</b><em id="o-epm-note"></em></div>
+      <div class="tile"><span class="k" data-i18n="k_warm">Warm-up</span><b id="o-warm">20</b><em data-i18n="n_warm"></em></div>
+    </div>
+    <details class="box">
+      <summary data-i18n="bench">Benchmarks &amp; sending setup</summary>
+      <div class="advlist">
+        <div class="arow"><label for="pos"><span data-i18n="b_pos" style="display:inline;color:inherit;font-size:inherit"></span><span data-i18n="b_pos_h"></span></label><div class="f"><input id="pos" type="number" min="0.1" step="0.1" value="1">%</div></div>
+        <div class="arow"><label for="book"><span data-i18n="b_book" style="display:inline;color:inherit;font-size:inherit"></span><span data-i18n="b_book_h"></span></label><div class="f"><input id="book" type="number" min="1" max="100" step="1" value="33">%</div></div>
+        <div class="arow"><label for="seq"><span data-i18n="b_seq" style="display:inline;color:inherit;font-size:inherit"></span><span data-i18n="b_seq_h"></span></label><div class="f"><input id="seq" type="number" min="1" max="6" step="1" value="2"></div></div>
+        <div class="arow"><label for="days"><span data-i18n="b_days" style="display:inline;color:inherit;font-size:inherit"></span><span data-i18n="b_days_h"></span></label><div class="f"><input id="days" type="number" min="1" max="31" step="1" value="26"></div></div>
+        <div class="arow"><label for="perbox"><span data-i18n="b_perbox" style="display:inline;color:inherit;font-size:inherit"></span><span data-i18n="b_perbox_h"></span></label><div class="f"><input id="perbox" type="number" min="1" max="50" step="1" value="20"></div></div>
+        <div class="arow"><label for="perdom"><span data-i18n="b_perdom" style="display:inline;color:inherit;font-size:inherit"></span></label><div class="f"><input id="perdom" type="number" min="1" max="10" step="1" value="3"></div></div>
+        <div class="arow"><label for="warm"><span data-i18n="b_warm" style="display:inline;color:inherit;font-size:inherit"></span><span data-i18n="b_warm_h"></span></label><div class="f"><input id="warm" type="number" min="0" max="59" step="1" value="20"></div></div>
+        <div class="arow"><label for="lag"><span data-i18n="b_lag" style="display:inline;color:inherit;font-size:inherit"></span><span data-i18n="b_lag_h"></span></label><div class="f"><input id="lag" type="number" min="0" max="30" step="1" value="5"></div></div>
+        <div class="arow"><label for="reserve"><span data-i18n="b_res" style="display:inline;color:inherit;font-size:inherit"></span><span data-i18n="b_res_h"></span></label><div class="switch"><input id="reserve" type="checkbox" role="switch"><i></i></div></div>
+      </div>
+      <button class="reset" id="reset" type="button" data-i18n="reset">Reset to defaults</button>
+    </details>
+    <details class="box">
+      <summary data-i18n="math">The math, step by step</summary>
+      <div class="tbl"><table>
+        <thead><tr><th data-i18n="th_step">Step</th><th data-i18n="th_formula">Formula</th><th style="text-align:right" data-i18n="th_result">Result</th></tr></thead>
+        <tbody id="steps"></tbody>
+      </table></div>
+    </details>
+  </section>
+
+  <p class="foot" data-client data-i18n="foot_c"></p>
+  <p class="foot" data-full hidden data-i18n="foot_f"></p>
+</div>
+
+<script>
+(() => {
+const $ = id => document.getElementById(id);
+
+/* ---------- i18n ---------- */
+const I18N = {
+en:{name:"English",loc:"en-US",brand:"60-Day Booked Meetings Planner",overview:"Overview",full:"Full plan",lang:"Language",cur:"Currency",eyebrow:"Your next 12 months",quick:"Quick start",
+meetings_l:"meetings booked",meeting_l1:"meeting booked",projects_l:"projects signed",project_l1:"project signed",added:"added this year",
+op_sign:"× {p} sign",op_each:"× {v} each",sub:"About {m} booked meetings a month. One in {n} signs.",sub_alt:"About {m} booked meetings a month. {p} of them sign.",empty:"Set every number above zero to see the plan.",
+your_numbers:"Your numbers",gap_l:"Extra revenue a year",gap_h:"On top of what you make today",deal_l:"Average project",deal_h:"What one new client pays",close_l:"Close rate",close_h:"Out of 100 meetings, how many sign",
+year:"Your year, month by month",month:"Month",revenue:"Revenue",play:"Play the year",lg_meet:"Booked meeting",lg_sign:"Signs and becomes a project",lg_rev:"Revenue added",unit:"1 mark = {n} meetings",
+t_meet:"Meetings",t_proj:"Projects",t_rev:"Revenue",month_r:"MONTH",goal:"GOAL",
+behind:"Behind the scenes · every month",sentence:"To add {gap} a year, email {leads} new leads a month from {boxes} mailboxes on {doms} domains.",
+f_leads:"Leads emailed",f_int:"Interested replies",f_meet:"Meetings booked",f_proj:"Projects signed",
+k_boxes:"Mailboxes",k_doms:"Domains",k_epd:"Emails / day",k_epm:"Emails / month",k_warm:"Warm-up",
+n_boxes:"{n} emails each per day",n_boxes_r:"{s} sending + {s} backup",n_doms:"{n} mailboxes on each",n_epd:"Across all mailboxes",n_epm:"{n} emails per lead",n_warm:"Days before the first send",
+bench:"Benchmarks & sending setup",b_pos:"Positive reply rate",b_pos_h:"Default: 1%",b_book:"Positive replies that book",b_book_h:"Default: 33%",b_seq:"Emails per lead",b_seq_h:"First email + 1 follow-up",b_days:"Sending days per month",b_days_h:"Monday to Saturday",b_perbox:"Emails per mailbox per day",b_perbox_h:"Start at 20, max 25",b_perdom:"Mailboxes per domain",b_res:"Backup mailboxes",b_res_h:"Buy 2×, keep half warm in reserve",reset:"Reset to defaults",
+math:"The math, step by step",th_step:"Step",th_formula:"Formula",th_result:"Result",
+r_clients:"New clients per month",r_calls:"Booked meetings per month",r_pos:"Positive replies per month",r_leads:"Leads per month",r_epm:"Emails per month",r_epd:"Emails per day",r_send:"Sending mailboxes",r_backup:"Mailboxes with backup",r_doms:"Domains",
+w_close:"close rate",w_book:"booking rate",w_pos:"positive reply rate",w_seq:"emails per lead",w_days:"sending days",w_perbox:"per mailbox, rounded up",w_perdom:"per domain, rounded up",
+foot_c:"Based on cold email averages. These are estimates, not promises: real campaign numbers replace them after the first weeks of sending.",
+foot_f:"Defaults are common cold email benchmarks. They're averages, not promises. Swap in your campaign's real numbers after the first few thousand sends.",
+popular:"Popular",all:"All currencies"},
+fr:{name:"Français",loc:"fr-FR",brand:"60-Day Booked Meetings Planner",overview:"Vue d'ensemble",full:"Plan complet",lang:"Langue",cur:"Devise",eyebrow:"Vos 12 prochains mois",quick:"Départ rapide",
+meetings_l:"rendez-vous réservés",meeting_l1:"rendez-vous réservé",projects_l:"projets signés",project_l1:"projet signé",added:"en plus cette année",
+op_sign:"× {p} signent",op_each:"× {v} chacun",sub:"Environ {m} rendez-vous par mois. 1 sur {n} signe.",sub_alt:"Environ {m} rendez-vous par mois. {p} signent.",empty:"Mettez chaque chiffre au-dessus de zéro pour voir le plan.",
+your_numbers:"Vos chiffres",gap_l:"CA en plus par an",gap_h:"En plus de ce que vous faites aujourd'hui",deal_l:"Projet moyen",deal_h:"Ce que paie un nouveau client",close_l:"Taux de closing",close_h:"Sur 100 rendez-vous, combien signent",
+year:"Votre année, mois par mois",month:"Mois",revenue:"CA",play:"Lire l'année",lg_meet:"Rendez-vous réservé",lg_sign:"Signe et devient un projet",lg_rev:"CA ajouté",unit:"1 trait = {n} rendez-vous",
+t_meet:"Rendez-vous",t_proj:"Projets",t_rev:"CA",month_r:"MOIS",goal:"OBJECTIF",
+behind:"En coulisses · chaque mois",sentence:"Pour ajouter {gap} par an, contactez {leads} nouveaux leads par mois depuis {boxes} boîtes mail sur {doms} domaines.",
+f_leads:"Leads contactés",f_int:"Réponses intéressées",f_meet:"Rendez-vous réservés",f_proj:"Projets signés",
+k_boxes:"Boîtes mail",k_doms:"Domaines",k_epd:"Emails / jour",k_epm:"Emails / mois",k_warm:"Préchauffage",
+n_boxes:"{n} emails chacune par jour",n_boxes_r:"{s} en envoi + {s} en réserve",n_doms:"{n} boîtes sur chacun",n_epd:"Sur toutes les boîtes",n_epm:"{n} emails par lead",n_warm:"Jours avant le premier envoi",
+bench:"Repères & réglages d'envoi",b_pos:"Taux de réponses positives",b_pos_h:"Par défaut : 1 %",b_book:"Réponses positives qui réservent",b_book_h:"Par défaut : 33 %",b_seq:"Emails par lead",b_seq_h:"Premier email + 1 relance",b_days:"Jours d'envoi par mois",b_days_h:"Du lundi au samedi",b_perbox:"Emails par boîte par jour",b_perbox_h:"Commencer à 20, max 25",b_perdom:"Boîtes par domaine",b_res:"Boîtes de réserve",b_res_h:"En acheter 2×, la moitié reste chaude en réserve",reset:"Revenir aux valeurs par défaut",
+math:"Le calcul, étape par étape",th_step:"Étape",th_formula:"Formule",th_result:"Résultat",
+r_clients:"Nouveaux clients par mois",r_calls:"Rendez-vous par mois",r_pos:"Réponses positives par mois",r_leads:"Leads par mois",r_epm:"Emails par mois",r_epd:"Emails par jour",r_send:"Boîtes d'envoi",r_backup:"Boîtes avec réserve",r_doms:"Domaines",
+w_close:"taux de closing",w_book:"taux de réservation",w_pos:"taux de réponses positives",w_seq:"emails par lead",w_days:"jours d'envoi",w_perbox:"par boîte, arrondi au supérieur",w_perdom:"par domaine, arrondi au supérieur",
+foot_c:"Basé sur des moyennes de cold email. Ce sont des estimations, pas des promesses : les vrais chiffres de campagne les remplacent après les premières semaines d'envoi.",
+foot_f:"Les valeurs par défaut sont des repères courants en cold email. Ce sont des moyennes, pas des promesses. Remplacez-les par les vrais chiffres de votre campagne après les premiers milliers d'envois.",
+popular:"Populaires",all:"Toutes les devises"},
+es:{name:"Español",loc:"es-ES",brand:"60-Day Booked Meetings Planner",overview:"Resumen",full:"Plan completo",lang:"Idioma",cur:"Moneda",eyebrow:"Tus próximos 12 meses",quick:"Inicio rápido",
+meetings_l:"reuniones agendadas",meeting_l1:"reunión agendada",projects_l:"proyectos firmados",project_l1:"proyecto firmado",added:"extra este año",
+op_sign:"× {p} firman",op_each:"× {v} cada uno",sub:"Unas {m} reuniones al mes. 1 de cada {n} firma.",sub_alt:"Unas {m} reuniones al mes. Firma el {p}.",empty:"Pon cada número por encima de cero para ver el plan.",
+your_numbers:"Tus números",gap_l:"Ingresos extra al año",gap_h:"Además de lo que facturas hoy",deal_l:"Proyecto medio",deal_h:"Lo que paga un cliente nuevo",close_l:"Tasa de cierre",close_h:"De 100 reuniones, cuántas firman",
+year:"Tu año, mes a mes",month:"Mes",revenue:"Ingresos",play:"Reproducir el año",lg_meet:"Reunión agendada",lg_sign:"Firma y se convierte en proyecto",lg_rev:"Ingresos añadidos",unit:"1 marca = {n} reuniones",
+t_meet:"Reuniones",t_proj:"Proyectos",t_rev:"Ingresos",month_r:"MES",goal:"OBJETIVO",
+behind:"Entre bastidores · cada mes",sentence:"Para sumar {gap} al año, escribe a {leads} leads nuevos al mes desde {boxes} buzones en {doms} dominios.",
+f_leads:"Leads contactados",f_int:"Respuestas interesadas",f_meet:"Reuniones agendadas",f_proj:"Proyectos firmados",
+k_boxes:"Buzones",k_doms:"Dominios",k_epd:"Emails / día",k_epm:"Emails / mes",k_warm:"Calentamiento",
+n_boxes:"{n} emails cada uno al día",n_boxes_r:"{s} enviando + {s} de reserva",n_doms:"{n} buzones en cada uno",n_epd:"Entre todos los buzones",n_epm:"{n} emails por lead",n_warm:"Días antes del primer envío",
+bench:"Referencias y ajustes de envío",b_pos:"Tasa de respuestas positivas",b_pos_h:"Por defecto: 1 %",b_book:"Respuestas positivas que agendan",b_book_h:"Por defecto: 33 %",b_seq:"Emails por lead",b_seq_h:"Primer email + 1 seguimiento",b_days:"Días de envío al mes",b_days_h:"De lunes a sábado",b_perbox:"Emails por buzón al día",b_perbox_h:"Empieza en 20, máximo 25",b_perdom:"Buzones por dominio",b_res:"Buzones de reserva",b_res_h:"Compra el doble y deja la mitad calentando en reserva",reset:"Volver a los valores por defecto",
+math:"El cálculo, paso a paso",th_step:"Paso",th_formula:"Fórmula",th_result:"Resultado",
+r_clients:"Clientes nuevos al mes",r_calls:"Reuniones al mes",r_pos:"Respuestas positivas al mes",r_leads:"Leads al mes",r_epm:"Emails al mes",r_epd:"Emails al día",r_send:"Buzones de envío",r_backup:"Buzones con reserva",r_doms:"Dominios",
+w_close:"tasa de cierre",w_book:"tasa de agendamiento",w_pos:"tasa de respuestas positivas",w_seq:"emails por lead",w_days:"días de envío",w_perbox:"por buzón, redondeado hacia arriba",w_perdom:"por dominio, redondeado hacia arriba",
+foot_c:"Basado en promedios de cold email. Son estimaciones, no promesas: los números reales de la campaña los sustituyen tras las primeras semanas de envío.",
+foot_f:"Los valores por defecto son referencias habituales de cold email. Son promedios, no promesas. Sustitúyelos por los números reales de tu campaña tras los primeros miles de envíos.",
+popular:"Populares",all:"Todas las monedas"},
+de:{name:"Deutsch",loc:"de-DE",brand:"60-Day Booked Meetings Planner",overview:"Überblick",full:"Ganzer Plan",lang:"Sprache",cur:"Währung",eyebrow:"Deine nächsten 12 Monate",quick:"Schnellstart",
+meetings_l:"gebuchte Termine",meeting_l1:"gebuchter Termin",projects_l:"unterschriebene Projekte",project_l1:"unterschriebenes Projekt",added:"zusätzlich dieses Jahr",
+op_sign:"× {p} unterschreiben",op_each:"× {v} pro Projekt",sub:"Etwa {m} gebuchte Termine pro Monat. Einer von {n} unterschreibt.",sub_alt:"Etwa {m} gebuchte Termine pro Monat. {p} davon unterschreiben.",empty:"Setze jede Zahl über null, um den Plan zu sehen.",
+your_numbers:"Deine Zahlen",gap_l:"Zusätzlicher Umsatz pro Jahr",gap_h:"Zusätzlich zu deinem heutigen Umsatz",deal_l:"Durchschnittliches Projekt",deal_h:"Was ein neuer Kunde zahlt",close_l:"Abschlussquote",close_h:"Von 100 Terminen, wie viele unterschreiben",
+year:"Dein Jahr, Monat für Monat",month:"Monat",revenue:"Umsatz",play:"Jahr abspielen",lg_meet:"Gebuchter Termin",lg_sign:"Unterschreibt und wird ein Projekt",lg_rev:"Zusätzlicher Umsatz",unit:"1 Markierung = {n} Termine",
+t_meet:"Termine",t_proj:"Projekte",t_rev:"Umsatz",month_r:"MONAT",goal:"ZIEL",
+behind:"Hinter den Kulissen · jeden Monat",sentence:"Für {gap} mehr pro Jahr: schreibe jeden Monat {leads} neue Leads an, von {boxes} Postfächern auf {doms} Domains.",
+f_leads:"Angeschriebene Leads",f_int:"Interessierte Antworten",f_meet:"Gebuchte Termine",f_proj:"Unterschriebene Projekte",
+k_boxes:"Postfächer",k_doms:"Domains",k_epd:"E-Mails / Tag",k_epm:"E-Mails / Monat",k_warm:"Aufwärmen",
+n_boxes:"{n} E-Mails pro Postfach und Tag",n_boxes_r:"{s} im Versand + {s} in Reserve",n_doms:"{n} Postfächer pro Domain",n_epd:"Über alle Postfächer",n_epm:"{n} E-Mails pro Lead",n_warm:"Tage vor dem ersten Versand",
+bench:"Richtwerte & Versand-Setup",b_pos:"Positive Antwortquote",b_pos_h:"Standard: 1 %",b_book:"Positive Antworten, die buchen",b_book_h:"Standard: 33 %",b_seq:"E-Mails pro Lead",b_seq_h:"Erste E-Mail + 1 Follow-up",b_days:"Versandtage pro Monat",b_days_h:"Montag bis Samstag",b_perbox:"E-Mails pro Postfach und Tag",b_perbox_h:"Mit 20 starten, max. 25",b_perdom:"Postfächer pro Domain",b_res:"Reserve-Postfächer",b_res_h:"Doppelt kaufen, die Hälfte warm in Reserve halten",reset:"Auf Standardwerte zurücksetzen",
+math:"Die Rechnung, Schritt für Schritt",th_step:"Schritt",th_formula:"Formel",th_result:"Ergebnis",
+r_clients:"Neue Kunden pro Monat",r_calls:"Gebuchte Termine pro Monat",r_pos:"Positive Antworten pro Monat",r_leads:"Leads pro Monat",r_epm:"E-Mails pro Monat",r_epd:"E-Mails pro Tag",r_send:"Versand-Postfächer",r_backup:"Postfächer mit Reserve",r_doms:"Domains",
+w_close:"Abschlussquote",w_book:"Buchungsquote",w_pos:"positive Antwortquote",w_seq:"E-Mails pro Lead",w_days:"Versandtage",w_perbox:"pro Postfach, aufgerundet",w_perdom:"pro Domain, aufgerundet",
+foot_c:"Basiert auf Cold-E-Mail-Durchschnittswerten. Schätzungen, keine Versprechen: Echte Kampagnenzahlen ersetzen sie nach den ersten Versandwochen.",
+foot_f:"Die Standardwerte sind übliche Cold-E-Mail-Richtwerte. Durchschnitte, keine Versprechen. Ersetze sie nach den ersten paar tausend Mails durch die echten Zahlen deiner Kampagne.",
+popular:"Beliebt",all:"Alle Währungen"},
+pt:{name:"Português",loc:"pt-BR",brand:"60-Day Booked Meetings Planner",overview:"Visão geral",full:"Plano completo",lang:"Idioma",cur:"Moeda",eyebrow:"Seus próximos 12 meses",quick:"Início rápido",
+meetings_l:"reuniões agendadas",meeting_l1:"reunião agendada",projects_l:"projetos fechados",project_l1:"projeto fechado",added:"a mais este ano",
+op_sign:"× {p} fecham",op_each:"× {v} cada",sub:"Cerca de {m} reuniões por mês. 1 em cada {n} fecha.",sub_alt:"Cerca de {m} reuniões por mês. {p} delas fecham.",empty:"Coloque todos os números acima de zero para ver o plano.",
+your_numbers:"Seus números",gap_l:"Receita extra por ano",gap_h:"Além do que você fatura hoje",deal_l:"Projeto médio",deal_h:"O que um cliente novo paga",close_l:"Taxa de fechamento",close_h:"De 100 reuniões, quantas fecham",
+year:"Seu ano, mês a mês",month:"Mês",revenue:"Receita",play:"Reproduzir o ano",lg_meet:"Reunião agendada",lg_sign:"Fecha e vira projeto",lg_rev:"Receita adicionada",unit:"1 marca = {n} reuniões",
+t_meet:"Reuniões",t_proj:"Projetos",t_rev:"Receita",month_r:"MÊS",goal:"META",
+behind:"Nos bastidores · todo mês",sentence:"Para somar {gap} por ano, envie e-mail para {leads} novos leads por mês a partir de {boxes} caixas de e-mail em {doms} domínios.",
+f_leads:"Leads contatados",f_int:"Respostas interessadas",f_meet:"Reuniões agendadas",f_proj:"Projetos fechados",
+k_boxes:"Caixas de e-mail",k_doms:"Domínios",k_epd:"E-mails / dia",k_epm:"E-mails / mês",k_warm:"Aquecimento",
+n_boxes:"{n} e-mails cada por dia",n_boxes_r:"{s} enviando + {s} de reserva",n_doms:"{n} caixas em cada",n_epd:"Somando todas as caixas",n_epm:"{n} e-mails por lead",n_warm:"Dias antes do primeiro envio",
+bench:"Referências e configuração de envio",b_pos:"Taxa de respostas positivas",b_pos_h:"Padrão: 1%",b_book:"Respostas positivas que agendam",b_book_h:"Padrão: 33%",b_seq:"E-mails por lead",b_seq_h:"Primeiro e-mail + 1 follow-up",b_days:"Dias de envio por mês",b_days_h:"De segunda a sábado",b_perbox:"E-mails por caixa por dia",b_perbox_h:"Comece com 20, máximo 25",b_perdom:"Caixas por domínio",b_res:"Caixas de reserva",b_res_h:"Compre o dobro e deixe metade aquecida na reserva",reset:"Voltar aos valores padrão",
+math:"O cálculo, passo a passo",th_step:"Etapa",th_formula:"Fórmula",th_result:"Resultado",
+r_clients:"Clientes novos por mês",r_calls:"Reuniões por mês",r_pos:"Respostas positivas por mês",r_leads:"Leads por mês",r_epm:"E-mails por mês",r_epd:"E-mails por dia",r_send:"Caixas de envio",r_backup:"Caixas com reserva",r_doms:"Domínios",
+w_close:"taxa de fechamento",w_book:"taxa de agendamento",w_pos:"taxa de respostas positivas",w_seq:"e-mails por lead",w_days:"dias de envio",w_perbox:"por caixa, arredondado para cima",w_perdom:"por domínio, arredondado para cima",
+foot_c:"Baseado em médias de cold email. São estimativas, não promessas: os números reais da campanha substituem estes após as primeiras semanas de envio.",
+foot_f:"Os valores padrão são referências comuns de cold email. São médias, não promessas. Troque pelos números reais da sua campanha depois dos primeiros milhares de envios.",
+popular:"Populares",all:"Todas as moedas"},
+it:{name:"Italiano",loc:"it-IT",brand:"60-Day Booked Meetings Planner",overview:"Panoramica",full:"Piano completo",lang:"Lingua",cur:"Valuta",eyebrow:"I tuoi prossimi 12 mesi",quick:"Avvio rapido",
+meetings_l:"appuntamenti fissati",meeting_l1:"appuntamento fissato",projects_l:"progetti firmati",project_l1:"progetto firmato",added:"in più quest'anno",
+op_sign:"× {p} firmano",op_each:"× {v} ciascuno",sub:"Circa {m} appuntamenti al mese. 1 su {n} firma.",sub_alt:"Circa {m} appuntamenti al mese. Firma il {p}.",empty:"Imposta ogni numero sopra lo zero per vedere il piano.",
+your_numbers:"I tuoi numeri",gap_l:"Fatturato extra all'anno",gap_h:"Oltre a quello che fatturi oggi",deal_l:"Progetto medio",deal_h:"Quanto paga un nuovo cliente",close_l:"Tasso di chiusura",close_h:"Su 100 appuntamenti, quanti firmano",
+year:"Il tuo anno, mese per mese",month:"Mese",revenue:"Fatturato",play:"Riproduci l'anno",lg_meet:"Appuntamento fissato",lg_sign:"Firma e diventa un progetto",lg_rev:"Fatturato aggiunto",unit:"1 segno = {n} appuntamenti",
+t_meet:"Appuntamenti",t_proj:"Progetti",t_rev:"Fatturato",month_r:"MESE",goal:"OBIETTIVO",
+behind:"Dietro le quinte · ogni mese",sentence:"Per aggiungere {gap} all'anno, scrivi a {leads} nuovi lead al mese da {boxes} caselle email su {doms} domini.",
+f_leads:"Lead contattati",f_int:"Risposte interessate",f_meet:"Appuntamenti fissati",f_proj:"Progetti firmati",
+k_boxes:"Caselle email",k_doms:"Domini",k_epd:"Email / giorno",k_epm:"Email / mese",k_warm:"Riscaldamento",
+n_boxes:"{n} email ciascuna al giorno",n_boxes_r:"{s} in invio + {s} di riserva",n_doms:"{n} caselle su ciascuno",n_epd:"Su tutte le caselle",n_epm:"{n} email per lead",n_warm:"Giorni prima del primo invio",
+bench:"Riferimenti e impostazioni di invio",b_pos:"Tasso di risposte positive",b_pos_h:"Predefinito: 1%",b_book:"Risposte positive che prenotano",b_book_h:"Predefinito: 33%",b_seq:"Email per lead",b_seq_h:"Prima email + 1 follow-up",b_days:"Giorni di invio al mese",b_days_h:"Da lunedì a sabato",b_perbox:"Email per casella al giorno",b_perbox_h:"Inizia da 20, massimo 25",b_perdom:"Caselle per dominio",b_res:"Caselle di riserva",b_res_h:"Comprane il doppio e tieni metà calde di riserva",reset:"Ripristina i valori predefiniti",
+math:"Il calcolo, passo per passo",th_step:"Passo",th_formula:"Formula",th_result:"Risultato",
+r_clients:"Nuovi clienti al mese",r_calls:"Appuntamenti al mese",r_pos:"Risposte positive al mese",r_leads:"Lead al mese",r_epm:"Email al mese",r_epd:"Email al giorno",r_send:"Caselle di invio",r_backup:"Caselle con riserva",r_doms:"Domini",
+w_close:"tasso di chiusura",w_book:"tasso di prenotazione",w_pos:"tasso di risposte positive",w_seq:"email per lead",w_days:"giorni di invio",w_perbox:"per casella, arrotondato per eccesso",w_perdom:"per dominio, arrotondato per eccesso",
+foot_c:"Basato sulle medie del cold email. Sono stime, non promesse: i numeri reali della campagna le sostituiscono dopo le prime settimane di invio.",
+foot_f:"I valori predefiniti sono riferimenti comuni del cold email. Sono medie, non promesse. Sostituiscili con i numeri reali della tua campagna dopo le prime migliaia di invii.",
+popular:"Popolari",all:"Tutte le valute"}
+};
+/* 60-day view strings */
+const EXTRA = {
+en:{eyebrow:"Your first 60 days",meet60_l:"meetings by day 60",meet60_l1:"meeting by day 60",inplay:"projects in play",pipe_l:"pipeline by day 60",gap_h:"The goal that sets how much we send",
+sub_full:"Warm-up takes the whole 60 days. Nothing books before day {d}.",sub_warm:"Days 1–{w}: inboxes warm up. ",sub_main:"Day {s}: first emails go out. First meetings around day {b}, then about {m} a month. Most deals sign after day 60.",
+year60:"Your first 60 days, day by day",day:"Day",pipeline:"Pipeline",play60:"Play the 60 days",lg_warm:"Inbox warm-up",lg_meet:"Booked meeting",lg_pipe:"Pipeline (meetings × close rate × project)",
+t_inbox:"Inboxes",t_meet:"Meetings",t_pipe:"Pipeline",day_r:"DAY",ph_warm_n:"WARM-UP · {n} DAYS",ph_warm:"WARM-UP",ph_send_n:"SENDING · {n} EMAILS/DAY",ph_send:"SENDING",
+no_meet:"No meetings yet · warming up",eats:"Warm-up eats the whole window",day60:"DAY 60 · {v} PIPELINE",behind60:"Behind the scenes · first 60 days",
+sentence60:"{w} days of warm-up, then {leads} leads emailed from {boxes} mailboxes on {doms} domains. By day 60: about {meet} meetings and {pipe} in the pipeline.",every_month:"Every month once sending",
+b_warm:"Warm-up days",b_warm_h:"New domains before the first send",b_lag:"Days from first send to first meeting",b_lag_h:"Reply, then booking",
+r_senddays:"Sending days in the 60",f_senddays:"60 − {w} warm-up days",r_leads60:"Leads emailed by day 60",r_meet60:"Meetings by day 60",f_meet60_tail:"(first one {l} days after first send)",r_pipe60:"Pipeline by day 60",
+foot_c:"Based on cold email averages. Day 60 shows meetings and pipeline, not cash in the bank: most deals sign after the first sales cycle. Real campaign numbers replace these estimates after the first weeks of sending."},
+fr:{eyebrow:"Vos 60 premiers jours",meet60_l:"rendez-vous d'ici le jour 60",meet60_l1:"rendez-vous d'ici le jour 60",inplay:"projets en jeu",pipe_l:"de pipeline au jour 60",gap_h:"L'objectif qui fixe le volume d'envoi",
+sub_full:"Le préchauffage prend les 60 jours. Rien ne se réserve avant le jour {d}.",sub_warm:"Jours 1 à {w} : les boîtes chauffent. ",sub_main:"Jour {s} : premiers emails envoyés. Premiers rendez-vous vers le jour {b}, puis environ {m} par mois. La plupart des contrats se signent après le jour 60.",
+year60:"Vos 60 premiers jours, jour par jour",day:"Jour",pipeline:"Pipeline",play60:"Lire les 60 jours",lg_warm:"Préchauffage des boîtes",lg_meet:"Rendez-vous réservé",lg_pipe:"Pipeline (rendez-vous × closing × projet)",
+t_inbox:"Boîtes",t_meet:"Rendez-vous",t_pipe:"Pipeline",day_r:"JOUR",ph_warm_n:"PRÉCHAUFFAGE · {n} JOURS",ph_warm:"PRÉCHAUFFAGE",ph_send_n:"ENVOI · {n} EMAILS/JOUR",ph_send:"ENVOI",
+no_meet:"Pas encore de rendez-vous · préchauffage",eats:"Le préchauffage occupe toute la période",day60:"JOUR 60 · {v} DE PIPELINE",behind60:"En coulisses · 60 premiers jours",
+sentence60:"{w} jours de préchauffage, puis {leads} leads contactés depuis {boxes} boîtes mail sur {doms} domaines. Au jour 60 : environ {meet} rendez-vous et {pipe} de pipeline.",every_month:"Chaque mois une fois l'envoi lancé",
+b_warm:"Jours de préchauffage",b_warm_h:"Nouveaux domaines avant le premier envoi",b_lag:"Jours entre le premier envoi et le premier rendez-vous",b_lag_h:"Réponse, puis réservation",
+r_senddays:"Jours d'envoi sur les 60",f_senddays:"60 − {w} jours de préchauffage",r_leads60:"Leads contactés au jour 60",r_meet60:"Rendez-vous au jour 60",f_meet60_tail:"(le premier {l} jours après le premier envoi)",r_pipe60:"Pipeline au jour 60",
+foot_c:"Basé sur des moyennes de cold email. Le jour 60 montre des rendez-vous et du pipeline, pas de l'argent encaissé : la plupart des contrats se signent après le premier cycle de vente. Les vrais chiffres de campagne remplacent ces estimations après les premières semaines d'envoi."},
+es:{eyebrow:"Tus primeros 60 días",meet60_l:"reuniones al día 60",meet60_l1:"reunión al día 60",inplay:"proyectos en juego",pipe_l:"de pipeline al día 60",gap_h:"El objetivo que marca cuánto enviamos",
+sub_full:"El calentamiento ocupa los 60 días. No se agenda nada antes del día {d}.",sub_warm:"Días 1 a {w}: los buzones se calientan. ",sub_main:"Día {s}: salen los primeros emails. Primeras reuniones hacia el día {b}, luego unas {m} al mes. La mayoría de los acuerdos se firman después del día 60.",
+year60:"Tus primeros 60 días, día a día",day:"Día",pipeline:"Pipeline",play60:"Reproducir los 60 días",lg_warm:"Calentamiento de buzones",lg_meet:"Reunión agendada",lg_pipe:"Pipeline (reuniones × cierre × proyecto)",
+t_inbox:"Buzones",t_meet:"Reuniones",t_pipe:"Pipeline",day_r:"DÍA",ph_warm_n:"CALENTAMIENTO · {n} DÍAS",ph_warm:"CALENTAMIENTO",ph_send_n:"ENVÍO · {n} EMAILS/DÍA",ph_send:"ENVÍO",
+no_meet:"Aún sin reuniones · calentando",eats:"El calentamiento ocupa todo el periodo",day60:"DÍA 60 · {v} DE PIPELINE",behind60:"Entre bastidores · primeros 60 días",
+sentence60:"{w} días de calentamiento, luego {leads} leads contactados desde {boxes} buzones en {doms} dominios. Al día 60: unas {meet} reuniones y {pipe} en pipeline.",every_month:"Cada mes una vez enviando",
+b_warm:"Días de calentamiento",b_warm_h:"Dominios nuevos antes del primer envío",b_lag:"Días del primer envío a la primera reunión",b_lag_h:"Respuesta y luego agenda",
+r_senddays:"Días de envío en los 60",f_senddays:"60 − {w} días de calentamiento",r_leads60:"Leads contactados al día 60",r_meet60:"Reuniones al día 60",f_meet60_tail:"(la primera {l} días después del primer envío)",r_pipe60:"Pipeline al día 60",
+foot_c:"Basado en promedios de cold email. El día 60 muestra reuniones y pipeline, no dinero cobrado: la mayoría de los acuerdos se firman tras el primer ciclo de venta. Los números reales de la campaña sustituyen estas estimaciones tras las primeras semanas de envío."},
+de:{eyebrow:"Deine ersten 60 Tage",meet60_l:"Termine bis Tag 60",meet60_l1:"Termin bis Tag 60",inplay:"Projekte im Spiel",pipe_l:"Pipeline bis Tag 60",gap_h:"Das Ziel, das die Versandmenge bestimmt",
+sub_full:"Das Aufwärmen dauert die ganzen 60 Tage. Vor Tag {d} wird nichts gebucht.",sub_warm:"Tag 1–{w}: Postfächer wärmen auf. ",sub_main:"Tag {s}: erste E-Mails gehen raus. Erste Termine um Tag {b}, danach etwa {m} pro Monat. Die meisten Deals werden nach Tag 60 unterschrieben.",
+year60:"Deine ersten 60 Tage, Tag für Tag",day:"Tag",pipeline:"Pipeline",play60:"Die 60 Tage abspielen",lg_warm:"Postfach-Aufwärmen",lg_meet:"Gebuchter Termin",lg_pipe:"Pipeline (Termine × Abschlussquote × Projekt)",
+t_inbox:"Postfächer",t_meet:"Termine",t_pipe:"Pipeline",day_r:"TAG",ph_warm_n:"AUFWÄRMEN · {n} TAGE",ph_warm:"AUFWÄRMEN",ph_send_n:"VERSAND · {n} E-MAILS/TAG",ph_send:"VERSAND",
+no_meet:"Noch keine Termine · Aufwärmphase",eats:"Das Aufwärmen füllt den ganzen Zeitraum",day60:"TAG 60 · {v} PIPELINE",behind60:"Hinter den Kulissen · erste 60 Tage",
+sentence60:"{w} Tage Aufwärmen, dann {leads} angeschriebene Leads von {boxes} Postfächern auf {doms} Domains. Bis Tag 60: etwa {meet} Termine und {pipe} in der Pipeline.",every_month:"Jeden Monat, sobald der Versand läuft",
+b_warm:"Aufwärmtage",b_warm_h:"Neue Domains vor dem ersten Versand",b_lag:"Tage vom ersten Versand bis zum ersten Termin",b_lag_h:"Antwort, dann Buchung",
+r_senddays:"Versandtage in den 60",f_senddays:"60 − {w} Aufwärmtage",r_leads60:"Angeschriebene Leads bis Tag 60",r_meet60:"Termine bis Tag 60",f_meet60_tail:"(der erste {l} Tage nach dem ersten Versand)",r_pipe60:"Pipeline bis Tag 60",
+foot_c:"Basiert auf Cold-E-Mail-Durchschnittswerten. Tag 60 zeigt Termine und Pipeline, kein Geld auf dem Konto: Die meisten Deals werden nach dem ersten Verkaufszyklus unterschrieben. Echte Kampagnenzahlen ersetzen diese Schätzungen nach den ersten Versandwochen."},
+pt:{eyebrow:"Seus primeiros 60 dias",meet60_l:"reuniões até o dia 60",meet60_l1:"reunião até o dia 60",inplay:"projetos em jogo",pipe_l:"de pipeline no dia 60",gap_h:"A meta que define quanto enviamos",
+sub_full:"O aquecimento ocupa os 60 dias. Nada é agendado antes do dia {d}.",sub_warm:"Dias 1 a {w}: as caixas aquecem. ",sub_main:"Dia {s}: saem os primeiros e-mails. Primeiras reuniões por volta do dia {b}, depois cerca de {m} por mês. A maioria dos negócios fecha depois do dia 60.",
+year60:"Seus primeiros 60 dias, dia a dia",day:"Dia",pipeline:"Pipeline",play60:"Reproduzir os 60 dias",lg_warm:"Aquecimento das caixas",lg_meet:"Reunião agendada",lg_pipe:"Pipeline (reuniões × fechamento × projeto)",
+t_inbox:"Caixas",t_meet:"Reuniões",t_pipe:"Pipeline",day_r:"DIA",ph_warm_n:"AQUECIMENTO · {n} DIAS",ph_warm:"AQUECIMENTO",ph_send_n:"ENVIO · {n} E-MAILS/DIA",ph_send:"ENVIO",
+no_meet:"Ainda sem reuniões · aquecendo",eats:"O aquecimento ocupa todo o período",day60:"DIA 60 · {v} DE PIPELINE",behind60:"Nos bastidores · primeiros 60 dias",
+sentence60:"{w} dias de aquecimento, depois {leads} leads contatados a partir de {boxes} caixas em {doms} domínios. No dia 60: cerca de {meet} reuniões e {pipe} em pipeline.",every_month:"Todo mês, depois que o envio começa",
+b_warm:"Dias de aquecimento",b_warm_h:"Domínios novos antes do primeiro envio",b_lag:"Dias do primeiro envio até a primeira reunião",b_lag_h:"Resposta, depois agendamento",
+r_senddays:"Dias de envio nos 60",f_senddays:"60 − {w} dias de aquecimento",r_leads60:"Leads contatados até o dia 60",r_meet60:"Reuniões até o dia 60",f_meet60_tail:"(a primeira {l} dias após o primeiro envio)",r_pipe60:"Pipeline no dia 60",
+foot_c:"Baseado em médias de cold email. O dia 60 mostra reuniões e pipeline, não dinheiro no caixa: a maioria dos negócios fecha após o primeiro ciclo de vendas. Os números reais da campanha substituem estas estimativas após as primeiras semanas de envio."},
+it:{eyebrow:"I tuoi primi 60 giorni",meet60_l:"appuntamenti entro il giorno 60",meet60_l1:"appuntamento entro il giorno 60",inplay:"progetti in gioco",pipe_l:"di pipeline al giorno 60",gap_h:"L'obiettivo che decide quanto inviamo",
+sub_full:"Il riscaldamento occupa tutti i 60 giorni. Nessun appuntamento prima del giorno {d}.",sub_warm:"Giorni 1–{w}: le caselle si riscaldano. ",sub_main:"Giorno {s}: partono le prime email. Primi appuntamenti verso il giorno {b}, poi circa {m} al mese. La maggior parte dei contratti si firma dopo il giorno 60.",
+year60:"I tuoi primi 60 giorni, giorno per giorno",day:"Giorno",pipeline:"Pipeline",play60:"Riproduci i 60 giorni",lg_warm:"Riscaldamento caselle",lg_meet:"Appuntamento fissato",lg_pipe:"Pipeline (appuntamenti × chiusura × progetto)",
+t_inbox:"Caselle",t_meet:"Appuntamenti",t_pipe:"Pipeline",day_r:"GIORNO",ph_warm_n:"RISCALDAMENTO · {n} GIORNI",ph_warm:"RISCALDAMENTO",ph_send_n:"INVIO · {n} EMAIL/GIORNO",ph_send:"INVIO",
+no_meet:"Ancora nessun appuntamento · riscaldamento",eats:"Il riscaldamento occupa tutto il periodo",day60:"GIORNO 60 · {v} DI PIPELINE",behind60:"Dietro le quinte · primi 60 giorni",
+sentence60:"{w} giorni di riscaldamento, poi {leads} lead contattati da {boxes} caselle su {doms} domini. Al giorno 60: circa {meet} appuntamenti e {pipe} in pipeline.",every_month:"Ogni mese, una volta avviato l'invio",
+b_warm:"Giorni di riscaldamento",b_warm_h:"Nuovi domini prima del primo invio",b_lag:"Giorni dal primo invio al primo appuntamento",b_lag_h:"Risposta, poi prenotazione",
+r_senddays:"Giorni di invio nei 60",f_senddays:"60 − {w} giorni di riscaldamento",r_leads60:"Lead contattati al giorno 60",r_meet60:"Appuntamenti al giorno 60",f_meet60_tail:"(il primo {l} giorni dopo il primo invio)",r_pipe60:"Pipeline al giorno 60",
+foot_c:"Basato sulle medie del cold email. Il giorno 60 mostra appuntamenti e pipeline, non soldi incassati: la maggior parte dei contratti si firma dopo il primo ciclo di vendita. I numeri reali della campagna sostituiscono queste stime dopo le prime settimane di invio."}
+};
+Object.keys(EXTRA).forEach(l=>Object.assign(I18N[l],EXTRA[l]));
+const HZ=60;
+
+const store = { get(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }, set(k,v){ try{ localStorage.setItem(k,v); }catch(e){} } };
+const navLang = (navigator.language||"en").toLowerCase();
+let LANG = store.get("os-lang") || (I18N[navLang.slice(0,2)] ? navLang.slice(0,2) : "en");
+if(!I18N[LANG]) LANG="en";
+const REGION_CUR = {US:"USD",GB:"GBP",CA:"CAD",AU:"AUD",NZ:"NZD",CH:"CHF",JP:"JPY",IN:"INR",BR:"BRL",MX:"MXN",AE:"AED",SG:"SGD",ZA:"ZAR",NG:"NGN",MA:"MAD",SA:"SAR",SE:"SEK",NO:"NOK",DK:"DKK",PL:"PLN",FR:"EUR",DE:"EUR",ES:"EUR",IT:"EUR",PT:"EUR",NL:"EUR",BE:"EUR",IE:"EUR",AT:"EUR",FI:"EUR",GR:"EUR",LU:"EUR"};
+const region = ((navigator.language||"").split("-")[1]||"").toUpperCase();
+let CUR = store.get("os-cur") || REGION_CUR[region] || (["fr","de","es","it"].includes(navLang.slice(0,2)) ? "EUR" : "USD");
+const L = () => I18N[LANG];
+const LOC = () => L().loc;
+const t = (k,v={}) => (L()[k] ?? I18N.en[k] ?? k).replace(/\{(\w+)\}/g,(_,x)=>v[x] ?? "");
+
+/* ---------- formatting ---------- */
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const nf = o => { try{ return new Intl.NumberFormat(LOC(),o); }catch(e){ return new Intl.NumberFormat("en-US",o); } };
+const fmt = (n,d=0) => nf({minimumFractionDigits:d,maximumFractionDigits:d}).format(n);
+const r1 = n => Math.round(n*10)/10;
+const nice = n => { if(!isFinite(n)) return "—"; if(n>=10) return fmt(Math.round(n)); const r=r1(n); return fmt(r, Number.isInteger(r)?0:1); };
+const big = n => n>=10000 ? nf({notation:"compact",maximumFractionDigits:1}).format(n) : nice(n);
+const bigInt = n => n>=100000 ? nf({notation:"compact",maximumFractionDigits:1}).format(n) : fmt(n);
+const pct = x => nf({style:"percent",maximumFractionDigits:1}).format(x);
+const sig3 = n => { if(Math.abs(n)<1000) return n; const p=Math.pow(10,Math.floor(Math.log10(Math.abs(n)))-2); return Math.round(n/p)*p; };
+const mC = n => { try{ return nf({style:"currency",currency:CUR,notation:"compact",maximumFractionDigits:1}).format(sig3(n)); }catch(e){ return fmt(n); } };
+const mF = n => { try{ return nf({style:"currency",currency:CUR,maximumFractionDigits:0,minimumFractionDigits:0}).format(Math.round(n)); }catch(e){ return fmt(n); } };
+function curParts(){
+  try{ const p=nf({style:"currency",currency:CUR}).formatToParts(1); const ci=p.findIndex(x=>x.type==="currency"), ii=p.findIndex(x=>x.type==="integer"); return {sym:p[ci].value, before:ci<ii}; }
+  catch(e){ return {sym:CUR,before:true}; }
+}
+const moneyDigits = s => { const v=parseFloat(String(s).replace(/[^0-9]/g,"")); return isFinite(v)&&v>0?v:0; };
+const pctNum = s => { const v=parseFloat(String(s).replace(",",".").replace(/[^0-9.]/g,"")); return isFinite(v)&&v>0?v:0; };
+
+/* log sliders */
+const RANGE = {gap:[10000,5000000], deal:[500,1000000]};
+const toLog = (tv,[a,b]) => a*Math.pow(b/a, tv/1000);
+const fromLog = (v,[a,b]) => Math.max(0,Math.min(1000, 1000*Math.log(v/a)/Math.log(b/a)));
+const round2 = v => { if(v<=0) return 0; const p=Math.pow(10,Math.floor(Math.log10(v))-1); return Math.round(v/p)*p; };
+
+/* ---------- count-up ---------- */
+const shown = {};
+function tween(id,to,f){
+  const el=$(id), from=shown[id]; shown[id]=to;
+  if(reduce || from===undefined || from===to){ el.textContent=f(to); return; }
+  cancelAnimationFrame(el._r);
+  const t0=performance.now(), dur=450;
+  const step=tt=>{ const k=Math.min(1,(tt-t0)/dur), e=1-Math.pow(1-k,3); el.textContent = k<1 ? f(from+(to-from)*e) : f(to); if(k<1) el._r=requestAnimationFrame(step); else if(id.startsWith("h-")) fitHero(); };
+  el._r=requestAnimationFrame(step);
+}
+
+function fitHero(){
+  const ch=document.querySelector(".chain"); if(!ch) return;
+  const bs=[...ch.querySelectorAll(".link b")]; bs.forEach(b=>b.style.fontSize="");
+  if(matchMedia("(max-width:760px)").matches){
+    bs.forEach(b=>{ const w=b.parentElement.clientWidth*.66; if(b.scrollWidth>w){ const fs=parseFloat(getComputedStyle(b).fontSize); b.style.fontSize=Math.max(34,fs*w/b.scrollWidth)+"px"; } });
+    return;
+  }
+  for(let i=0;i<14 && ch.scrollWidth>ch.clientWidth+1;i++) bs.forEach(b=>{ const fs=parseFloat(getComputedStyle(b).fontSize); b.style.fontSize=(fs*.92)+"px"; });
+}
+/* ---------- model ---------- */
+const S = {gap:120000, deal:30000, close:10};
+const n = id => { const v=parseFloat($(id).value); return isFinite(v)&&v>0?v:0; };
+function model(){
+  const gap=S.gap, deal=S.deal, close=S.close/100, pos=n("pos")/100, book=n("book")/100;
+  const seq=n("seq"), days=n("days"), perbox=n("perbox"), perdom=n("perdom"), reserve=$("reserve").checked;
+  const ok = !!(gap&&deal&&close&&pos&&book&&seq&&days&&perbox&&perdom) && close<=1 && book<=1 && pos<=1;
+  const dealsYr=ok?gap/deal:0, dealsMo=dealsYr/12, meetMo=ok?dealsMo/close:0, meetYr=meetMo*12, posMo=ok?meetMo/book:0;
+  const leads=ok?Math.ceil(posMo/pos):0, epm=leads*seq, epd=ok?Math.ceil(epm/days):0;
+  const send=ok?Math.ceil((epm/days)/perbox):0, boxes=reserve?send*2:send, doms=ok?Math.ceil(boxes/perdom):0;
+  const intIn=(id,lo,hi,d)=>{ const v=parseFloat($(id).value); return isFinite(v)?Math.max(lo,Math.min(hi,Math.round(v))):d; };
+  const warm=intIn("warm",0,59,20), lag=intIn("lag",0,30,5);
+  const sendDays=Math.max(0,HZ-warm), bookStart=Math.min(HZ,warm+lag), bookDays=Math.max(0,HZ-bookStart);
+  const leads60=Math.round(leads*sendDays/30), meet60=meetMo*bookDays/30, deals60=meet60*close, pipe60=deals60*deal;
+  return {gap,deal,close,pos,book,seq,days,perbox,perdom,reserve,ok,dealsYr,dealsMo,meetMo,meetYr,posMo,leads,epm,epd,send,boxes,doms,
+    warm,lag,sendDays,bookStart,bookDays,leads60,meet60,deals60,pipe60};
+}
+
+/* ---------- timeline ---------- */
+const NS="http://www.w3.org/2000/svg";
+function mk(tag,a,parent,text){ const e=document.createElementNS(NS,tag); for(const k in a) e.setAttribute(k,a[k]); if(text!=null) e.textContent=text; parent.appendChild(e); return e; }
+let TL=null, lastW=0, anim=0;
+function drawTL(m){
+  const stage=$("stage"), svg=$("tlsvg"), cs=getComputedStyle(stage);
+  lastW=stage.clientWidth;
+  const W=Math.max(260, Math.floor(stage.clientWidth-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight)));
+  svg.textContent="";
+  const narrow=W<560, G=narrow?74:108, x0=G, x1=W-8, TW=x1-x0;
+  const rH=24, sH=28, tH=40, gp=10, aH=narrow?92:112;
+  const yS=rH+10, yM=yS+sH+gp, yA=yM+tH+gp, H=yA+aH+2;
+  svg.setAttribute("width",W); svg.setAttribute("height",H); svg.setAttribute("viewBox",`0 0 ${W} ${H}`);
+  const X=d=>x0+d/HZ*TW;
+  const defs=mk("defs",{},svg);
+  const lg=mk("linearGradient",{id:"revfill",x1:"0",y1:"0",x2:"0",y2:"1"},defs);
+  mk("stop",{offset:"0",style:"stop-color:var(--warm);stop-opacity:.45"},lg);
+  mk("stop",{offset:"1",style:"stop-color:var(--warm);stop-opacity:.02"},lg);
+  const pat=mk("pattern",{id:"hatch",width:"6",height:"6",patternUnits:"userSpaceOnUse",patternTransform:"rotate(45)"},defs);
+  mk("line",{x1:"0",y1:"0",x2:"0",y2:"6",style:"stroke:var(--warm);stroke-width:2;stroke-opacity:.35"},pat);
+  const cp=mk("clipPath",{id:"phclip"},defs);
+  const cpr=mk("rect",{x:"0",y:"0",width:String(W),height:String(H)},cp);
+  [[yS,sH],[yM,tH],[yA,aH]].forEach(([y,h])=>{
+    mk("rect",{x:x0,y,width:TW,height:h,rx:5,class:"bed"},svg);
+    for(let d=10;d<HZ;d+=20) mk("rect",{x:X(d),y:y+1,width:X(d+10)-X(d),height:h-2,class:"band"},svg);
+  });
+  mk("text",{x:0,y:rH-13,class:"gl"},svg,t("day_r"));
+  mk("line",{x1:x0,y1:rH,x2:x1,y2:rH,class:"rl"},svg);
+  for(let d=0;d<=HZ;d+=5){
+    const x=X(d), major=d%10===0;
+    mk("line",{x1:x,y1:major?rH-10:rH-4,x2:x,y2:rH,class:major?"tick":"tick mn"},svg);
+    if(major && d>0) mk("text",{x,y:rH-13,"text-anchor":d===HZ?"end":"middle",class:"rlab"},svg,String(d));
+  }
+  [["V1",t("t_inbox"),yS+sH/2],["V2",t("t_meet"),yM+tH/2],["A1",t("t_pipe"),yA+20]].forEach(([c,nm,cy])=>{
+    if(!narrow) mk("text",{x:0,y:cy+3.5,class:"tcode"},svg,c);
+    mk("text",{x:narrow?0:26,y:cy+4,class:"tname"},svg,nm);
+  });
+  const items=[];
+  const wx=X(m.warm), ty=yS+sH/2+3.5;
+  if(m.warm>0){
+    mk("rect",{x:x0+1,y:yS+3,width:Math.max(0,wx-x0-2),height:sH-6,rx:3,class:"ph-warm"},svg);
+    const l1=t("ph_warm_n",{n:m.warm}), l2=t("ph_warm");
+    const lbl = wx-x0>l1.length*6.6+16 ? l1 : (wx-x0>l2.length*6.6+16 ? l2 : "");
+    if(lbl) mk("text",{x:x0+8,y:ty,class:"phtxt w"},svg,lbl);
+  }
+  if(m.sendDays>0){
+    mk("rect",{x:wx+1,y:yS+3,width:Math.max(0,x1-wx-2),height:sH-6,rx:3,class:"ph-send"},svg);
+    const l1=t("ph_send_n",{n:fmt(m.epd)}), l2=t("ph_send");
+    const lbl = x1-wx>l1.length*6.6+16 ? l1 : (x1-wx>l2.length*6.6+16 ? l2 : "");
+    if(lbl && m.ok) mk("text",{x:wx+8,y:ty,class:"phtxt s"},svg,lbl);
+    if(m.warm>0) mk("line",{x1:wx,y1:yS+sH,x2:wx,y2:yA+aH-8,class:"fsend"},svg);
+  }
+  const n60=m.ok?m.meet60:0, full=Math.floor(n60+1e-9), rem=n60-full;
+  const room=Math.max(20,X(HZ)-X(m.bookStart));
+  const maxM=Math.max(4,Math.floor(room/8)), unit=full>maxM?Math.ceil(full/maxM):1;
+  const dayOf=k=>m.bookStart+k*30/(m.meetMo||1);
+  const ev=[]; let acc=0;
+  while(acc<full){ const a=Math.min(unit,full-acc); acc+=a; ev.push({d:dayOf(acc),amt:a,part:false}); }
+  if(rem>0.1) ev.push({d:HZ,amt:rem,part:true});
+  const pitch=ev.length?room/ev.length:room;
+  const bw=Math.max(3,Math.min(10,pitch*.55)), bh=22, by=yM+(tH-bh)/2;
+  ev.forEach(e=>{ e.x=Math.min(x1-bw/2-1, X(e.d)); });
+  ev.forEach(e=>{
+    const r=mk("rect",{x:(e.x-bw/2).toFixed(2),y:by,width:bw.toFixed(2),height:bh,rx:Math.min(2,bw/2).toFixed(2),class:e.part?"mk part":"mk"},svg);
+    items.push({el:r,x:e.x});
+  });
+  const nm=t("no_meet");
+  if(m.ok && m.bookStart>0 && m.bookStart<HZ && X(m.bookStart)-x0>nm.length*6.4+16) mk("text",{x:x0+8,y:yM+tH/2+3.5,class:"wnote"},svg,nm);
+  if(m.ok && m.bookStart>=HZ) mk("text",{x:x0+8,y:yM+tH/2+3.5,class:"wnote"},svg,t("eats"));
+  const top=yA+26, base=yA+aH-8;
+  const Y=v=>base-(m.pipe60?Math.min(1,v/m.pipe60):0)*(base-top);
+  let line=`M${x0},${base}`, cum=0;
+  ev.forEach(e=>{ cum+=e.amt*m.close*m.deal; line+=` H${e.x.toFixed(2)} V${Y(cum).toFixed(2)}`; });
+  line+=` H${x1}`;
+  const area=line+` V${base} H${x0} Z`;
+  mk("line",{x1:x0,y1:base,x2:x1,y2:base,class:"base"},svg);
+  if(m.ok && m.pipe60>0){
+    mk("line",{x1:x0,y1:Y(m.pipe60),x2:x1,y2:Y(m.pipe60),class:"goal"},svg);
+    mk("text",{x:x0+8,y:Y(m.pipe60)-7,class:"glabel"},svg,t("day60",{v:mC(m.pipe60)}));
+  }
+  const dim=mk("g",{class:"dimlayer"},svg); mk("path",{d:area,class:"area"},dim); mk("path",{d:line,class:"rev"},dim);
+  const lit=mk("g",{"clip-path":"url(#phclip)"},svg); mk("path",{d:area,class:"area"},lit); mk("path",{d:line,class:"rev"},lit);
+  if(m.ok && m.pipe60>0){ const ed=mk("circle",{cx:x1,cy:Y(m.pipe60),r:4,class:"enddot"},svg); items.push({el:ed,x:x1-0.6}); }
+  const head=mk("g",{},svg);
+  mk("line",{x1:0,y1:2,x2:0,y2:H,class:"phl"},head);
+  mk("path",{d:"M-6,0 H6 V9 L0,15 L-6,9 Z",class:"phh"},head);
+  TL={x0,TW,items,ev,cpr,head,close:m.close,deal:m.deal,pipe:m.pipe60,ok:m.ok};
+  svg.setAttribute("aria-label", m.ok ? `${t("year60")}: ${big(m.meet60)} ${t("meet60_l")}, ${mC(m.pipe60)} ${t("pipe_l")}.` : t("empty"));
+  $("unit-note").textContent = unit>1 ? t("unit",{n:fmt(unit)}) : "";
+}
+function setHead(p){
+  if(!TL) return;
+  const px=TL.x0+p*TL.TW;
+  TL.head.setAttribute("transform",`translate(${px.toFixed(2)},0)`);
+  TL.cpr.setAttribute("width",Math.max(0,px).toFixed(2));
+  for(const it of TL.items) it.el.classList.toggle("ahead", it.x>px+0.5);
+  let cum=0; for(const e of TL.ev) if(e.x<=px+0.5) cum+=e.amt*TL.close*TL.deal;
+  if(p>=1) cum=TL.ok?TL.pipe:0;
+  $("tc-r").textContent = TL.ok ? mF(cum) : "—";
+  $("tc-m").textContent = String(Math.round(Math.max(0,Math.min(1,p))*HZ)).padStart(2,"0");
+}
+function stopAnim(){ if(anim){ cancelAnimationFrame(anim); anim=0; } }
+function play(){
+  stopAnim(); if(!TL) return;
+  if(reduce){ setHead(1); return; }
+  const t0=performance.now(), dur=3200;
+  const step=now=>{ const k=Math.min(1,(now-t0)/dur); setHead(k); anim=k<1?requestAnimationFrame(step):0; };
+  setHead(0); anim=requestAnimationFrame(step);
+}
+
+/* ---------- render ---------- */
+let M=null;
+const PRESETS=[100000,500000,1000000,5000000];
+function update(){
+  M=model(); const m=M;
+  if(m.ok){
+    tween("h-meet",m.meet60,big);
+    tween("h-proj",m.deals60,v=>v<10?fmt(r1(v),Number.isInteger(r1(v))?0:1):big(v));
+    tween("h-rev",m.pipe60,v=>mC(v));
+    $("h-meet-l").textContent = r1(m.meet60)===1 ? t("meet60_l1") : t("meet60_l");
+    $("h-proj-l").textContent = t("inplay");
+    $("h-close").textContent = t("op_sign",{p:pct(m.close)});
+    $("h-deal").textContent = t("op_each",{v:mC(m.deal)});
+    $("h-sub").textContent = m.bookStart>=HZ
+      ? t("sub_full",{d:m.bookStart+1})
+      : (m.warm>0 ? t("sub_warm",{w:m.warm}) : "") + t("sub_main",{s:m.warm+1,b:m.bookStart+1,m:big(m.meetMo)});
+  } else {
+    ["h-meet","h-proj","h-rev"].forEach(id=>{ $(id).textContent="—"; delete shown[id]; });
+    $("h-close").textContent="× —"; $("h-deal").textContent="× —"; $("h-sub").textContent=t("empty");
+  }
+  document.querySelectorAll("#presets .chip").forEach(c=>c.setAttribute("aria-pressed", String(+c.dataset.v===m.gap)));
+  stopAnim(); drawTL(m); setHead(1); fitHero();
+
+  $("sentence").innerHTML = m.ok
+    ? t("sentence60",{w:`<b>${fmt(m.warm)}</b>`,leads:`<b>${fmt(m.leads60)}</b>`,boxes:`<b>${fmt(m.boxes)}</b>`,doms:`<b>${fmt(m.doms)}</b>`,meet:`<b>${big(m.meet60)}</b>`,pipe:`<b>${mC(m.pipe60)}</b>`})
+    : t("empty");
+  const st=[[bigInt(m.leads),t("f_leads"),"c0",null],[nice(m.posMo),t("f_int"),"c1",pct(m.pos)],[big(m.meetMo),t("f_meet"),"c2",pct(m.book)],[m.dealsMo<1?fmt(m.dealsMo,2):big(m.dealsMo),t("f_proj"),"c3",pct(m.close)]];
+  $("flow").innerHTML = st.map((s,i)=>(i?`<div class="fop"><em>× ${s[3]}</em></div>`:"")+`<div class="fcell ${s[2]}"><b>${m.ok?s[0]:"—"}</b><span>${s[1]}</span></div>`).join("");
+  tween("o-boxes",m.boxes,v=>fmt(Math.round(v)));
+  tween("o-doms",m.doms,v=>fmt(Math.round(v)));
+  $("o-epd").textContent=bigInt(m.epd); $("o-epm").textContent=bigInt(m.epm); $("o-warm").textContent=fmt(m.warm);
+  $("o-boxes-note").textContent = m.reserve ? t("n_boxes_r",{s:fmt(m.send)}) : t("n_boxes",{n:fmt(m.perbox)});
+  $("o-doms-note").textContent = t("n_doms",{n:fmt(m.perdom)});
+  $("o-epm-note").textContent = t("n_epm",{n:fmt(m.seq)});
+  const rows=[
+    [t("r_clients"), `${mC(m.gap)} ÷ ${mC(m.deal)} ÷ 12`, fmt(m.dealsMo,2)],
+    [t("r_calls"), `${fmt(m.dealsMo,2)} ÷ ${pct(m.close)} ${t("w_close")}`, fmt(m.meetMo,1)],
+    [t("r_pos"), `${fmt(m.meetMo,1)} ÷ ${pct(m.book)} ${t("w_book")}`, fmt(m.posMo,1)],
+    [t("r_leads"), `${fmt(m.posMo,1)} ÷ ${pct(m.pos)} ${t("w_pos")}`, fmt(m.leads), 1],
+    [t("r_epm"), `${fmt(m.leads)} × ${fmt(m.seq)} ${t("w_seq")}`, fmt(m.epm)],
+    [t("r_epd"), `${fmt(m.epm)} ÷ ${fmt(m.days)} ${t("w_days")}`, fmt(m.epd)],
+    [t("r_send"), `${fmt(m.epm/(m.days||1),1)} ÷ ${fmt(m.perbox)} ${t("w_perbox")}`, fmt(m.send), m.reserve?0:1],
+  ];
+  if(m.reserve) rows.push([t("r_backup"), `${fmt(m.send)} × 2`, fmt(m.boxes), 1]);
+  rows.push([t("r_doms"), `${fmt(m.boxes)} ÷ ${fmt(m.perdom)} ${t("w_perdom")}`, fmt(m.doms), 1]);
+  rows.push([t("r_senddays"), t("f_senddays",{w:fmt(m.warm)}), fmt(m.sendDays)]);
+  rows.push([t("r_leads60"), `${fmt(m.leads)} × ${fmt(m.sendDays)} ÷ 30`, fmt(m.leads60)]);
+  rows.push([t("r_meet60"), `${fmt(m.meetMo,1)} × ${fmt(m.bookDays)} ÷ 30 ${t("f_meet60_tail",{l:fmt(m.lag)})}`, fmt(m.meet60,1), 1]);
+  rows.push([t("r_pipe60"), `${fmt(m.meet60,1)} × ${pct(m.close)} × ${mC(m.deal)}`, mC(m.pipe60), 1]);
+  $("steps").innerHTML = m.ok ? rows.map(r=>`<tr><td>${r[0]}</td><td class="f">${r[1]}</td><td class="r${r[3]?" hl":""}">${r[2]}</td></tr>`).join("") : `<tr><td colspan="3">${t("empty")}</td></tr>`;
+}
+
+/* ---------- inputs ---------- */
+function paint(id){ const R=$(id); const p=(R.value-R.min)/(R.max-R.min)*100; R.style.setProperty("--p",Math.max(0,Math.min(100,p))+"%"); }
+function syncMoney(key){ $(key).value=fmt(S[key]); $(key+"R").value=fromLog(Math.max(S[key],RANGE[key][0]),RANGE[key]); paint(key+"R"); }
+function syncAll(){ syncMoney("gap"); syncMoney("deal"); $("close").value=String(S.close).replace(".",LOC().startsWith("en")?".":","); $("closeR").value=Math.min(80,S.close); paint("closeR"); }
+["gap","deal"].forEach(k=>{
+  $(k+"R").addEventListener("input",()=>{ S[k]=round2(toLog(+$(k+"R").value,RANGE[k])); $(k).value=fmt(S[k]); paint(k+"R"); update(); });
+  $(k).addEventListener("input",()=>{ S[k]=moneyDigits($(k).value); if(S[k]){ $(k+"R").value=fromLog(Math.max(S[k],RANGE[k][0]),RANGE[k]); paint(k+"R"); } update(); });
+  $(k).addEventListener("blur",()=>{ if(S[k]) $(k).value=fmt(S[k]); });
+});
+$("closeR").addEventListener("input",()=>{ S.close=+$("closeR").value; $("close").value=S.close; paint("closeR"); update(); });
+$("close").addEventListener("input",()=>{ S.close=Math.min(100,pctNum($("close").value)); if(S.close){ $("closeR").value=Math.min(80,S.close); paint("closeR"); } update(); });
+["pos","book","seq","days","perbox","perdom","warm","lag","reserve"].forEach(id=>$(id).addEventListener("input",update));
+$("reset").addEventListener("click",()=>{ Object.entries({pos:1,book:33,seq:2,days:26,perbox:20,perdom:3,warm:20,lag:5}).forEach(([k,v])=>$(k).value=v); $("reserve").checked=false; update(); });
+$("play").addEventListener("click",play);
+
+/* presets */
+function buildPresets(){
+  const box=$("presets"); box.querySelectorAll(".chip").forEach(c=>c.remove());
+  PRESETS.forEach(v=>{ const b=document.createElement("button"); b.type="button"; b.className="chip"; b.dataset.v=v; b.textContent=mC(v);
+    b.addEventListener("click",()=>{ S.gap=v; syncMoney("gap"); update(); }); box.appendChild(b); });
+}
+
+/* language + currency */
+function currencyList(){
+  let all=[]; try{ all=Intl.supportedValuesOf("currency"); }catch(e){}
+  const popular=["USD","EUR","GBP","CAD","AUD","CHF","JPY","INR","BRL","MXN","AED","SGD","ZAR","NGN","MAD","SAR","SEK","PLN","NZD","HKD"];
+  if(!all.length) all=popular.slice();
+  return {popular:popular.filter(c=>all.includes(c)||true), rest:all.filter(c=>!popular.includes(c)).sort()};
+}
+function buildSelects(){
+  const ls=$("lang"); ls.innerHTML=Object.entries(I18N).map(([k,v])=>`<option value="${k}"${k===LANG?" selected":""}>${v.name}</option>`).join("");
+  let dn=null; try{ dn=new Intl.DisplayNames([LOC()],{type:"currency"}); }catch(e){}
+  const name=c=>{ try{ return dn?dn.of(c):c; }catch(e){ return c; } };
+  const {popular,rest}=currencyList();
+  const opt=c=>`<option value="${c}"${c===CUR?" selected":""}>${c} · ${name(c)}</option>`;
+  $("cur").innerHTML=`<optgroup label="${t("popular")}">${popular.map(opt).join("")}</optgroup><optgroup label="${t("all")}">${rest.map(opt).join("")}</optgroup>`;
+  if(!$("cur").value) { CUR="USD"; $("cur").value="USD"; }
+}
+function applyI18n(){
+  document.documentElement.lang=LANG;
+  document.querySelectorAll("[data-i18n]").forEach(el=>{ el.textContent=t(el.dataset.i18n); });
+  $("play").setAttribute("aria-label",t("play60"));
+  $("lang").setAttribute("aria-label",t("lang")); $("cur").setAttribute("aria-label",t("cur"));
+  const cp=curParts();
+  document.querySelectorAll(".val .cb").forEach(e=>e.textContent=cp.before?cp.sym:"");
+  document.querySelectorAll(".val .ca").forEach(e=>e.textContent=cp.before?"":cp.sym);
+  $("gap-min").textContent=mC(RANGE.gap[0]); $("gap-max").textContent=mC(RANGE.gap[1]);
+  $("deal-min").textContent=mC(RANGE.deal[0]); $("deal-max").textContent=mC(RANGE.deal[1]);
+  buildSelects(); buildPresets(); syncAll();
+}
+$("lang").addEventListener("change",e=>{ LANG=e.target.value; store.set("os-lang",LANG); for(const k in shown) delete shown[k]; applyI18n(); update(); });
+$("cur").addEventListener("change",e=>{ CUR=e.target.value; store.set("os-cur",CUR); for(const k in shown) delete shown[k]; applyI18n(); update(); });
+
+function setView(v){
+  document.querySelectorAll("[data-full]").forEach(e=>e.hidden = v!=="full");
+  document.querySelectorAll("[data-client]").forEach(e=>e.hidden = v==="full");
+  document.querySelectorAll("[data-view]").forEach(b=>b.setAttribute("aria-pressed", String(b.dataset.view===v)));
+}
+document.querySelectorAll("[data-view]").forEach(b=>b.addEventListener("click",()=>setView(b.dataset.view)));
+setView(location.hash==="#full" ? "full" : "client");
+
+applyI18n();
+update();
+if("ResizeObserver" in window){
+  new ResizeObserver(()=>{ const w=$("stage").clientWidth; if(Math.abs(w-lastW)>1){ stopAnim(); drawTL(M); setHead(1); fitHero(); } }).observe($("stage"));
+}
+if(!reduce) setTimeout(play, 900);
+})();
+</script>
+</body>
+</html>

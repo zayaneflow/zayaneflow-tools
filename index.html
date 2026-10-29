@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}#nl-badge-frame{display:none!important}</style>
+
+<title>Zayaneflow Tools</title>
+<meta name="description" content="Free 3D sales tools for cold email agencies: plan the booked meetings a client needs, then price each one.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Zayaneflow Tools">
+<meta property="og:title" content="Zayaneflow Tools">
+<meta property="og:description" content="Free 3D sales tools for cold email agencies: plan the booked meetings a client needs, then price each one.">
+<meta property="og:url" content="https://zayaneflow-tools.netlify.app/">
+<meta property="og:image" content="https://zayaneflow-tools.netlify.app/media/og-tools.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://zayaneflow-tools.netlify.app/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22plg%22%20x1%3D%220%22%20y1%3D%221%22%20x2%3D%221%22%20y2%3D%220%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22%2341b6cc%22/%3E%3Cstop%20offset%3D%22.55%22%20stop-color%3D%22%23f0a03c%22/%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23ffd57f%22/%3E%3C/linearGradient%3E%3ClinearGradient%20id%3D%22plb%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%220%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22%231b2228%22/%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%230d1115%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20x%3D%221%22%20y%3D%221%22%20width%3D%2246%22%20height%3D%2246%22%20rx%3D%2212%22%20fill%3D%22url%28%23plb%29%22%20stroke%3D%22%232f3a43%22/%3E%3Cpath%20d%3D%22M9%2016V9h7M32%209h7v7M39%2032v7h-7M16%2039H9v-7%22%20fill%3D%22none%22%20stroke%3D%22%235f6b75%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22/%3E%3Cpath%20d%3D%22M13%2033h6v-5h6v-5h6v-5h3%22%20fill%3D%22none%22%20stroke%3D%22url%28%23plg%29%22%20stroke-width%3D%223.2%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3Ccircle%20cx%3D%2235.5%22%20cy%3D%2218%22%20r%3D%223.4%22%20fill%3D%22%23ffd57f%22/%3E%3Ccircle%20cx%3D%2235.5%22%20cy%3D%2218%22%20r%3D%226%22%20fill%3D%22%23ffd57f%22%20opacity%3D%22.18%22/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Martian+Mono:wght@400;500&display=swap">
+<style>
+/* Index of the two tools: a short thesis, two monitor-style cards with live previews, then how to use them on a call.
+   Same teal-to-amber grade as the apps. Single dark theme by choice. */
+:root{
+  color-scheme:dark;
+  --bg:#05070a; --panel:#11161a; --panel-2:#171e24; --inset:#06080a; --line:#222a31; --line-2:#34404a;
+  --fg:#eaedef; --muted:#8e99a1; --faint:#5f6b75; --cold:#41b6cc; --warm:#f0a03c; --hot:#ffd57f; --on-warm:#1c1206;
+  --display:"Big Shoulders Display","Arial Narrow","Roboto Condensed",Impact,sans-serif;
+  --sans:"Instrument Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --mono:"Martian Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box}
+html{background:var(--bg)}
+body{margin:0;background:radial-gradient(1100px 560px at 15% -10%, rgba(65,182,204,.08), transparent 60%),radial-gradient(900px 520px at 95% 0%, rgba(240,160,60,.07), transparent 60%),var(--bg);
+  color:var(--fg);font-family:var(--sans);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 48px}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--hot);outline-offset:3px}
+.wrap{max-width:1180px;margin:0 auto;display:grid;gap:40px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.mark{display:flex;align-items:center;gap:12px;font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase}
+.mark .logos{display:flex}
+.mark svg{width:30px;height:30px}
+.mark svg + svg{margin-left:-6px}
+.langs{font-family:var(--mono);font-size:11px;color:var(--faint);letter-spacing:.08em}
+.hero{display:grid;gap:14px;max-width:980px}
+.eyebrow{margin:0;font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+h1{margin:0;font-family:var(--display);font-weight:900;font-size:clamp(44px,6vw,80px);line-height:.9;letter-spacing:.005em;text-wrap:balance}
+h1 em{font-style:normal;background:linear-gradient(180deg,#fff6dc 0%,var(--hot) 48%,#e39a33 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.lede{margin:0;font-size:clamp(17px,2vw,20px);color:#c9d1d6;max-width:56ch}
+.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+@media (max-width:860px){.cards{grid-template-columns:minmax(0,1fr)}}
+.card{display:grid;grid-template-rows:auto 1fr;background:linear-gradient(180deg,var(--panel-2),var(--panel));border:1px solid var(--line);border-radius:16px;overflow:hidden;min-width:0;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.04),0 30px 70px -36px rgba(0,0,0,.9)}
+.screen{position:relative;aspect-ratio:1088/640;max-width:100%;background:#05070a;border-bottom:1px solid var(--line)}
+.screen video,.screen img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.screen::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(var(--line-2),var(--line-2)) 10px 10px/16px 1.5px no-repeat,linear-gradient(var(--line-2),var(--line-2)) 10px 10px/1.5px 16px no-repeat,
+  linear-gradient(var(--line-2),var(--line-2)) calc(100% - 10px) 10px/16px 1.5px no-repeat,linear-gradient(var(--line-2),var(--line-2)) calc(100% - 11.5px) 10px/1.5px 16px no-repeat}
+.body{padding:22px 22px 24px;display:grid;gap:12px;align-content:start}
+.kick{margin:0;font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase}
+.c1 .kick{color:var(--cold)} .c2 .kick{color:var(--warm)}
+.card h2{margin:0;font-family:var(--display);font-weight:800;font-size:clamp(30px,3.4vw,40px);line-height:.95;letter-spacing:.01em;text-wrap:balance}
+.card p{margin:0;color:#c3ccd2;max-width:52ch}
+.inputs{display:flex;flex-wrap:wrap;gap:6px;margin:2px 0 4px;padding:0;list-style:none}
+.inputs li{font-family:var(--mono);font-size:11px;color:var(--fg);background:var(--inset);border:1px solid var(--line-2);border-radius:999px;padding:4px 10px}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px}
+.btn{display:inline-flex;align-items:center;gap:9px;font-weight:600;font-size:15px;text-decoration:none;border-radius:999px;padding:11px 18px}
+.btn.primary{color:var(--on-warm);background:linear-gradient(180deg,var(--hot),var(--warm));box-shadow:0 10px 34px -10px rgba(240,160,60,.6)}
+.btn.primary:hover{filter:brightness(1.06)}
+.btn.ghost{color:var(--fg);border:1px solid var(--line-2);background:var(--inset)}
+.btn.ghost:hover{border-color:var(--muted)}
+.btn svg{width:12px;height:12px;fill:currentColor}
+.how{display:grid;gap:16px}
+.how h2{margin:0;font-family:var(--display);font-weight:800;font-size:clamp(28px,3vw,36px);line-height:1}
+.steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:0;padding:0;list-style:none;counter-reset:s}
+@media (max-width:860px){.steps{grid-template-columns:minmax(0,1fr)}}
+.steps li{counter-increment:s;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;display:grid;gap:6px;min-width:0}
+.steps li::before{content:counter(s);font-family:var(--display);font-weight:800;font-size:30px;line-height:1;color:var(--hot)}
+.steps b{font-weight:600}
+.steps span{color:var(--muted);font-size:14.5px}
+.foot{display:grid;gap:6px;padding-top:20px;border-top:1px dashed var(--line-2);font-size:13px;color:var(--faint)}
+.foot p{margin:0;max-width:80ch}
+.foot a{color:var(--muted)}
+@media (prefers-reduced-motion:reduce){ .screen video{display:none} }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top">
+    <div class="mark"><span class="logos"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" class="logo" aria-hidden="true"><defs><linearGradient id="plg" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#41b6cc"/><stop offset=".55" stop-color="#f0a03c"/><stop offset="1" stop-color="#ffd57f"/></linearGradient><linearGradient id="plb" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1b2228"/><stop offset="1" stop-color="#0d1115"/></linearGradient></defs><rect x="1" y="1" width="46" height="46" rx="12" fill="url(#plb)" stroke="#2f3a43"/><path d="M9 16V9h7M32 9h7v7M39 32v7h-7M16 39H9v-7" fill="none" stroke="#5f6b75" stroke-width="2" stroke-linecap="round"/><path d="M13 33h6v-5h6v-5h6v-5h3" fill="none" stroke="url(#plg)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="35.5" cy="18" r="3.4" fill="#ffd57f"/><circle cx="35.5" cy="18" r="6" fill="#ffd57f" opacity=".18"/></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" class="logo" aria-hidden="true"><defs><radialGradient id="prc" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#fff3d1"/><stop offset=".5" stop-color="#ffd57f"/><stop offset="1" stop-color="#e08f2c"/></radialGradient><linearGradient id="prb" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1b2228"/><stop offset="1" stop-color="#0d1115"/></linearGradient></defs><rect x="1" y="1" width="46" height="46" rx="12" fill="url(#prb)" stroke="#2f3a43"/><circle cx="24" cy="24" r="17" fill="none" stroke="#41b6cc" stroke-width="1.6" stroke-dasharray="2.2 3.1" opacity=".75"/><circle cx="24" cy="24" r="12.5" fill="url(#prc)"/><circle cx="24" cy="24" r="10.2" fill="none" stroke="#1c1206" stroke-opacity=".22" stroke-width="1"/><path d="M26.2 15.5 18.6 25.6h4.9l-1.7 7 7.6-10.1h-4.9z" fill="#1c1206"/></svg></span><span>Zayaneflow Tools</span></div>
+    <span class="langs">EN · FR · ES · DE · PT · IT · every currency</span>
+  </header>
+
+  <section class="hero">
+    <p class="eyebrow">Free · no sign-up · built for sales calls</p>
+    <h1>Show your prospect the meetings <em>before you sell them.</em></h1>
+    <p class="lede">Two free tools for cold email agencies. The first one plans how many booked meetings a client needs. The second one prices each meeting. Type three numbers while they talk, then share your screen.</p>
+  </section>
+
+  <section class="cards">
+    <article class="card c1">
+      <div class="screen">
+        <video autoplay muted loop playsinline preload="metadata" poster="media/planner-3d.png" aria-label="Preview of the 60-Day Booked Meetings Planner playing its 60 days">
+          <source src="media/planner-3d.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="body">
+        <p class="kick">Tool 1 · plan the meetings</p>
+        <h2>60-Day Booked Meetings Planner</h2>
+        <p>See the mailboxes, leads and meetings it takes to hit a revenue goal, and what lands in the first 60 days. Press Play and the camera walks your prospect through every step.</p>
+        <ul class="inputs"><li>Extra revenue a year</li><li>Average project</li><li>Close rate</li></ul>
+        <div class="actions">
+          <a class="btn primary" href="planner/"><svg viewBox="0 0 12 14" aria-hidden="true"><path d="M0 0 L12 7 L0 14 Z"/></svg>Open the 3D planner</a>
+          <a class="btn ghost" href="planner-lite/">Light version</a>
+        </div>
+      </div>
+    </article>
+    <article class="card c2">
+      <div class="screen">
+        <video autoplay muted loop playsinline preload="metadata" poster="media/pricer-3d.png" aria-label="Preview of the 2-Second Meeting Pricer splitting a project coin into meetings">
+          <source src="media/pricer-3d.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="body">
+        <p class="kick">Tool 2 · price each meeting</p>
+        <h2>2-Second Meeting Pricer</h2>
+        <p>Turn your cut into a price per booked meeting. A signed project becomes a gold coin, cut into the meetings it takes to win it. Your fee is a sliver of each slice.</p>
+        <ul class="inputs"><li>Your cut</li><li>Their close rate</li><li>Average project</li></ul>
+        <div class="actions">
+          <a class="btn primary" href="pricer/"><svg viewBox="0 0 12 14" aria-hidden="true"><path d="M0 0 L12 7 L0 14 Z"/></svg>Open the 3D pricer</a>
+          <a class="btn ghost" href="pricer-lite/">Light version</a>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <section class="how">
+    <h2>How to use them on a call</h2>
+    <ol class="steps">
+      <li><b>Ask three numbers.</b><span>Their extra revenue goal for the next 12 months, their average project price, and their close rate.</span></li>
+      <li><b>Type them in while they talk.</b><span>The planner shows the meetings they need and what's in the pipeline by day 60.</span></li>
+      <li><b>Share your screen and press Play.</b><span>Then open the pricer: it shows your price per meeting and what they keep on every signed project.</span></li>
+    </ol>
+  </section>
+
+  <footer class="foot">
+    <p>Made by Zayane (Zayaneflow). Free for anyone.</p>
+    <p>The numbers are estimates based on cold email averages: about 1% interested replies, 1 in 3 of those booking a call. Your real campaign numbers replace them after the first weeks of sending. The light versions skip the 3D view and load fast on any phone.</p>
+  </footer>
+</div>
+</body>
+</html>

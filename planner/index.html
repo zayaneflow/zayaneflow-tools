@@ -1,0 +1,1585 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}#nl-badge-frame{display:none!important}</style>
+<meta name="description" content="Type a revenue goal, a project price and a close rate. See the mailboxes, leads and booked meetings it takes, in 3D. Free.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Zayaneflow Tools">
+<meta property="og:title" content="60-Day Booked Meetings Planner">
+<meta property="og:description" content="Type a revenue goal, a project price and a close rate. See the mailboxes, leads and booked meetings it takes, in 3D. Free.">
+<meta property="og:url" content="https://zayaneflow-tools.netlify.app/planner/">
+<meta property="og:image" content="https://zayaneflow-tools.netlify.app/media/og-planner.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://zayaneflow-tools.netlify.app/planner/">
+<title>60-Day Booked Meetings Planner</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22plg%22%20x1%3D%220%22%20y1%3D%221%22%20x2%3D%221%22%20y2%3D%220%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22%2341b6cc%22/%3E%3Cstop%20offset%3D%22.55%22%20stop-color%3D%22%23f0a03c%22/%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23ffd57f%22/%3E%3C/linearGradient%3E%3ClinearGradient%20id%3D%22plb%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%220%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22%231b2228%22/%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%230d1115%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20x%3D%221%22%20y%3D%221%22%20width%3D%2246%22%20height%3D%2246%22%20rx%3D%2212%22%20fill%3D%22url%28%23plb%29%22%20stroke%3D%22%232f3a43%22/%3E%3Cpath%20d%3D%22M9%2016V9h7M32%209h7v7M39%2032v7h-7M16%2039H9v-7%22%20fill%3D%22none%22%20stroke%3D%22%235f6b75%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22/%3E%3Cpath%20d%3D%22M13%2033h6v-5h6v-5h6v-5h3%22%20fill%3D%22none%22%20stroke%3D%22url%28%23plg%29%22%20stroke-width%3D%223.2%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3Ccircle%20cx%3D%2235.5%22%20cy%3D%2218%22%20r%3D%223.4%22%20fill%3D%22%23ffd57f%22/%3E%3Ccircle%20cx%3D%2235.5%22%20cy%3D%2218%22%20r%3D%226%22%20fill%3D%22%23ffd57f%22%20opacity%3D%22.18%22/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Martian+Mono:wght@400;500&display=swap">
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/shaders/CopyShader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/shaders/LuminosityHighPassShader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/postprocessing/Pass.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/postprocessing/EffectComposer.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/postprocessing/RenderPass.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/postprocessing/ShaderPass.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/postprocessing/UnrealBloomPass.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/controls/OrbitControls.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/environments/RoomEnvironment.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<style>
+/* A 3D "program monitor" of the outreach machine: inboxes → market planet → calendar → vault.
+   HUD numbers top-left, inspector top-right, transport + captions above a fader console at the bottom,
+   detailed 60-day tracks and the full plan below the fold. Teal-to-amber grade: cold leads warm up into money.
+   Single dark theme by choice. */
+:root{
+  color-scheme:dark;
+  --bg:#05070a; --panel:#11161a; --panel-2:#171e24; --inset:#06080a;
+  --glass:rgba(11,15,19,.74); --line:#222a31; --line-2:#34404a;
+  --fg:#eaedef; --muted:#8e99a1; --faint:#5f6b75;
+  --deep:#4a8db5; --mid:#44a6c6; --cold:#41b6cc; --warm:#f0a03c; --hot:#ffd57f;
+  --on-warm:#1c1206; --warm-soft:rgba(240,160,60,.12);
+  --display:"Big Shoulders Display","Arial Narrow","Roboto Condensed",Impact,sans-serif;
+  --sans:"Instrument Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --mono:"Martian Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box}
+html{background:var(--bg)}
+body{
+  background:radial-gradient(1200px 600px at 50% -10%, rgba(65,182,204,.07), transparent 60%),var(--bg);
+  color:var(--fg);font-family:var(--sans);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  padding-block:12px 56px;min-height:100%;
+}
+button,select,input{font:inherit}
+:focus-visible{outline:2px solid var(--hot);outline-offset:2px}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.shell{max-width:1600px;margin:0 auto;display:grid;gap:12px}
+.shell>*,.top>*,.studio>*{min-width:0}
+
+/* top bar */
+.top{display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:space-between}
+.mark{display:flex;align-items:center;gap:12px;font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;min-width:0}
+.logo{width:32px;height:32px;flex:none;filter:drop-shadow(0 4px 14px rgba(0,0,0,.5))}
+.chips{display:flex;gap:4px;padding:3px;background:var(--inset);border:1px solid var(--line);border-radius:999px;overflow-x:auto;max-width:100%;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chips button{flex:none;font-size:12.5px;font-weight:500;color:var(--muted);background:none;border:0;border-radius:999px;padding:6px 12px;cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:7px}
+.chips button i{width:7px;height:7px;border-radius:50%;background:var(--c,var(--cold));box-shadow:0 0 8px var(--c,var(--cold))}
+.chips button[aria-pressed="true"]{background:var(--panel-2);color:var(--fg);box-shadow:inset 0 0 0 1px var(--line-2)}
+.ctrls{display:flex;gap:8px;flex-wrap:wrap}
+.sel{appearance:none;-webkit-appearance:none;background:var(--inset) url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6'><path d='M1 1l4 4 4-4' fill='none' stroke='%238e99a1' stroke-width='1.5'/></svg>") no-repeat right 12px center;
+  border:1px solid var(--line);border-radius:999px;color:var(--fg);font-size:13px;font-weight:500;padding:7px 30px 7px 12px;max-width:190px;cursor:pointer}
+.sel option,.sel optgroup{background:#13181c;color:var(--fg)}
+@media (max-width:620px){ .top{gap:10px} .mark span{font-size:11px;letter-spacing:.12em} .chips{order:3;width:100%} .ctrls{margin-left:auto} .sel{max-width:150px;font-size:12.5px} }
+
+/* studio */
+.studio{position:relative;display:grid;gap:12px}
+.viewport{position:relative;height:clamp(480px,132vw,640px);border-radius:16px;overflow:hidden;border:1px solid var(--line);background:#05070a;
+  box-shadow:0 30px 80px -40px rgba(0,0,0,.9),inset 0 0 0 1px rgba(255,255,255,.02);touch-action:pan-y}
+@media (min-width:640px){ .viewport{height:clamp(540px,74vh,760px)} }
+.viewport canvas.gl{position:absolute;inset:0;width:100%!important;height:100%!important;display:block;cursor:grab;outline:none}
+.viewport canvas.gl.hov{cursor:pointer}
+.viewport canvas.gl:active{cursor:grabbing}
+.viewport::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse at center, transparent 58%, rgba(0,0,0,.5) 100%),
+    linear-gradient(var(--line-2),var(--line-2)) 12px 12px/20px 1.5px no-repeat,
+    linear-gradient(var(--line-2),var(--line-2)) 12px 12px/1.5px 20px no-repeat,
+    linear-gradient(var(--line-2),var(--line-2)) calc(100% - 12px) 12px/20px 1.5px no-repeat,
+    linear-gradient(var(--line-2),var(--line-2)) calc(100% - 13.5px) 12px/1.5px 20px no-repeat}
+.labels{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.lbl{position:absolute;left:0;top:0;pointer-events:auto;cursor:pointer;background:none;border:0;padding:6px 8px 0;color:var(--fg);text-align:center;
+  display:grid;justify-items:center;gap:2px;will-change:transform;transition:opacity .25s}
+.lbl b{font-family:var(--display);font-weight:800;font-size:28px;line-height:.9;letter-spacing:.01em;font-variant-numeric:tabular-nums;text-shadow:0 2px 18px rgba(0,0,0,.95)}
+.lbl span{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:#a6b0b7;text-shadow:0 1px 8px #000;white-space:nowrap}
+.lbl::after{content:"";width:1px;height:18px;background:linear-gradient(var(--c,var(--cold)),transparent);margin-top:3px}
+.lbl.dim{opacity:.28}
+.lbl[hidden]{display:none}
+.hud{position:absolute;left:20px;top:18px;right:20px;pointer-events:none;display:grid;gap:8px;justify-items:start}
+.hud .eyebrow{margin:0;font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.chain{display:flex;align-items:flex-end;gap:12px;flex-wrap:nowrap;max-width:100%;--hf:62px}
+.link{display:grid;gap:6px;min-width:0}
+.link b{font-family:var(--display);font-weight:900;font-size:var(--hf);line-height:.82;font-variant-numeric:tabular-nums;white-space:nowrap;
+  -webkit-background-clip:text;background-clip:text;color:transparent;padding-bottom:3px}
+.link span{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+.k-meet b{background-image:linear-gradient(180deg,#9aeaf6 0%,var(--cold) 55%,#2a7f95 100%)}
+.k-proj b{background-image:linear-gradient(180deg,#ffd9a1 0%,var(--warm) 55%,#b8661a 100%)}
+.k-rev b{background-image:linear-gradient(180deg,#fff6dc 0%,var(--hot) 50%,#e39a33 100%);filter:drop-shadow(0 0 26px rgba(255,213,127,.35))}
+.op{font-family:var(--mono);font-size:10.5px;color:var(--fg);background:rgba(12,16,20,.8);border:1px solid var(--line-2);border-radius:999px;padding:3px 9px;white-space:nowrap;margin-bottom:24px;flex:none}
+
+.caption{position:absolute;left:50%;bottom:calc(var(--tph,58px) + 24px);transform:translate(-50%,6px);width:max-content;max-width:min(640px,calc(100% - 28px));
+  text-align:center;font-size:15px;font-weight:500;line-height:1.4;color:var(--fg);background:rgba(7,10,13,.8);border:1px solid var(--line-2);border-radius:12px;
+  padding:9px 15px;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);opacity:0;transition:opacity .35s,transform .35s;pointer-events:none;text-wrap:balance}
+.caption.on{opacity:1;transform:translate(-50%,0)}
+.caption b{color:var(--hot);font-weight:600}
+
+.transport3{position:absolute;left:12px;right:12px;bottom:12px;display:flex;align-items:center;gap:12px;padding:7px 16px 7px 7px;background:rgba(7,10,13,.8);
+  border:1px solid var(--line-2);border-radius:999px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.tp-play{position:relative;flex:none;display:flex;align-items:center;gap:9px;font-weight:600;font-size:14px;color:var(--on-warm);
+  background:linear-gradient(180deg,var(--hot),var(--warm));border:0;border-radius:999px;padding:10px 18px 10px 15px;cursor:pointer;box-shadow:0 8px 30px -8px rgba(240,160,60,.65);white-space:nowrap}
+.tp-play svg{width:12px;height:12px;fill:currentColor;flex:none}
+.tp-play.playing{background:var(--panel-2);color:var(--fg);box-shadow:inset 0 0 0 1px var(--line-2)}
+.tp-play.pulse::before{content:"";position:absolute;inset:-5px;border-radius:999px;border:2px solid rgba(255,213,127,.55);animation:ring 1.8s ease-out infinite}
+@keyframes ring{0%{opacity:.9;transform:scale(.96)}100%{opacity:0;transform:scale(1.18)}}
+.tp-day{display:grid;line-height:1;gap:3px;flex:none}
+.tp-day span,.tp-val span{font-family:var(--mono);font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
+.tp-day b{font-family:var(--display);font-weight:800;font-size:24px;color:var(--hot);font-variant-numeric:tabular-nums;min-width:2.2ch}
+.tp-bar{position:relative;flex:1;min-width:60px;height:30px;cursor:ew-resize;touch-action:none}
+.tp-bar:focus-visible{outline:2px solid var(--hot);outline-offset:2px;border-radius:6px}
+.tp-bar::before{content:"";position:absolute;left:0;right:0;top:50%;height:4px;margin-top:-2px;border-radius:4px;background:var(--line-2)}
+.tp-warm{position:absolute;left:0;top:50%;height:6px;margin-top:-3px;border-radius:4px;background:repeating-linear-gradient(135deg,var(--warm) 0 2px,transparent 2px 5px);opacity:.75}
+.tp-fill{position:absolute;top:50%;height:4px;margin-top:-2px;border-radius:4px;background:linear-gradient(90deg,var(--cold),var(--hot))}
+.tp-ticks i{position:absolute;top:50%;width:2px;height:12px;margin:-6px 0 0 -1px;border-radius:1px;background:var(--cold);opacity:.35}
+.tp-ticks i.on{opacity:1;box-shadow:0 0 6px var(--cold)}
+.tp-head{position:absolute;top:50%;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;background:var(--hot);box-shadow:0 0 0 4px rgba(255,213,127,.2),0 0 16px rgba(255,213,127,.6)}
+.tp-val{display:grid;line-height:1;gap:3px;text-align:right;flex:none;min-width:64px}
+.tp-val b{font-family:var(--display);font-weight:800;font-size:24px;color:var(--fg);font-variant-numeric:tabular-nums;white-space:nowrap}
+.tp-fs{flex:none;width:34px;height:34px;border-radius:50%;border:1px solid var(--line-2);background:var(--inset);color:var(--fg);display:none;place-items:center;cursor:pointer}
+.tp-fs svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.6}
+.tp-fs:hover{border-color:var(--muted)}
+@media (min-width:1080px){ .fs-ok .tp-fs{display:grid} }
+.studio:fullscreen{height:100vh!important;max-height:none;background:var(--bg)}
+.studio:fullscreen .viewport{border-radius:0;border:0}
+.vnotes{position:absolute;right:18px;bottom:calc(var(--tph,58px) + 26px);display:grid;gap:3px;text-align:right;font-family:var(--mono);font-size:9.5px;color:var(--faint);pointer-events:none;max-width:46%}
+.nogl{position:absolute;inset:0;display:grid;place-items:center;padding:24px;text-align:center;color:var(--muted);font-size:14px;
+  background:radial-gradient(circle at 50% 45%, rgba(65,182,204,.12), transparent 60%)}
+.nogl p{max-width:42ch;margin:0}
+@media (max-width:620px){
+  .caption{font-size:13.5px;padding:8px 12px}
+  .tp-play span{display:none}
+  .tp-play{padding:11px 13px}
+  .tp-day b,.tp-val b{font-size:21px}
+  .transport3{gap:10px;padding-right:14px}
+  .lbl b{font-size:21px}
+  .lbl span{font-size:8.5px}
+  .vnotes{display:none}
+  .hud{left:16px;top:14px;right:16px}
+  .link span{white-space:normal;font-size:8.5px;letter-spacing:.1em;line-height:1.25}
+  .link{flex:0 1 auto}
+  .op{margin-bottom:30px;padding:2px 7px;font-size:9.5px}
+  .chain{gap:8px}
+}
+
+/* glass panels */
+.panel{background:linear-gradient(180deg,rgba(23,30,36,.92),rgba(14,19,23,.94));border:1px solid var(--line);border-radius:14px;min-width:0;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.04),0 24px 60px -28px rgba(0,0,0,.8)}
+.console{padding:14px 16px 16px;display:grid;gap:16px}
+.c-head{display:grid;gap:9px;align-content:start}
+.c-head h2,.ins-k{margin:0;font-family:var(--mono);font-size:10px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.presets{display:flex;gap:5px;flex-wrap:wrap}
+.chip{border:1px solid var(--line-2);background:var(--inset);color:var(--muted);border-radius:999px;padding:4px 10px;font-family:var(--mono);font-size:11px;cursor:pointer;transition:all .15s}
+.chip:hover{color:var(--fg);border-color:var(--muted)}
+.chip[aria-pressed="true"]{border-color:var(--warm);color:var(--hot);background:var(--warm-soft)}
+.ctl{display:grid;gap:4px;min-width:0}
+.ctl-top{display:flex;justify-content:space-between;align-items:flex-end;gap:10px}
+.ctl label{font-weight:600;font-size:13.5px;line-height:1.25;min-width:0}
+.ctl .hint2{display:block;font-weight:400;font-size:11.5px;color:var(--muted);margin-top:1px}
+.val{display:flex;align-items:baseline;gap:2px;font-family:var(--display);font-weight:700;font-size:28px;line-height:1;flex:none}
+.val .u{color:var(--faint);font-size:19px}
+.val input{width:8.6ch;font:inherit;color:var(--fg);background:transparent;border:0;border-bottom:1px dashed var(--line-2);text-align:right;padding:0 0 2px;font-variant-numeric:tabular-nums}
+.val input.short{width:3.2ch}
+.val input:focus{outline:none;border-bottom-color:var(--hot)}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:26px;background:transparent;margin:0;cursor:pointer}
+input[type=range]:focus-visible{outline:none}
+input[type=range]::-webkit-slider-runnable-track{height:4px;border-radius:4px;background:linear-gradient(90deg,var(--cold),var(--warm)) 0 0/var(--p,50%) 100% no-repeat,var(--line-2)}
+input[type=range]::-moz-range-track{height:4px;border-radius:4px;background:var(--line-2)}
+input[type=range]::-moz-range-progress{height:4px;border-radius:4px;background:linear-gradient(90deg,var(--cold),var(--warm))}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:26px;margin-top:-11px;border:0;border-radius:4px;
+  background:linear-gradient(180deg,#f3f5f7 0 45%,#272d34 45% 55%,#c6cdd3 55% 100%);box-shadow:0 2px 8px rgba(0,0,0,.6),0 0 0 1px rgba(0,0,0,.45)}
+input[type=range]::-moz-range-thumb{width:16px;height:26px;border:0;border-radius:4px;background:linear-gradient(180deg,#f3f5f7 0 45%,#272d34 45% 55%,#c6cdd3 55% 100%)}
+input[type=range]:focus-visible::-webkit-slider-thumb{box-shadow:0 0 0 3px var(--bg),0 0 0 5px var(--hot)}
+
+.inspector{padding:16px;display:grid;gap:11px;align-content:start}
+.ins-k{display:flex;align-items:center;gap:8px;color:var(--c,var(--cold))}
+.ins-k i{width:8px;height:8px;border-radius:50%;background:var(--c,var(--cold));box-shadow:0 0 10px var(--c,var(--cold))}
+.inspector h3{margin:0;font-family:var(--display);font-weight:800;font-size:30px;line-height:1;letter-spacing:.01em}
+.inspector p{margin:0;color:#c9d1d6;font-size:14px;line-height:1.55}
+.inspector p b{color:var(--hot);font-weight:600}
+.mathline{font-family:var(--mono);font-size:11.5px;color:var(--fg);background:var(--inset);border:1px solid var(--line);border-radius:8px;padding:9px 11px;line-height:1.6;overflow-wrap:anywhere}
+.mathline[hidden]{display:none}
+.stepper{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.dots{display:flex;gap:5px}
+.dots span{width:18px;height:3px;border-radius:2px;background:var(--line-2)}
+.dots span.on{background:var(--c,var(--cold))}
+.nav{display:flex;gap:6px}
+.nav button{width:34px;height:30px;border-radius:8px;border:1px solid var(--line-2);background:var(--inset);color:var(--fg);cursor:pointer;display:grid;place-items:center}
+.nav button:hover{border-color:var(--muted)}
+.nav svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2}
+
+@media (min-width:1080px){
+  .studio{display:block;height:clamp(640px,calc(100vh - var(--hdr,52px) - 36px),980px)}
+  .viewport{position:absolute;inset:0;height:auto}
+  .console{position:absolute;left:16px;right:16px;bottom:16px;grid-template-columns:auto repeat(3,minmax(0,1fr));align-items:end;gap:30px;padding:13px 20px 14px;
+    background:var(--glass);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+  .console .hint2{display:none}
+  .inspector{position:absolute;right:16px;top:16px;width:340px;background:var(--glass);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+  .transport3{left:28px;right:384px;bottom:calc(var(--ch,96px) + 30px)}
+  .caption{left:calc((100% - 356px)/2);bottom:calc(var(--ch,96px) + var(--tph,58px) + 46px)}
+  .vnotes{right:28px;bottom:calc(var(--ch,96px) + 34px);max-width:330px}
+  .hud{right:390px;left:24px;top:22px}
+}
+@media (max-width:1079px){ .inspector{order:1} .console{order:2} }
+
+/* timeline */
+.panel-head{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:11px 14px;border-bottom:1px solid var(--line)}
+.panel-head h2{margin:0;font-family:var(--mono);font-size:10.5px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.transport{display:flex;align-items:center;gap:8px}
+.tc{display:grid;gap:1px;background:var(--inset);border:1px solid var(--line);border-radius:6px;padding:4px 10px 5px;min-width:58px}
+.tc span{font-family:var(--mono);font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
+.tc b{font-family:var(--mono);font-size:14px;font-weight:500;color:var(--hot);font-variant-numeric:tabular-nums;white-space:nowrap}
+.tc.r{min-width:110px}
+.play{width:36px;height:36px;border-radius:50%;border:1px solid var(--warm);background:var(--warm-soft);color:var(--hot);display:grid;place-items:center;cursor:pointer}
+.play svg{width:12px;height:12px;fill:currentColor}
+.stage{padding:10px 14px 2px;min-width:0;touch-action:none;cursor:ew-resize}
+.stage:focus-visible{outline:2px solid var(--hot);outline-offset:-2px;border-radius:8px}
+.stage svg{display:block}
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;padding:6px 16px 12px;font-family:var(--mono);font-size:10px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:8px}
+.legend i{display:inline-block;width:7px;height:14px;border-radius:2px;background:var(--cold)}
+.legend i.r{width:16px;height:2px;background:var(--hot)}
+.legend i.w{width:16px;background:repeating-linear-gradient(135deg,var(--warm) 0 2px,transparent 2px 5px);border:1px solid rgba(240,160,60,.5)}
+.legend #unit-note:empty{display:none}
+.bed{fill:rgba(255,255,255,.022);stroke:var(--line)} .band{fill:rgba(255,255,255,.025)}
+.rl{stroke:var(--line-2)} .tick{stroke:var(--faint)} .tick.mn{stroke:var(--line-2)}
+.rlab{fill:var(--muted);font-family:var(--mono);font-size:9.5px}
+.gl{fill:var(--faint);font-family:var(--mono);font-size:9px;letter-spacing:.12em}
+.tcode{fill:var(--faint);font-family:var(--mono);font-size:9px}
+.tname{fill:var(--fg);font-family:var(--sans);font-size:12px;font-weight:500}
+.mk{fill:var(--cold)} .mk.part{fill:none;stroke:var(--cold);stroke-dasharray:2 2}
+.ph-warm{fill:url(#hatch);stroke:var(--warm);stroke-opacity:.5}
+.ph-send{fill:rgba(65,182,204,.13);stroke:var(--cold);stroke-opacity:.55}
+.phtxt{font-family:var(--mono);font-size:9.5px;letter-spacing:.08em} .phtxt.w{fill:var(--warm)} .phtxt.s{fill:var(--cold)}
+.wnote{fill:var(--faint);font-family:var(--mono);font-size:9.5px;letter-spacing:.04em}
+.fsend{stroke:var(--cold);stroke-dasharray:3 4;opacity:.55}
+.base{stroke:var(--line-2)} .goal{stroke:var(--muted);stroke-width:1;stroke-dasharray:4 4;opacity:.7}
+.glabel{fill:var(--muted);font-family:var(--mono);font-size:9.5px;letter-spacing:.06em}
+.area{fill:url(#revfill)} .rev{fill:none;stroke:var(--hot);stroke-width:2;stroke-linejoin:round}
+.dimlayer{opacity:.16} .enddot{fill:var(--hot)} .phl{stroke:var(--hot);stroke-width:1.5} .phh{fill:var(--hot)}
+.ahead{opacity:.16}
+
+/* full plan */
+.full{display:grid;gap:16px;padding-top:26px;border-top:1px dashed var(--line-2);margin-top:6px}
+.full h2{margin:0;font-family:var(--display);font-weight:800;font-size:clamp(28px,3.4vw,40px);line-height:1;letter-spacing:.01em}
+.full .subh{margin:6px 0 0;color:var(--muted)}
+.sec-label{margin:0;font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.sentence{margin:4px 0 0;font-size:clamp(17px,2vw,22px);font-weight:500;line-height:1.4;text-wrap:balance;max-width:66ch}
+.sentence b{color:var(--hot);font-weight:600}
+.flow{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr) auto minmax(0,1fr) auto minmax(0,1fr);align-items:center}
+.fcell{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;display:grid;gap:6px;min-width:0}
+.fcell b{font-family:var(--display);font-weight:800;font-size:clamp(30px,3.6vw,46px);line-height:.85;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.fcell span{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.c0 b{color:var(--deep)} .c1 b{color:var(--mid)} .c2 b{color:var(--cold)} .c3 b{color:var(--warm)}
+.fop{padding:0 8px;display:grid;place-items:center}
+.fop em{font-style:normal;font-family:var(--mono);font-size:11px;color:var(--fg);border:1px solid var(--line-2);border-radius:999px;padding:3px 9px;white-space:nowrap;background:var(--inset)}
+@media (max-width:840px){.flow{grid-template-columns:minmax(0,1fr)} .fop{place-items:start;padding:6px 0 6px 18px} .fop em::before{content:"↓ ";color:var(--muted)}}
+.kit{display:flex;flex-wrap:wrap;gap:12px}
+.tile{flex:1 1 170px;min-width:0;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;display:grid;gap:6px;align-content:start}
+.tile .k{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.tile b{font-family:var(--display);font-weight:800;font-size:clamp(36px,4.2vw,50px);line-height:.85;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.tile em{font-style:normal;font-size:12.5px;color:var(--muted)}
+details.box{background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+details.box summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 18px;font-weight:600}
+details.box summary::-webkit-details-marker{display:none}
+details.box summary::after{content:"+";font-family:var(--mono);color:var(--muted)}
+details.box[open] summary::after{content:"−"}
+.advlist{display:grid;border-top:1px solid var(--line)}
+.arow{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 18px;min-height:52px}
+.arow + .arow{border-top:1px solid var(--line)}
+.arow label{flex:1;min-width:0;font-size:14px}
+.arow label span.h{display:block;font-size:12px;color:var(--muted)}
+.arow .f{display:flex;align-items:center;gap:6px;color:var(--muted);font-family:var(--mono);font-size:12px}
+.arow input[type=number]{width:76px;text-align:right;font-family:var(--mono);font-size:13px;color:var(--fg);background:var(--inset);border:1px solid var(--line);border-radius:6px;padding:6px 8px}
+.switch{position:relative;width:46px;height:28px;flex:none}
+.switch input{position:absolute;inset:0;opacity:0;margin:0;cursor:pointer;z-index:1}
+.switch i{position:absolute;inset:0;background:var(--line-2);border-radius:28px;transition:background .2s}
+.switch i::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:var(--fg);transition:transform .2s}
+.switch input:checked + i{background:var(--warm)}
+.switch input:checked + i::after{transform:translateX(18px)}
+.switch input:focus-visible + i{outline:2px solid var(--hot);outline-offset:2px}
+.reset{margin:12px 18px 16px;font-size:13px;color:var(--warm);background:none;border:0;padding:4px 0;cursor:pointer}
+.tbl{overflow-x:auto;border-top:1px solid var(--line)}
+table{width:100%;border-collapse:collapse;font-size:14px;min-width:580px}
+th,td{text-align:left;padding:11px 18px}
+th{font-family:var(--mono);font-size:10px;font-weight:500;color:var(--faint);letter-spacing:.12em;text-transform:uppercase}
+tbody tr{border-top:1px solid var(--line)}
+td.f{color:var(--muted);font-family:var(--mono);font-size:12px}
+td.r{text-align:right;font-family:var(--mono);font-weight:500;white-space:nowrap}
+td.r.hl{color:var(--hot)}
+.foot{margin:0;font-size:12.5px;color:var(--faint);max-width:76ch}
+@media (prefers-reduced-motion:reduce){.switch i,.switch i::after,.chip,.lbl,.caption{transition:none} .tp-play.pulse::before{animation:none}}
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <header class="top">
+    <div class="mark"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" class="logo" aria-hidden="true"><defs><linearGradient id="plg" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#41b6cc"/><stop offset=".55" stop-color="#f0a03c"/><stop offset="1" stop-color="#ffd57f"/></linearGradient><linearGradient id="plb" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1b2228"/><stop offset="1" stop-color="#0d1115"/></linearGradient></defs><rect x="1" y="1" width="46" height="46" rx="12" fill="url(#plb)" stroke="#2f3a43"/><path d="M9 16V9h7M32 9h7v7M39 32v7h-7M16 39H9v-7" fill="none" stroke="#5f6b75" stroke-width="2" stroke-linecap="round"/><path d="M13 33h6v-5h6v-5h6v-5h3" fill="none" stroke="url(#plg)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="35.5" cy="18" r="3.4" fill="#ffd57f"/><circle cx="35.5" cy="18" r="6" fill="#ffd57f" opacity=".18"/></svg><span data-i18n="brand">60-Day Booked Meetings Planner</span></div>
+    <nav class="chips" id="chips" aria-label="Stations"></nav>
+    <div class="ctrls">
+      <label class="vh" for="lang" data-i18n="lang">Language</label><select id="lang" class="sel"></select>
+      <label class="vh" for="cur" data-i18n="cur">Currency</label><select id="cur" class="sel"></select>
+    </div>
+  </header>
+
+  <section class="studio" id="studio">
+    <div class="viewport" id="vp" role="group">
+      <div class="labels" id="labels"></div>
+      <div class="hud" id="hud" aria-live="polite">
+        <p class="eyebrow" data-i18n="eyebrow">Your first 60 days</p>
+        <div class="chain" id="chain">
+          <div class="link k-meet"><b id="h-meet">0</b><span id="h-meet-l"></span></div>
+          <div class="op" id="h-close">× 10%</div>
+          <div class="link k-proj"><b id="h-proj">0</b><span data-i18n="byday_proj"></span></div>
+          <div class="op" id="h-deal">× 30K</div>
+          <div class="link k-rev"><b id="h-rev">0</b><span id="h-rev-l"></span></div>
+        </div>
+      </div>
+      <div class="vnotes" id="vnotes"><span id="hint"></span><span id="scaleNote"></span></div>
+      <div class="caption" id="caption" aria-live="polite"></div>
+      <div class="transport3" id="tp">
+        <button class="tp-play pulse" id="cta" type="button"><svg viewBox="0 0 12 14" aria-hidden="true" id="cta-ico"><path d="M0 0 L12 7 L0 14 Z"/></svg><span id="cta-t" data-i18n="play_cta">Play the 60 days</span></button>
+        <div class="tp-day"><span data-i18n="day">Day</span><b id="tp-d">60</b></div>
+        <div class="tp-bar" id="tpbar" role="slider" tabindex="0" aria-valuemin="0" aria-valuemax="60" aria-valuenow="60">
+          <i class="tp-warm" id="tp-warm"></i><span class="tp-ticks" id="tp-ticks"></span><i class="tp-fill" id="tp-fill"></i><i class="tp-head" id="tp-head"></i>
+        </div>
+        <div class="tp-val"><span data-i18n="pipeline">Pipeline</span><b id="tp-v">—</b></div>
+        <button class="tp-fs" id="fs" type="button"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M1 5V1h4M9 1h4v4M13 9v4H9M5 13H1V9"/></svg></button>
+      </div>
+      <div class="nogl" id="nogl" hidden><p data-i18n="nogl"></p></div>
+    </div>
+
+    <aside class="panel console" id="console">
+      <div class="c-head"><h2 data-i18n="your_numbers">Your numbers</h2><div class="presets" id="presets"></div></div>
+      <div class="ctl">
+        <div class="ctl-top">
+          <label for="gapR"><span data-i18n="gap_l"></span><span class="hint2" data-i18n="gap_h"></span></label>
+          <div class="val"><span class="u cb"></span><input id="gap" type="text" inputmode="numeric" value="120000"><span class="u ca"></span></div>
+        </div>
+        <input id="gapR" type="range" min="0" max="1000" step="1">
+      </div>
+      <div class="ctl">
+        <div class="ctl-top">
+          <label for="dealR"><span data-i18n="deal_l"></span><span class="hint2" data-i18n="deal_h"></span></label>
+          <div class="val"><span class="u cb"></span><input id="deal" type="text" inputmode="numeric" value="30000"><span class="u ca"></span></div>
+        </div>
+        <input id="dealR" type="range" min="0" max="1000" step="1">
+      </div>
+      <div class="ctl">
+        <div class="ctl-top">
+          <label for="closeR"><span data-i18n="close_l"></span><span class="hint2" data-i18n="close_h"></span></label>
+          <div class="val"><input id="close" class="short" type="text" inputmode="decimal" value="10"><span class="u">%</span></div>
+        </div>
+        <input id="closeR" type="range" min="1" max="80" step="1" value="10">
+      </div>
+    </aside>
+
+    <aside class="panel inspector" id="inspector" aria-live="polite">
+      <div class="ins-k"><i></i><span id="ins-kt"></span></div>
+      <h3 id="ins-t"></h3>
+      <p id="ins-p"></p>
+      <div class="mathline" id="ins-m"></div>
+      <div class="stepper">
+        <div class="dots" id="ins-dots"></div>
+        <div class="nav">
+          <button type="button" id="prev" aria-label="Previous"><svg viewBox="0 0 12 12"><path d="M8 1 3 6l5 5"/></svg></button>
+          <button type="button" id="next" aria-label="Next"><svg viewBox="0 0 12 12"><path d="M4 1l5 5-5 5"/></svg></button>
+        </div>
+      </div>
+    </aside>
+  </section>
+
+  <section class="panel tl">
+    <div class="panel-head">
+      <h2 data-i18n="year60">Your first 60 days, day by day</h2>
+      <div class="transport">
+        <div class="tc"><span data-i18n="day">Day</span><b id="tc-m">60</b></div>
+        <div class="tc r"><span data-i18n="pipeline">Pipeline</span><b id="tc-r"></b></div>
+        <button class="play" id="play" type="button"><svg viewBox="0 0 12 14" aria-hidden="true" id="play-ico"><path d="M0 0 L12 7 L0 14 Z"/></svg></button>
+      </div>
+    </div>
+    <div class="stage" id="stage" tabindex="0" role="slider" aria-valuemin="0" aria-valuemax="60" aria-valuenow="60"><svg id="tlsvg" role="img"></svg></div>
+    <div class="legend">
+      <span><i class="w"></i><span data-i18n="lg_warm"></span></span>
+      <span><i></i><span data-i18n="lg_meet"></span></span>
+      <span><i class="r"></i><span data-i18n="lg_pipe"></span></span>
+      <span id="unit-note"></span>
+    </div>
+  </section>
+
+  <section class="full">
+    <div><h2 data-i18n="full_title">The full plan</h2><p class="subh" data-i18n="full_sub"></p></div>
+    <div><p class="sec-label" data-i18n="behind60"></p><p class="sentence" id="sentence"></p></div>
+    <p class="sec-label" data-i18n="every_month"></p>
+    <div class="flow" id="flow"></div>
+    <div class="kit">
+      <div class="tile"><span class="k" data-i18n="k_boxes"></span><b id="o-boxes">0</b><em id="o-boxes-note"></em></div>
+      <div class="tile"><span class="k" data-i18n="k_doms"></span><b id="o-doms">0</b><em id="o-doms-note"></em></div>
+      <div class="tile"><span class="k" data-i18n="k_epd"></span><b id="o-epd">0</b><em data-i18n="n_epd"></em></div>
+      <div class="tile"><span class="k" data-i18n="k_epm"></span><b id="o-epm">0</b><em id="o-epm-note"></em></div>
+      <div class="tile"><span class="k" data-i18n="k_warm"></span><b id="o-warm">20</b><em data-i18n="n_warm"></em></div>
+    </div>
+    <details class="box" id="bench">
+      <summary data-i18n="bench">Benchmarks &amp; sending setup</summary>
+      <div class="advlist">
+        <div class="arow"><label for="pos"><span data-i18n="b_pos"></span><span class="h" data-i18n="b_pos_h"></span></label><div class="f"><input id="pos" type="number" min="0.1" step="0.1" value="1">%</div></div>
+        <div class="arow"><label for="book"><span data-i18n="b_book"></span><span class="h" data-i18n="b_book_h"></span></label><div class="f"><input id="book" type="number" min="1" max="100" step="1" value="33">%</div></div>
+        <div class="arow"><label for="seq"><span data-i18n="b_seq"></span><span class="h" data-i18n="b_seq_h"></span></label><div class="f"><input id="seq" type="number" min="1" max="6" step="1" value="2"></div></div>
+        <div class="arow"><label for="days"><span data-i18n="b_days"></span><span class="h" data-i18n="b_days_h"></span></label><div class="f"><input id="days" type="number" min="1" max="31" step="1" value="26"></div></div>
+        <div class="arow"><label for="perbox"><span data-i18n="b_perbox"></span><span class="h" data-i18n="b_perbox_h"></span></label><div class="f"><input id="perbox" type="number" min="1" max="50" step="1" value="20"></div></div>
+        <div class="arow"><label for="perdom"><span data-i18n="b_perdom"></span></label><div class="f"><input id="perdom" type="number" min="1" max="10" step="1" value="3"></div></div>
+        <div class="arow"><label for="warm"><span data-i18n="b_warm"></span><span class="h" data-i18n="b_warm_h"></span></label><div class="f"><input id="warm" type="number" min="0" max="59" step="1" value="20"></div></div>
+        <div class="arow"><label for="lag"><span data-i18n="b_lag"></span><span class="h" data-i18n="b_lag_h"></span></label><div class="f"><input id="lag" type="number" min="0" max="30" step="1" value="5"></div></div>
+        <div class="arow"><label for="reserve"><span data-i18n="b_res"></span><span class="h" data-i18n="b_res_h"></span></label><div class="switch"><input id="reserve" type="checkbox" role="switch"><i></i></div></div>
+      </div>
+      <button class="reset" id="reset" type="button" data-i18n="reset"></button>
+    </details>
+    <details class="box">
+      <summary data-i18n="math"></summary>
+      <div class="tbl"><table>
+        <thead><tr><th data-i18n="th_step"></th><th data-i18n="th_formula"></th><th style="text-align:right" data-i18n="th_result"></th></tr></thead>
+        <tbody id="steps"></tbody>
+      </table></div>
+    </details>
+    <p class="foot"><span data-i18n="foot_c"></span> <span data-i18n="illus"></span></p>
+  </section>
+</div>
+
+<script>
+(() => {
+const $ = id => document.getElementById(id);
+const I18N = {
+en:{name:"English",loc:"en-US",brand:"60-Day Booked Meetings Planner",overview:"Overview",full:"Full plan",lang:"Language",cur:"Currency",eyebrow:"Your next 12 months",quick:"Quick start",
+meetings_l:"meetings booked",meeting_l1:"meeting booked",projects_l:"projects signed",project_l1:"project signed",added:"added this year",
+op_sign:"× {p} sign",op_each:"× {v} each",sub:"About {m} booked meetings a month. One in {n} signs.",sub_alt:"About {m} booked meetings a month. {p} of them sign.",empty:"Set every number above zero to see the plan.",
+your_numbers:"Your numbers",gap_l:"Extra revenue a year",gap_h:"On top of what you make today",deal_l:"Average project",deal_h:"What one new client pays",close_l:"Close rate",close_h:"Out of 100 meetings, how many sign",
+year:"Your year, month by month",month:"Month",revenue:"Revenue",play:"Play the year",lg_meet:"Booked meeting",lg_sign:"Signs and becomes a project",lg_rev:"Revenue added",unit:"1 mark = {n} meetings",
+t_meet:"Meetings",t_proj:"Projects",t_rev:"Revenue",month_r:"MONTH",goal:"GOAL",
+behind:"Behind the scenes · every month",sentence:"To add {gap} a year, email {leads} new leads a month from {boxes} mailboxes on {doms} domains.",
+f_leads:"Leads emailed",f_int:"Interested replies",f_meet:"Meetings booked",f_proj:"Projects signed",
+k_boxes:"Mailboxes",k_doms:"Domains",k_epd:"Emails / day",k_epm:"Emails / month",k_warm:"Warm-up",
+n_boxes:"{n} emails each per day",n_boxes_r:"{s} sending + {s} backup",n_doms:"{n} mailboxes on each",n_epd:"Across all mailboxes",n_epm:"{n} emails per lead",n_warm:"Days before the first send",
+bench:"Benchmarks & sending setup",b_pos:"Positive reply rate",b_pos_h:"Default: 1%",b_book:"Positive replies that book",b_book_h:"Default: 33%",b_seq:"Emails per lead",b_seq_h:"First email + 1 follow-up",b_days:"Sending days per month",b_days_h:"Monday to Saturday",b_perbox:"Emails per mailbox per day",b_perbox_h:"Start at 20, max 25",b_perdom:"Mailboxes per domain",b_res:"Backup mailboxes",b_res_h:"Buy 2×, keep half warm in reserve",reset:"Reset to defaults",
+math:"The math, step by step",th_step:"Step",th_formula:"Formula",th_result:"Result",
+r_clients:"New clients per month",r_calls:"Booked meetings per month",r_pos:"Positive replies per month",r_leads:"Leads per month",r_epm:"Emails per month",r_epd:"Emails per day",r_send:"Sending mailboxes",r_backup:"Mailboxes with backup",r_doms:"Domains",
+w_close:"close rate",w_book:"booking rate",w_pos:"positive reply rate",w_seq:"emails per lead",w_days:"sending days",w_perbox:"per mailbox, rounded up",w_perdom:"per domain, rounded up",
+foot_c:"Based on cold email averages. These are estimates, not promises: real campaign numbers replace them after the first weeks of sending.",
+foot_f:"Defaults are common cold email benchmarks. They're averages, not promises. Swap in your campaign's real numbers after the first few thousand sends.",
+popular:"Popular",all:"All currencies"},
+fr:{name:"Français",loc:"fr-FR",brand:"60-Day Booked Meetings Planner",overview:"Vue d'ensemble",full:"Plan complet",lang:"Langue",cur:"Devise",eyebrow:"Vos 12 prochains mois",quick:"Départ rapide",
+meetings_l:"rendez-vous réservés",meeting_l1:"rendez-vous réservé",projects_l:"projets signés",project_l1:"projet signé",added:"en plus cette année",
+op_sign:"× {p} signent",op_each:"× {v} chacun",sub:"Environ {m} rendez-vous par mois. 1 sur {n} signe.",sub_alt:"Environ {m} rendez-vous par mois. {p} signent.",empty:"Mettez chaque chiffre au-dessus de zéro pour voir le plan.",
+your_numbers:"Vos chiffres",gap_l:"CA en plus par an",gap_h:"En plus de ce que vous faites aujourd'hui",deal_l:"Projet moyen",deal_h:"Ce que paie un nouveau client",close_l:"Taux de closing",close_h:"Sur 100 rendez-vous, combien signent",
+year:"Votre année, mois par mois",month:"Mois",revenue:"CA",play:"Lire l'année",lg_meet:"Rendez-vous réservé",lg_sign:"Signe et devient un projet",lg_rev:"CA ajouté",unit:"1 trait = {n} rendez-vous",
+t_meet:"Rendez-vous",t_proj:"Projets",t_rev:"CA",month_r:"MOIS",goal:"OBJECTIF",
+behind:"En coulisses · chaque mois",sentence:"Pour ajouter {gap} par an, contactez {leads} nouveaux leads par mois depuis {boxes} boîtes mail sur {doms} domaines.",
+f_leads:"Leads contactés",f_int:"Réponses intéressées",f_meet:"Rendez-vous réservés",f_proj:"Projets signés",
+k_boxes:"Boîtes mail",k_doms:"Domaines",k_epd:"Emails / jour",k_epm:"Emails / mois",k_warm:"Préchauffage",
+n_boxes:"{n} emails chacune par jour",n_boxes_r:"{s} en envoi + {s} en réserve",n_doms:"{n} boîtes sur chacun",n_epd:"Sur toutes les boîtes",n_epm:"{n} emails par lead",n_warm:"Jours avant le premier envoi",
+bench:"Repères & réglages d'envoi",b_pos:"Taux de réponses positives",b_pos_h:"Par défaut : 1 %",b_book:"Réponses positives qui réservent",b_book_h:"Par défaut : 33 %",b_seq:"Emails par lead",b_seq_h:"Premier email + 1 relance",b_days:"Jours d'envoi par mois",b_days_h:"Du lundi au samedi",b_perbox:"Emails par boîte par jour",b_perbox_h:"Commencer à 20, max 25",b_perdom:"Boîtes par domaine",b_res:"Boîtes de réserve",b_res_h:"En acheter 2×, la moitié reste chaude en réserve",reset:"Revenir aux valeurs par défaut",
+math:"Le calcul, étape par étape",th_step:"Étape",th_formula:"Formule",th_result:"Résultat",
+r_clients:"Nouveaux clients par mois",r_calls:"Rendez-vous par mois",r_pos:"Réponses positives par mois",r_leads:"Leads par mois",r_epm:"Emails par mois",r_epd:"Emails par jour",r_send:"Boîtes d'envoi",r_backup:"Boîtes avec réserve",r_doms:"Domaines",
+w_close:"taux de closing",w_book:"taux de réservation",w_pos:"taux de réponses positives",w_seq:"emails par lead",w_days:"jours d'envoi",w_perbox:"par boîte, arrondi au supérieur",w_perdom:"par domaine, arrondi au supérieur",
+foot_c:"Basé sur des moyennes de cold email. Ce sont des estimations, pas des promesses : les vrais chiffres de campagne les remplacent après les premières semaines d'envoi.",
+foot_f:"Les valeurs par défaut sont des repères courants en cold email. Ce sont des moyennes, pas des promesses. Remplacez-les par les vrais chiffres de votre campagne après les premiers milliers d'envois.",
+popular:"Populaires",all:"Toutes les devises"},
+es:{name:"Español",loc:"es-ES",brand:"60-Day Booked Meetings Planner",overview:"Resumen",full:"Plan completo",lang:"Idioma",cur:"Moneda",eyebrow:"Tus próximos 12 meses",quick:"Inicio rápido",
+meetings_l:"reuniones agendadas",meeting_l1:"reunión agendada",projects_l:"proyectos firmados",project_l1:"proyecto firmado",added:"extra este año",
+op_sign:"× {p} firman",op_each:"× {v} cada uno",sub:"Unas {m} reuniones al mes. 1 de cada {n} firma.",sub_alt:"Unas {m} reuniones al mes. Firma el {p}.",empty:"Pon cada número por encima de cero para ver el plan.",
+your_numbers:"Tus números",gap_l:"Ingresos extra al año",gap_h:"Además de lo que facturas hoy",deal_l:"Proyecto medio",deal_h:"Lo que paga un cliente nuevo",close_l:"Tasa de cierre",close_h:"De 100 reuniones, cuántas firman",
+year:"Tu año, mes a mes",month:"Mes",revenue:"Ingresos",play:"Reproducir el año",lg_meet:"Reunión agendada",lg_sign:"Firma y se convierte en proyecto",lg_rev:"Ingresos añadidos",unit:"1 marca = {n} reuniones",
+t_meet:"Reuniones",t_proj:"Proyectos",t_rev:"Ingresos",month_r:"MES",goal:"OBJETIVO",
+behind:"Entre bastidores · cada mes",sentence:"Para sumar {gap} al año, escribe a {leads} leads nuevos al mes desde {boxes} buzones en {doms} dominios.",
+f_leads:"Leads contactados",f_int:"Respuestas interesadas",f_meet:"Reuniones agendadas",f_proj:"Proyectos firmados",
+k_boxes:"Buzones",k_doms:"Dominios",k_epd:"Emails / día",k_epm:"Emails / mes",k_warm:"Calentamiento",
+n_boxes:"{n} emails cada uno al día",n_boxes_r:"{s} enviando + {s} de reserva",n_doms:"{n} buzones en cada uno",n_epd:"Entre todos los buzones",n_epm:"{n} emails por lead",n_warm:"Días antes del primer envío",
+bench:"Referencias y ajustes de envío",b_pos:"Tasa de respuestas positivas",b_pos_h:"Por defecto: 1 %",b_book:"Respuestas positivas que agendan",b_book_h:"Por defecto: 33 %",b_seq:"Emails por lead",b_seq_h:"Primer email + 1 seguimiento",b_days:"Días de envío al mes",b_days_h:"De lunes a sábado",b_perbox:"Emails por buzón al día",b_perbox_h:"Empieza en 20, máximo 25",b_perdom:"Buzones por dominio",b_res:"Buzones de reserva",b_res_h:"Compra el doble y deja la mitad calentando en reserva",reset:"Volver a los valores por defecto",
+math:"El cálculo, paso a paso",th_step:"Paso",th_formula:"Fórmula",th_result:"Resultado",
+r_clients:"Clientes nuevos al mes",r_calls:"Reuniones al mes",r_pos:"Respuestas positivas al mes",r_leads:"Leads al mes",r_epm:"Emails al mes",r_epd:"Emails al día",r_send:"Buzones de envío",r_backup:"Buzones con reserva",r_doms:"Dominios",
+w_close:"tasa de cierre",w_book:"tasa de agendamiento",w_pos:"tasa de respuestas positivas",w_seq:"emails por lead",w_days:"días de envío",w_perbox:"por buzón, redondeado hacia arriba",w_perdom:"por dominio, redondeado hacia arriba",
+foot_c:"Basado en promedios de cold email. Son estimaciones, no promesas: los números reales de la campaña los sustituyen tras las primeras semanas de envío.",
+foot_f:"Los valores por defecto son referencias habituales de cold email. Son promedios, no promesas. Sustitúyelos por los números reales de tu campaña tras los primeros miles de envíos.",
+popular:"Populares",all:"Todas las monedas"},
+de:{name:"Deutsch",loc:"de-DE",brand:"60-Day Booked Meetings Planner",overview:"Überblick",full:"Ganzer Plan",lang:"Sprache",cur:"Währung",eyebrow:"Deine nächsten 12 Monate",quick:"Schnellstart",
+meetings_l:"gebuchte Termine",meeting_l1:"gebuchter Termin",projects_l:"unterschriebene Projekte",project_l1:"unterschriebenes Projekt",added:"zusätzlich dieses Jahr",
+op_sign:"× {p} unterschreiben",op_each:"× {v} pro Projekt",sub:"Etwa {m} gebuchte Termine pro Monat. Einer von {n} unterschreibt.",sub_alt:"Etwa {m} gebuchte Termine pro Monat. {p} davon unterschreiben.",empty:"Setze jede Zahl über null, um den Plan zu sehen.",
+your_numbers:"Deine Zahlen",gap_l:"Zusätzlicher Umsatz pro Jahr",gap_h:"Zusätzlich zu deinem heutigen Umsatz",deal_l:"Durchschnittliches Projekt",deal_h:"Was ein neuer Kunde zahlt",close_l:"Abschlussquote",close_h:"Von 100 Terminen, wie viele unterschreiben",
+year:"Dein Jahr, Monat für Monat",month:"Monat",revenue:"Umsatz",play:"Jahr abspielen",lg_meet:"Gebuchter Termin",lg_sign:"Unterschreibt und wird ein Projekt",lg_rev:"Zusätzlicher Umsatz",unit:"1 Markierung = {n} Termine",
+t_meet:"Termine",t_proj:"Projekte",t_rev:"Umsatz",month_r:"MONAT",goal:"ZIEL",
+behind:"Hinter den Kulissen · jeden Monat",sentence:"Für {gap} mehr pro Jahr: schreibe jeden Monat {leads} neue Leads an, von {boxes} Postfächern auf {doms} Domains.",
+f_leads:"Angeschriebene Leads",f_int:"Interessierte Antworten",f_meet:"Gebuchte Termine",f_proj:"Unterschriebene Projekte",
+k_boxes:"Postfächer",k_doms:"Domains",k_epd:"E-Mails / Tag",k_epm:"E-Mails / Monat",k_warm:"Aufwärmen",
+n_boxes:"{n} E-Mails pro Postfach und Tag",n_boxes_r:"{s} im Versand + {s} in Reserve",n_doms:"{n} Postfächer pro Domain",n_epd:"Über alle Postfächer",n_epm:"{n} E-Mails pro Lead",n_warm:"Tage vor dem ersten Versand",
+bench:"Richtwerte & Versand-Setup",b_pos:"Positive Antwortquote",b_pos_h:"Standard: 1 %",b_book:"Positive Antworten, die buchen",b_book_h:"Standard: 33 %",b_seq:"E-Mails pro Lead",b_seq_h:"Erste E-Mail + 1 Follow-up",b_days:"Versandtage pro Monat",b_days_h:"Montag bis Samstag",b_perbox:"E-Mails pro Postfach und Tag",b_perbox_h:"Mit 20 starten, max. 25",b_perdom:"Postfächer pro Domain",b_res:"Reserve-Postfächer",b_res_h:"Doppelt kaufen, die Hälfte warm in Reserve halten",reset:"Auf Standardwerte zurücksetzen",
+math:"Die Rechnung, Schritt für Schritt",th_step:"Schritt",th_formula:"Formel",th_result:"Ergebnis",
+r_clients:"Neue Kunden pro Monat",r_calls:"Gebuchte Termine pro Monat",r_pos:"Positive Antworten pro Monat",r_leads:"Leads pro Monat",r_epm:"E-Mails pro Monat",r_epd:"E-Mails pro Tag",r_send:"Versand-Postfächer",r_backup:"Postfächer mit Reserve",r_doms:"Domains",
+w_close:"Abschlussquote",w_book:"Buchungsquote",w_pos:"positive Antwortquote",w_seq:"E-Mails pro Lead",w_days:"Versandtage",w_perbox:"pro Postfach, aufgerundet",w_perdom:"pro Domain, aufgerundet",
+foot_c:"Basiert auf Cold-E-Mail-Durchschnittswerten. Schätzungen, keine Versprechen: Echte Kampagnenzahlen ersetzen sie nach den ersten Versandwochen.",
+foot_f:"Die Standardwerte sind übliche Cold-E-Mail-Richtwerte. Durchschnitte, keine Versprechen. Ersetze sie nach den ersten paar tausend Mails durch die echten Zahlen deiner Kampagne.",
+popular:"Beliebt",all:"Alle Währungen"},
+pt:{name:"Português",loc:"pt-BR",brand:"60-Day Booked Meetings Planner",overview:"Visão geral",full:"Plano completo",lang:"Idioma",cur:"Moeda",eyebrow:"Seus próximos 12 meses",quick:"Início rápido",
+meetings_l:"reuniões agendadas",meeting_l1:"reunião agendada",projects_l:"projetos fechados",project_l1:"projeto fechado",added:"a mais este ano",
+op_sign:"× {p} fecham",op_each:"× {v} cada",sub:"Cerca de {m} reuniões por mês. 1 em cada {n} fecha.",sub_alt:"Cerca de {m} reuniões por mês. {p} delas fecham.",empty:"Coloque todos os números acima de zero para ver o plano.",
+your_numbers:"Seus números",gap_l:"Receita extra por ano",gap_h:"Além do que você fatura hoje",deal_l:"Projeto médio",deal_h:"O que um cliente novo paga",close_l:"Taxa de fechamento",close_h:"De 100 reuniões, quantas fecham",
+year:"Seu ano, mês a mês",month:"Mês",revenue:"Receita",play:"Reproduzir o ano",lg_meet:"Reunião agendada",lg_sign:"Fecha e vira projeto",lg_rev:"Receita adicionada",unit:"1 marca = {n} reuniões",
+t_meet:"Reuniões",t_proj:"Projetos",t_rev:"Receita",month_r:"MÊS",goal:"META",
+behind:"Nos bastidores · todo mês",sentence:"Para somar {gap} por ano, envie e-mail para {leads} novos leads por mês a partir de {boxes} caixas de e-mail em {doms} domínios.",
+f_leads:"Leads contatados",f_int:"Respostas interessadas",f_meet:"Reuniões agendadas",f_proj:"Projetos fechados",
+k_boxes:"Caixas de e-mail",k_doms:"Domínios",k_epd:"E-mails / dia",k_epm:"E-mails / mês",k_warm:"Aquecimento",
+n_boxes:"{n} e-mails cada por dia",n_boxes_r:"{s} enviando + {s} de reserva",n_doms:"{n} caixas em cada",n_epd:"Somando todas as caixas",n_epm:"{n} e-mails por lead",n_warm:"Dias antes do primeiro envio",
+bench:"Referências e configuração de envio",b_pos:"Taxa de respostas positivas",b_pos_h:"Padrão: 1%",b_book:"Respostas positivas que agendam",b_book_h:"Padrão: 33%",b_seq:"E-mails por lead",b_seq_h:"Primeiro e-mail + 1 follow-up",b_days:"Dias de envio por mês",b_days_h:"De segunda a sábado",b_perbox:"E-mails por caixa por dia",b_perbox_h:"Comece com 20, máximo 25",b_perdom:"Caixas por domínio",b_res:"Caixas de reserva",b_res_h:"Compre o dobro e deixe metade aquecida na reserva",reset:"Voltar aos valores padrão",
+math:"O cálculo, passo a passo",th_step:"Etapa",th_formula:"Fórmula",th_result:"Resultado",
+r_clients:"Clientes novos por mês",r_calls:"Reuniões por mês",r_pos:"Respostas positivas por mês",r_leads:"Leads por mês",r_epm:"E-mails por mês",r_epd:"E-mails por dia",r_send:"Caixas de envio",r_backup:"Caixas com reserva",r_doms:"Domínios",
+w_close:"taxa de fechamento",w_book:"taxa de agendamento",w_pos:"taxa de respostas positivas",w_seq:"e-mails por lead",w_days:"dias de envio",w_perbox:"por caixa, arredondado para cima",w_perdom:"por domínio, arredondado para cima",
+foot_c:"Baseado em médias de cold email. São estimativas, não promessas: os números reais da campanha substituem estes após as primeiras semanas de envio.",
+foot_f:"Os valores padrão são referências comuns de cold email. São médias, não promessas. Troque pelos números reais da sua campanha depois dos primeiros milhares de envios.",
+popular:"Populares",all:"Todas as moedas"},
+it:{name:"Italiano",loc:"it-IT",brand:"60-Day Booked Meetings Planner",overview:"Panoramica",full:"Piano completo",lang:"Lingua",cur:"Valuta",eyebrow:"I tuoi prossimi 12 mesi",quick:"Avvio rapido",
+meetings_l:"appuntamenti fissati",meeting_l1:"appuntamento fissato",projects_l:"progetti firmati",project_l1:"progetto firmato",added:"in più quest'anno",
+op_sign:"× {p} firmano",op_each:"× {v} ciascuno",sub:"Circa {m} appuntamenti al mese. 1 su {n} firma.",sub_alt:"Circa {m} appuntamenti al mese. Firma il {p}.",empty:"Imposta ogni numero sopra lo zero per vedere il piano.",
+your_numbers:"I tuoi numeri",gap_l:"Fatturato extra all'anno",gap_h:"Oltre a quello che fatturi oggi",deal_l:"Progetto medio",deal_h:"Quanto paga un nuovo cliente",close_l:"Tasso di chiusura",close_h:"Su 100 appuntamenti, quanti firmano",
+year:"Il tuo anno, mese per mese",month:"Mese",revenue:"Fatturato",play:"Riproduci l'anno",lg_meet:"Appuntamento fissato",lg_sign:"Firma e diventa un progetto",lg_rev:"Fatturato aggiunto",unit:"1 segno = {n} appuntamenti",
+t_meet:"Appuntamenti",t_proj:"Progetti",t_rev:"Fatturato",month_r:"MESE",goal:"OBIETTIVO",
+behind:"Dietro le quinte · ogni mese",sentence:"Per aggiungere {gap} all'anno, scrivi a {leads} nuovi lead al mese da {boxes} caselle email su {doms} domini.",
+f_leads:"Lead contattati",f_int:"Risposte interessate",f_meet:"Appuntamenti fissati",f_proj:"Progetti firmati",
+k_boxes:"Caselle email",k_doms:"Domini",k_epd:"Email / giorno",k_epm:"Email / mese",k_warm:"Riscaldamento",
+n_boxes:"{n} email ciascuna al giorno",n_boxes_r:"{s} in invio + {s} di riserva",n_doms:"{n} caselle su ciascuno",n_epd:"Su tutte le caselle",n_epm:"{n} email per lead",n_warm:"Giorni prima del primo invio",
+bench:"Riferimenti e impostazioni di invio",b_pos:"Tasso di risposte positive",b_pos_h:"Predefinito: 1%",b_book:"Risposte positive che prenotano",b_book_h:"Predefinito: 33%",b_seq:"Email per lead",b_seq_h:"Prima email + 1 follow-up",b_days:"Giorni di invio al mese",b_days_h:"Da lunedì a sabato",b_perbox:"Email per casella al giorno",b_perbox_h:"Inizia da 20, massimo 25",b_perdom:"Caselle per dominio",b_res:"Caselle di riserva",b_res_h:"Comprane il doppio e tieni metà calde di riserva",reset:"Ripristina i valori predefiniti",
+math:"Il calcolo, passo per passo",th_step:"Passo",th_formula:"Formula",th_result:"Risultato",
+r_clients:"Nuovi clienti al mese",r_calls:"Appuntamenti al mese",r_pos:"Risposte positive al mese",r_leads:"Lead al mese",r_epm:"Email al mese",r_epd:"Email al giorno",r_send:"Caselle di invio",r_backup:"Caselle con riserva",r_doms:"Domini",
+w_close:"tasso di chiusura",w_book:"tasso di prenotazione",w_pos:"tasso di risposte positive",w_seq:"email per lead",w_days:"giorni di invio",w_perbox:"per casella, arrotondato per eccesso",w_perdom:"per dominio, arrotondato per eccesso",
+foot_c:"Basato sulle medie del cold email. Sono stime, non promesse: i numeri reali della campagna le sostituiscono dopo le prime settimane di invio.",
+foot_f:"I valori predefiniti sono riferimenti comuni del cold email. Sono medie, non promesse. Sostituiscili con i numeri reali della tua campagna dopo le prime migliaia di invii.",
+popular:"Popolari",all:"Tutte le valute"}
+};
+/* 60-day view strings */
+const EXTRA = {
+en:{eyebrow:"Your first 60 days",meet60_l:"meetings by day 60",meet60_l1:"meeting by day 60",inplay:"projects in play",pipe_l:"pipeline by day 60",gap_h:"The goal that sets how much we send",
+sub_full:"Warm-up takes the whole 60 days. Nothing books before day {d}.",sub_warm:"Days 1–{w}: inboxes warm up. ",sub_main:"Day {s}: first emails go out. First meetings around day {b}, then about {m} a month. Most deals sign after day 60.",
+year60:"Your first 60 days, day by day",day:"Day",pipeline:"Pipeline",play60:"Play the 60 days",lg_warm:"Inbox warm-up",lg_meet:"Booked meeting",lg_pipe:"Pipeline (meetings × close rate × project)",
+t_inbox:"Inboxes",t_meet:"Meetings",t_pipe:"Pipeline",day_r:"DAY",ph_warm_n:"WARM-UP · {n} DAYS",ph_warm:"WARM-UP",ph_send_n:"SENDING · {n} EMAILS/DAY",ph_send:"SENDING",
+no_meet:"No meetings yet · warming up",eats:"Warm-up eats the whole window",day60:"DAY 60 · {v} PIPELINE",behind60:"Behind the scenes · first 60 days",
+sentence60:"{w} days of warm-up, then {leads} leads emailed from {boxes} mailboxes on {doms} domains. By day 60: about {meet} meetings and {pipe} in the pipeline.",every_month:"Every month once sending",
+b_warm:"Warm-up days",b_warm_h:"New domains before the first send",b_lag:"Days from first send to first meeting",b_lag_h:"Reply, then booking",
+r_senddays:"Sending days in the 60",f_senddays:"60 − {w} warm-up days",r_leads60:"Leads emailed by day 60",r_meet60:"Meetings by day 60",f_meet60_tail:"(first one {l} days after first send)",r_pipe60:"Pipeline by day 60",
+foot_c:"Based on cold email averages. Day 60 shows meetings and pipeline, not cash in the bank: most deals sign after the first sales cycle. Real campaign numbers replace these estimates after the first weeks of sending."},
+fr:{eyebrow:"Vos 60 premiers jours",meet60_l:"rendez-vous d'ici le jour 60",meet60_l1:"rendez-vous d'ici le jour 60",inplay:"projets en jeu",pipe_l:"de pipeline au jour 60",gap_h:"L'objectif qui fixe le volume d'envoi",
+sub_full:"Le préchauffage prend les 60 jours. Rien ne se réserve avant le jour {d}.",sub_warm:"Jours 1 à {w} : les boîtes chauffent. ",sub_main:"Jour {s} : premiers emails envoyés. Premiers rendez-vous vers le jour {b}, puis environ {m} par mois. La plupart des contrats se signent après le jour 60.",
+year60:"Vos 60 premiers jours, jour par jour",day:"Jour",pipeline:"Pipeline",play60:"Lire les 60 jours",lg_warm:"Préchauffage des boîtes",lg_meet:"Rendez-vous réservé",lg_pipe:"Pipeline (rendez-vous × closing × projet)",
+t_inbox:"Boîtes",t_meet:"Rendez-vous",t_pipe:"Pipeline",day_r:"JOUR",ph_warm_n:"PRÉCHAUFFAGE · {n} JOURS",ph_warm:"PRÉCHAUFFAGE",ph_send_n:"ENVOI · {n} EMAILS/JOUR",ph_send:"ENVOI",
+no_meet:"Pas encore de rendez-vous · préchauffage",eats:"Le préchauffage occupe toute la période",day60:"JOUR 60 · {v} DE PIPELINE",behind60:"En coulisses · 60 premiers jours",
+sentence60:"{w} jours de préchauffage, puis {leads} leads contactés depuis {boxes} boîtes mail sur {doms} domaines. Au jour 60 : environ {meet} rendez-vous et {pipe} de pipeline.",every_month:"Chaque mois une fois l'envoi lancé",
+b_warm:"Jours de préchauffage",b_warm_h:"Nouveaux domaines avant le premier envoi",b_lag:"Jours entre le premier envoi et le premier rendez-vous",b_lag_h:"Réponse, puis réservation",
+r_senddays:"Jours d'envoi sur les 60",f_senddays:"60 − {w} jours de préchauffage",r_leads60:"Leads contactés au jour 60",r_meet60:"Rendez-vous au jour 60",f_meet60_tail:"(le premier {l} jours après le premier envoi)",r_pipe60:"Pipeline au jour 60",
+foot_c:"Basé sur des moyennes de cold email. Le jour 60 montre des rendez-vous et du pipeline, pas de l'argent encaissé : la plupart des contrats se signent après le premier cycle de vente. Les vrais chiffres de campagne remplacent ces estimations après les premières semaines d'envoi."},
+es:{eyebrow:"Tus primeros 60 días",meet60_l:"reuniones al día 60",meet60_l1:"reunión al día 60",inplay:"proyectos en juego",pipe_l:"de pipeline al día 60",gap_h:"El objetivo que marca cuánto enviamos",
+sub_full:"El calentamiento ocupa los 60 días. No se agenda nada antes del día {d}.",sub_warm:"Días 1 a {w}: los buzones se calientan. ",sub_main:"Día {s}: salen los primeros emails. Primeras reuniones hacia el día {b}, luego unas {m} al mes. La mayoría de los acuerdos se firman después del día 60.",
+year60:"Tus primeros 60 días, día a día",day:"Día",pipeline:"Pipeline",play60:"Reproducir los 60 días",lg_warm:"Calentamiento de buzones",lg_meet:"Reunión agendada",lg_pipe:"Pipeline (reuniones × cierre × proyecto)",
+t_inbox:"Buzones",t_meet:"Reuniones",t_pipe:"Pipeline",day_r:"DÍA",ph_warm_n:"CALENTAMIENTO · {n} DÍAS",ph_warm:"CALENTAMIENTO",ph_send_n:"ENVÍO · {n} EMAILS/DÍA",ph_send:"ENVÍO",
+no_meet:"Aún sin reuniones · calentando",eats:"El calentamiento ocupa todo el periodo",day60:"DÍA 60 · {v} DE PIPELINE",behind60:"Entre bastidores · primeros 60 días",
+sentence60:"{w} días de calentamiento, luego {leads} leads contactados desde {boxes} buzones en {doms} dominios. Al día 60: unas {meet} reuniones y {pipe} en pipeline.",every_month:"Cada mes una vez enviando",
+b_warm:"Días de calentamiento",b_warm_h:"Dominios nuevos antes del primer envío",b_lag:"Días del primer envío a la primera reunión",b_lag_h:"Respuesta y luego agenda",
+r_senddays:"Días de envío en los 60",f_senddays:"60 − {w} días de calentamiento",r_leads60:"Leads contactados al día 60",r_meet60:"Reuniones al día 60",f_meet60_tail:"(la primera {l} días después del primer envío)",r_pipe60:"Pipeline al día 60",
+foot_c:"Basado en promedios de cold email. El día 60 muestra reuniones y pipeline, no dinero cobrado: la mayoría de los acuerdos se firman tras el primer ciclo de venta. Los números reales de la campaña sustituyen estas estimaciones tras las primeras semanas de envío."},
+de:{eyebrow:"Deine ersten 60 Tage",meet60_l:"Termine bis Tag 60",meet60_l1:"Termin bis Tag 60",inplay:"Projekte im Spiel",pipe_l:"Pipeline bis Tag 60",gap_h:"Das Ziel, das die Versandmenge bestimmt",
+sub_full:"Das Aufwärmen dauert die ganzen 60 Tage. Vor Tag {d} wird nichts gebucht.",sub_warm:"Tag 1–{w}: Postfächer wärmen auf. ",sub_main:"Tag {s}: erste E-Mails gehen raus. Erste Termine um Tag {b}, danach etwa {m} pro Monat. Die meisten Deals werden nach Tag 60 unterschrieben.",
+year60:"Deine ersten 60 Tage, Tag für Tag",day:"Tag",pipeline:"Pipeline",play60:"Die 60 Tage abspielen",lg_warm:"Postfach-Aufwärmen",lg_meet:"Gebuchter Termin",lg_pipe:"Pipeline (Termine × Abschlussquote × Projekt)",
+t_inbox:"Postfächer",t_meet:"Termine",t_pipe:"Pipeline",day_r:"TAG",ph_warm_n:"AUFWÄRMEN · {n} TAGE",ph_warm:"AUFWÄRMEN",ph_send_n:"VERSAND · {n} E-MAILS/TAG",ph_send:"VERSAND",
+no_meet:"Noch keine Termine · Aufwärmphase",eats:"Das Aufwärmen füllt den ganzen Zeitraum",day60:"TAG 60 · {v} PIPELINE",behind60:"Hinter den Kulissen · erste 60 Tage",
+sentence60:"{w} Tage Aufwärmen, dann {leads} angeschriebene Leads von {boxes} Postfächern auf {doms} Domains. Bis Tag 60: etwa {meet} Termine und {pipe} in der Pipeline.",every_month:"Jeden Monat, sobald der Versand läuft",
+b_warm:"Aufwärmtage",b_warm_h:"Neue Domains vor dem ersten Versand",b_lag:"Tage vom ersten Versand bis zum ersten Termin",b_lag_h:"Antwort, dann Buchung",
+r_senddays:"Versandtage in den 60",f_senddays:"60 − {w} Aufwärmtage",r_leads60:"Angeschriebene Leads bis Tag 60",r_meet60:"Termine bis Tag 60",f_meet60_tail:"(der erste {l} Tage nach dem ersten Versand)",r_pipe60:"Pipeline bis Tag 60",
+foot_c:"Basiert auf Cold-E-Mail-Durchschnittswerten. Tag 60 zeigt Termine und Pipeline, kein Geld auf dem Konto: Die meisten Deals werden nach dem ersten Verkaufszyklus unterschrieben. Echte Kampagnenzahlen ersetzen diese Schätzungen nach den ersten Versandwochen."},
+pt:{eyebrow:"Seus primeiros 60 dias",meet60_l:"reuniões até o dia 60",meet60_l1:"reunião até o dia 60",inplay:"projetos em jogo",pipe_l:"de pipeline no dia 60",gap_h:"A meta que define quanto enviamos",
+sub_full:"O aquecimento ocupa os 60 dias. Nada é agendado antes do dia {d}.",sub_warm:"Dias 1 a {w}: as caixas aquecem. ",sub_main:"Dia {s}: saem os primeiros e-mails. Primeiras reuniões por volta do dia {b}, depois cerca de {m} por mês. A maioria dos negócios fecha depois do dia 60.",
+year60:"Seus primeiros 60 dias, dia a dia",day:"Dia",pipeline:"Pipeline",play60:"Reproduzir os 60 dias",lg_warm:"Aquecimento das caixas",lg_meet:"Reunião agendada",lg_pipe:"Pipeline (reuniões × fechamento × projeto)",
+t_inbox:"Caixas",t_meet:"Reuniões",t_pipe:"Pipeline",day_r:"DIA",ph_warm_n:"AQUECIMENTO · {n} DIAS",ph_warm:"AQUECIMENTO",ph_send_n:"ENVIO · {n} E-MAILS/DIA",ph_send:"ENVIO",
+no_meet:"Ainda sem reuniões · aquecendo",eats:"O aquecimento ocupa todo o período",day60:"DIA 60 · {v} DE PIPELINE",behind60:"Nos bastidores · primeiros 60 dias",
+sentence60:"{w} dias de aquecimento, depois {leads} leads contatados a partir de {boxes} caixas em {doms} domínios. No dia 60: cerca de {meet} reuniões e {pipe} em pipeline.",every_month:"Todo mês, depois que o envio começa",
+b_warm:"Dias de aquecimento",b_warm_h:"Domínios novos antes do primeiro envio",b_lag:"Dias do primeiro envio até a primeira reunião",b_lag_h:"Resposta, depois agendamento",
+r_senddays:"Dias de envio nos 60",f_senddays:"60 − {w} dias de aquecimento",r_leads60:"Leads contatados até o dia 60",r_meet60:"Reuniões até o dia 60",f_meet60_tail:"(a primeira {l} dias após o primeiro envio)",r_pipe60:"Pipeline no dia 60",
+foot_c:"Baseado em médias de cold email. O dia 60 mostra reuniões e pipeline, não dinheiro no caixa: a maioria dos negócios fecha após o primeiro ciclo de vendas. Os números reais da campanha substituem estas estimativas após as primeiras semanas de envio."},
+it:{eyebrow:"I tuoi primi 60 giorni",meet60_l:"appuntamenti entro il giorno 60",meet60_l1:"appuntamento entro il giorno 60",inplay:"progetti in gioco",pipe_l:"di pipeline al giorno 60",gap_h:"L'obiettivo che decide quanto inviamo",
+sub_full:"Il riscaldamento occupa tutti i 60 giorni. Nessun appuntamento prima del giorno {d}.",sub_warm:"Giorni 1–{w}: le caselle si riscaldano. ",sub_main:"Giorno {s}: partono le prime email. Primi appuntamenti verso il giorno {b}, poi circa {m} al mese. La maggior parte dei contratti si firma dopo il giorno 60.",
+year60:"I tuoi primi 60 giorni, giorno per giorno",day:"Giorno",pipeline:"Pipeline",play60:"Riproduci i 60 giorni",lg_warm:"Riscaldamento caselle",lg_meet:"Appuntamento fissato",lg_pipe:"Pipeline (appuntamenti × chiusura × progetto)",
+t_inbox:"Caselle",t_meet:"Appuntamenti",t_pipe:"Pipeline",day_r:"GIORNO",ph_warm_n:"RISCALDAMENTO · {n} GIORNI",ph_warm:"RISCALDAMENTO",ph_send_n:"INVIO · {n} EMAIL/GIORNO",ph_send:"INVIO",
+no_meet:"Ancora nessun appuntamento · riscaldamento",eats:"Il riscaldamento occupa tutto il periodo",day60:"GIORNO 60 · {v} DI PIPELINE",behind60:"Dietro le quinte · primi 60 giorni",
+sentence60:"{w} giorni di riscaldamento, poi {leads} lead contattati da {boxes} caselle su {doms} domini. Al giorno 60: circa {meet} appuntamenti e {pipe} in pipeline.",every_month:"Ogni mese, una volta avviato l'invio",
+b_warm:"Giorni di riscaldamento",b_warm_h:"Nuovi domini prima del primo invio",b_lag:"Giorni dal primo invio al primo appuntamento",b_lag_h:"Risposta, poi prenotazione",
+r_senddays:"Giorni di invio nei 60",f_senddays:"60 − {w} giorni di riscaldamento",r_leads60:"Lead contattati al giorno 60",r_meet60:"Appuntamenti al giorno 60",f_meet60_tail:"(il primo {l} giorni dopo il primo invio)",r_pipe60:"Pipeline al giorno 60",
+foot_c:"Basato sulle medie del cold email. Il giorno 60 mostra appuntamenti e pipeline, non soldi incassati: la maggior parte dei contratti si firma dopo il primo ciclo di vendita. I numeri reali della campagna sostituiscono queste stime dopo le prime settimane di invio."}
+};
+Object.keys(EXTRA).forEach(l=>Object.assign(I18N[l],EXTRA[l]));
+const NEW = {"en": {"byday_meet": "meetings by day {d}", "byday_meet1": "meeting by day {d}", "byday_proj": "projects in play", "byday_pipe": "pipeline by day {d}", "st_over": "Overview", "st_infra": "Inboxes", "st_market": "Market", "st_reply": "Replies", "st_meet": "Meetings", "st_vault": "Pipeline", "hint": "Drag to orbit · Scroll to zoom · Click a station", "hint_touch": "Swipe sideways to orbit · Pinch to zoom · Tap a station", "play_cta": "Play the 60 days", "pause": "Pause", "replay": "Replay the 60 days", "full_title": "The full plan", "full_sub": "Every number behind the 3D view, step by step.", "dot_unit": "1 dot = {n} leads", "blade_unit": "1 blade = {n} mailboxes", "coin_unit": "1 coin = {n} projects", "voxel_unit": "1 block = {n} meetings", "lab_infra": "mailboxes", "lab_market": "leads emailed", "lab_reply": "interested replies", "lab_meet": "meetings booked", "lab_vault": "in the pipeline", "ins_over_t": "Your first 60 days", "ins_over": "Each station is one step of the machine. Click one to see how its number is made, or play the 60 days.", "ins_infra_t": "Your sending machine", "ins_infra": "{boxes} mailboxes on {doms} domains. Each one sends {perbox} emails a day, {epd} a day in total. New domains warm up for {warm} days first, or your emails land in spam.", "ins_infra_m": "{epd} emails a day ÷ {perbox} per mailbox = {send} mailboxes", "ins_market_t": "The people you email", "ins_market": "{leads} new companies a month, {leads60} by day 60. Every dot is a company. The wave shows who you've reached so far.", "ins_market_m": "{posMo} replies ÷ {pos} reply rate = {leads} leads a month", "ins_reply_t": "The ones who say yes", "ins_reply": "About 1 in {one} people you email replies “interested”. That's {posMo} a month. They're the bright dots.", "ins_reply_m": "{leads} × {pos} = {posMo} interested replies a month", "ins_meet_t": "Meetings in your calendar", "ins_meet": "1 in {one} interested replies books a call: {meetMo} meetings a month. Each block is a meeting on that day. The first one lands around day {b}.", "ins_meet_m": "{posMo} × {book} = {meetMo} meetings a month", "ins_vault_t": "Money in play", "ins_vault": "1 in {one} meetings signs. By day 60 that's {deals60} projects worth {pipe60}. The ghost coins are your full year: {dealsYr} projects, {gap}.", "ins_vault_m": "{meet60} × {close} × {deal} = {pipe60}", "nogl": "The 3D view isn't available on this device. Every number still works below.", "illus": "The 3D view illustrates the flow. The numbers are exact.", "vp_label": "3D view of your outreach machine", "cap_warm": "Days 1–{w}: your inboxes warm up, so emails land in the inbox, not spam.", "cap_send": "Day {s}: the first emails go out, {epd} a day.", "cap_reply": "Replies come in. About 1 in {one} says “interested”.", "cap_meet": "Day {b}: your first meeting lands. Then about {m} a month.", "cap_end": "Day 60: {meet} meetings and {pipe} in play. Most deals sign after day 60.", "fs_on": "Presenter mode (full screen)", "fs_off": "Exit full screen"}, "fr": {"byday_meet": "rendez-vous au jour {d}", "byday_meet1": "rendez-vous au jour {d}", "byday_proj": "projets en jeu", "byday_pipe": "pipeline au jour {d}", "st_over": "Vue d'ensemble", "st_infra": "Boîtes mail", "st_market": "Marché", "st_reply": "Réponses", "st_meet": "Rendez-vous", "st_vault": "Pipeline", "hint": "Glissez pour tourner · Molette pour zoomer · Cliquez une station", "hint_touch": "Glissez sur le côté pour tourner · Pincez pour zoomer · Touchez une station", "play_cta": "Lancer les 60 jours", "pause": "Pause", "replay": "Rejouer les 60 jours", "full_title": "Le plan complet", "full_sub": "Tous les chiffres derrière la vue 3D, étape par étape.", "dot_unit": "1 point = {n} prospects", "blade_unit": "1 lame = {n} boîtes mail", "coin_unit": "1 pièce = {n} projets", "voxel_unit": "1 bloc = {n} rendez-vous", "lab_infra": "boîtes mail", "lab_market": "prospects contactés", "lab_reply": "réponses intéressées", "lab_meet": "rendez-vous pris", "lab_vault": "dans le pipeline", "ins_over_t": "Vos 60 premiers jours", "ins_over": "Chaque station est une étape de la machine. Cliquez-en une pour voir comment son chiffre est calculé, ou lancez les 60 jours.", "ins_infra_t": "Votre machine d'envoi", "ins_infra": "{boxes} boîtes mail sur {doms} domaines. Chacune envoie {perbox} e-mails par jour, {epd} par jour au total. Les nouveaux domaines chauffent d'abord {warm} jours, sinon vos e-mails finissent en spam.", "ins_infra_m": "{epd} e-mails par jour ÷ {perbox} par boîte = {send} boîtes", "ins_market_t": "Les gens que vous contactez", "ins_market": "{leads} nouvelles entreprises par mois, {leads60} au jour 60. Chaque point est une entreprise. La vague montre qui vous avez déjà contacté.", "ins_market_m": "{posMo} réponses ÷ {pos} de taux de réponse = {leads} prospects par mois", "ins_reply_t": "Ceux qui disent oui", "ins_reply": "Environ 1 personne sur {one} répond « intéressé ». Ça fait {posMo} par mois. Ce sont les points brillants.", "ins_reply_m": "{leads} × {pos} = {posMo} réponses intéressées par mois", "ins_meet_t": "Les rendez-vous dans votre agenda", "ins_meet": "1 réponse intéressée sur {one} prend un appel : {meetMo} rendez-vous par mois. Chaque bloc est un rendez-vous ce jour-là. Le premier arrive vers le jour {b}.", "ins_meet_m": "{posMo} × {book} = {meetMo} rendez-vous par mois", "ins_vault_t": "L'argent en jeu", "ins_vault": "1 rendez-vous sur {one} signe. Au jour 60, ça fait {deals60} projets pour {pipe60}. Les pièces fantômes sont votre année complète : {dealsYr} projets, {gap}.", "ins_vault_m": "{meet60} × {close} × {deal} = {pipe60}", "nogl": "La vue 3D n'est pas disponible sur cet appareil. Tous les chiffres restent ci-dessous.", "illus": "La vue 3D illustre le flux. Les chiffres sont exacts.", "vp_label": "Vue 3D de votre machine de prospection", "cap_warm": "Jours 1–{w} : vos boîtes mail chauffent, pour que vos e-mails arrivent en boîte de réception, pas en spam.", "cap_send": "Jour {s} : les premiers e-mails partent, {epd} par jour.", "cap_reply": "Les réponses arrivent. Environ 1 sur {one} dit « intéressé ».", "cap_meet": "Jour {b} : votre premier rendez-vous tombe. Puis environ {m} par mois.", "cap_end": "Jour 60 : {meet} rendez-vous et {pipe} en jeu. La plupart des contrats se signent après le jour 60.", "fs_on": "Mode présentation (plein écran)", "fs_off": "Quitter le plein écran"}, "es": {"byday_meet": "reuniones al día {d}", "byday_meet1": "reunión al día {d}", "byday_proj": "proyectos en juego", "byday_pipe": "pipeline al día {d}", "st_over": "Vista general", "st_infra": "Buzones", "st_market": "Mercado", "st_reply": "Respuestas", "st_meet": "Reuniones", "st_vault": "Pipeline", "hint": "Arrastra para girar · Rueda para zoom · Haz clic en una estación", "hint_touch": "Desliza de lado para girar · Pellizca para zoom · Toca una estación", "play_cta": "Reproducir los 60 días", "pause": "Pausa", "replay": "Repetir los 60 días", "full_title": "El plan completo", "full_sub": "Cada número detrás de la vista 3D, paso a paso.", "dot_unit": "1 punto = {n} leads", "blade_unit": "1 placa = {n} buzones", "coin_unit": "1 moneda = {n} proyectos", "voxel_unit": "1 bloque = {n} reuniones", "lab_infra": "buzones", "lab_market": "leads contactados", "lab_reply": "respuestas interesadas", "lab_meet": "reuniones agendadas", "lab_vault": "en el pipeline", "ins_over_t": "Tus primeros 60 días", "ins_over": "Cada estación es un paso de la máquina. Haz clic en una para ver cómo se calcula su número, o reproduce los 60 días.", "ins_infra_t": "Tu máquina de envío", "ins_infra": "{boxes} buzones en {doms} dominios. Cada uno envía {perbox} correos al día, {epd} al día en total. Los dominios nuevos se calientan primero {warm} días, o tus correos acaban en spam.", "ins_infra_m": "{epd} correos al día ÷ {perbox} por buzón = {send} buzones", "ins_market_t": "La gente a la que escribes", "ins_market": "{leads} empresas nuevas al mes, {leads60} al día 60. Cada punto es una empresa. La ola muestra a quién has llegado hasta ahora.", "ins_market_m": "{posMo} respuestas ÷ {pos} de tasa de respuesta = {leads} leads al mes", "ins_reply_t": "Los que dicen que sí", "ins_reply": "Más o menos 1 de cada {one} personas responde «me interesa». Son {posMo} al mes. Son los puntos brillantes.", "ins_reply_m": "{leads} × {pos} = {posMo} respuestas interesadas al mes", "ins_meet_t": "Reuniones en tu calendario", "ins_meet": "1 de cada {one} respuestas interesadas agenda una llamada: {meetMo} reuniones al mes. Cada bloque es una reunión ese día. La primera llega hacia el día {b}.", "ins_meet_m": "{posMo} × {book} = {meetMo} reuniones al mes", "ins_vault_t": "Dinero en juego", "ins_vault": "1 de cada {one} reuniones firma. Al día 60 son {deals60} proyectos por {pipe60}. Las monedas fantasma son tu año completo: {dealsYr} proyectos, {gap}.", "ins_vault_m": "{meet60} × {close} × {deal} = {pipe60}", "nogl": "La vista 3D no está disponible en este dispositivo. Todos los números siguen abajo.", "illus": "La vista 3D ilustra el flujo. Los números son exactos.", "vp_label": "Vista 3D de tu máquina de prospección", "cap_warm": "Días 1–{w}: tus buzones se calientan para que los correos lleguen a la bandeja de entrada, no al spam.", "cap_send": "Día {s}: salen los primeros correos, {epd} al día.", "cap_reply": "Llegan las respuestas. Más o menos 1 de cada {one} dice «me interesa».", "cap_meet": "Día {b}: llega tu primera reunión. Luego unas {m} al mes.", "cap_end": "Día 60: {meet} reuniones y {pipe} en juego. La mayoría de los contratos se firman después del día 60.", "fs_on": "Modo presentación (pantalla completa)", "fs_off": "Salir de pantalla completa"}, "de": {"byday_meet": "Termine bis Tag {d}", "byday_meet1": "Termin bis Tag {d}", "byday_proj": "Projekte im Spiel", "byday_pipe": "Pipeline bis Tag {d}", "st_over": "Überblick", "st_infra": "Postfächer", "st_market": "Markt", "st_reply": "Antworten", "st_meet": "Termine", "st_vault": "Pipeline", "hint": "Ziehen zum Drehen · Scrollen zum Zoomen · Station anklicken", "hint_touch": "Seitlich wischen zum Drehen · Zwei Finger zum Zoomen · Station antippen", "play_cta": "Die 60 Tage abspielen", "pause": "Pause", "replay": "Die 60 Tage erneut abspielen", "full_title": "Der ganze Plan", "full_sub": "Jede Zahl hinter der 3D-Ansicht, Schritt für Schritt.", "dot_unit": "1 Punkt = {n} Leads", "blade_unit": "1 Modul = {n} Postfächer", "coin_unit": "1 Münze = {n} Projekte", "voxel_unit": "1 Block = {n} Termine", "lab_infra": "Postfächer", "lab_market": "Leads angeschrieben", "lab_reply": "interessierte Antworten", "lab_meet": "gebuchte Termine", "lab_vault": "in der Pipeline", "ins_over_t": "Ihre ersten 60 Tage", "ins_over": "Jede Station ist ein Schritt der Maschine. Klicken Sie eine an, um zu sehen, wie ihre Zahl entsteht, oder spielen Sie die 60 Tage ab.", "ins_infra_t": "Ihre Versandmaschine", "ins_infra": "{boxes} Postfächer auf {doms} Domains. Jedes sendet {perbox} E-Mails pro Tag, insgesamt {epd} pro Tag. Neue Domains wärmen sich zuerst {warm} Tage auf, sonst landen Ihre E-Mails im Spam.", "ins_infra_m": "{epd} E-Mails pro Tag ÷ {perbox} pro Postfach = {send} Postfächer", "ins_market_t": "Die Leute, die Sie anschreiben", "ins_market": "{leads} neue Firmen pro Monat, {leads60} bis Tag 60. Jeder Punkt ist eine Firma. Die Welle zeigt, wen Sie schon erreicht haben.", "ins_market_m": "{posMo} Antworten ÷ {pos} Antwortrate = {leads} Leads pro Monat", "ins_reply_t": "Die, die Ja sagen", "ins_reply": "Etwa 1 von {one} angeschriebenen Personen antwortet „interessiert“. Das sind {posMo} pro Monat. Das sind die hellen Punkte.", "ins_reply_m": "{leads} × {pos} = {posMo} interessierte Antworten pro Monat", "ins_meet_t": "Termine in Ihrem Kalender", "ins_meet": "1 von {one} interessierten Antworten bucht ein Gespräch: {meetMo} Termine pro Monat. Jeder Block ist ein Termin an diesem Tag. Der erste kommt um Tag {b}.", "ins_meet_m": "{posMo} × {book} = {meetMo} Termine pro Monat", "ins_vault_t": "Geld im Spiel", "ins_vault": "1 von {one} Terminen unterschreibt. Bis Tag 60 sind das {deals60} Projekte im Wert von {pipe60}. Die Geistermünzen sind Ihr ganzes Jahr: {dealsYr} Projekte, {gap}.", "ins_vault_m": "{meet60} × {close} × {deal} = {pipe60}", "nogl": "Die 3D-Ansicht ist auf diesem Gerät nicht verfügbar. Alle Zahlen stehen weiter unten.", "illus": "Die 3D-Ansicht veranschaulicht den Ablauf. Die Zahlen sind exakt.", "vp_label": "3D-Ansicht Ihrer Outreach-Maschine", "cap_warm": "Tage 1–{w}: Ihre Postfächer wärmen sich auf, damit E-Mails im Posteingang landen, nicht im Spam.", "cap_send": "Tag {s}: Die ersten E-Mails gehen raus, {epd} pro Tag.", "cap_reply": "Die Antworten kommen. Etwa 1 von {one} sagt „interessiert“.", "cap_meet": "Tag {b}: Ihr erster Termin steht. Danach etwa {m} pro Monat.", "cap_end": "Tag 60: {meet} Termine und {pipe} im Spiel. Die meisten Verträge werden nach Tag 60 unterschrieben.", "fs_on": "Präsentationsmodus (Vollbild)", "fs_off": "Vollbild beenden"}, "pt": {"byday_meet": "reuniões até o dia {d}", "byday_meet1": "reunião até o dia {d}", "byday_proj": "projetos em jogo", "byday_pipe": "pipeline até o dia {d}", "st_over": "Visão geral", "st_infra": "Caixas de e-mail", "st_market": "Mercado", "st_reply": "Respostas", "st_meet": "Reuniões", "st_vault": "Pipeline", "hint": "Arraste para girar · Role para dar zoom · Clique numa estação", "hint_touch": "Deslize para o lado para girar · Pince para dar zoom · Toque numa estação", "play_cta": "Reproduzir os 60 dias", "pause": "Pausar", "replay": "Repetir os 60 dias", "full_title": "O plano completo", "full_sub": "Cada número por trás da vista 3D, passo a passo.", "dot_unit": "1 ponto = {n} leads", "blade_unit": "1 placa = {n} caixas", "coin_unit": "1 moeda = {n} projetos", "voxel_unit": "1 bloco = {n} reuniões", "lab_infra": "caixas de e-mail", "lab_market": "leads contatados", "lab_reply": "respostas interessadas", "lab_meet": "reuniões marcadas", "lab_vault": "no pipeline", "ins_over_t": "Seus primeiros 60 dias", "ins_over": "Cada estação é uma etapa da máquina. Clique numa para ver como o número dela é calculado, ou reproduza os 60 dias.", "ins_infra_t": "Sua máquina de envio", "ins_infra": "{boxes} caixas de e-mail em {doms} domínios. Cada uma envia {perbox} e-mails por dia, {epd} por dia no total. Domínios novos aquecem primeiro por {warm} dias, senão seus e-mails caem no spam.", "ins_infra_m": "{epd} e-mails por dia ÷ {perbox} por caixa = {send} caixas", "ins_market_t": "As pessoas que você contata", "ins_market": "{leads} empresas novas por mês, {leads60} até o dia 60. Cada ponto é uma empresa. A onda mostra quem você já alcançou.", "ins_market_m": "{posMo} respostas ÷ {pos} de taxa de resposta = {leads} leads por mês", "ins_reply_t": "Os que dizem sim", "ins_reply": "Cerca de 1 em cada {one} pessoas responde “tenho interesse”. São {posMo} por mês. São os pontos brilhantes.", "ins_reply_m": "{leads} × {pos} = {posMo} respostas interessadas por mês", "ins_meet_t": "Reuniões na sua agenda", "ins_meet": "1 em cada {one} respostas interessadas marca uma chamada: {meetMo} reuniões por mês. Cada bloco é uma reunião naquele dia. A primeira chega por volta do dia {b}.", "ins_meet_m": "{posMo} × {book} = {meetMo} reuniões por mês", "ins_vault_t": "Dinheiro em jogo", "ins_vault": "1 em cada {one} reuniões assina. Até o dia 60 são {deals60} projetos no valor de {pipe60}. As moedas fantasma são o seu ano completo: {dealsYr} projetos, {gap}.", "ins_vault_m": "{meet60} × {close} × {deal} = {pipe60}", "nogl": "A vista 3D não está disponível neste dispositivo. Todos os números continuam abaixo.", "illus": "A vista 3D ilustra o fluxo. Os números são exatos.", "vp_label": "Vista 3D da sua máquina de prospecção", "cap_warm": "Dias 1–{w}: suas caixas aquecem para os e-mails caírem na caixa de entrada, não no spam.", "cap_send": "Dia {s}: os primeiros e-mails saem, {epd} por dia.", "cap_reply": "As respostas chegam. Cerca de 1 em cada {one} diz “tenho interesse”.", "cap_meet": "Dia {b}: chega sua primeira reunião. Depois, cerca de {m} por mês.", "cap_end": "Dia 60: {meet} reuniões e {pipe} em jogo. A maioria dos contratos é assinada depois do dia 60.", "fs_on": "Modo apresentação (tela cheia)", "fs_off": "Sair da tela cheia"}, "it": {"byday_meet": "appuntamenti al giorno {d}", "byday_meet1": "appuntamento al giorno {d}", "byday_proj": "progetti in gioco", "byday_pipe": "pipeline al giorno {d}", "st_over": "Panoramica", "st_infra": "Caselle", "st_market": "Mercato", "st_reply": "Risposte", "st_meet": "Appuntamenti", "st_vault": "Pipeline", "hint": "Trascina per ruotare · Scorri per lo zoom · Clicca una stazione", "hint_touch": "Scorri di lato per ruotare · Pizzica per lo zoom · Tocca una stazione", "play_cta": "Riproduci i 60 giorni", "pause": "Pausa", "replay": "Riproduci di nuovo i 60 giorni", "full_title": "Il piano completo", "full_sub": "Ogni numero dietro la vista 3D, passo dopo passo.", "dot_unit": "1 punto = {n} lead", "blade_unit": "1 lama = {n} caselle", "coin_unit": "1 moneta = {n} progetti", "voxel_unit": "1 blocco = {n} appuntamenti", "lab_infra": "caselle email", "lab_market": "lead contattati", "lab_reply": "risposte interessate", "lab_meet": "appuntamenti fissati", "lab_vault": "in pipeline", "ins_over_t": "I tuoi primi 60 giorni", "ins_over": "Ogni stazione è un passo della macchina. Cliccane una per vedere come nasce il suo numero, oppure riproduci i 60 giorni.", "ins_infra_t": "La tua macchina d'invio", "ins_infra": "{boxes} caselle su {doms} domini. Ognuna invia {perbox} email al giorno, {epd} al giorno in totale. I domini nuovi si scaldano prima per {warm} giorni, altrimenti le email finiscono nello spam.", "ins_infra_m": "{epd} email al giorno ÷ {perbox} per casella = {send} caselle", "ins_market_t": "Le persone che contatti", "ins_market": "{leads} nuove aziende al mese, {leads60} al giorno 60. Ogni punto è un'azienda. L'onda mostra chi hai già raggiunto.", "ins_market_m": "{posMo} risposte ÷ {pos} di tasso di risposta = {leads} lead al mese", "ins_reply_t": "Quelli che dicono sì", "ins_reply": "Circa 1 persona su {one} risponde «interessato». Sono {posMo} al mese. Sono i punti luminosi.", "ins_reply_m": "{leads} × {pos} = {posMo} risposte interessate al mese", "ins_meet_t": "Appuntamenti in agenda", "ins_meet": "1 risposta interessata su {one} prenota una call: {meetMo} appuntamenti al mese. Ogni blocco è un appuntamento in quel giorno. Il primo arriva verso il giorno {b}.", "ins_meet_m": "{posMo} × {book} = {meetMo} appuntamenti al mese", "ins_vault_t": "Soldi in gioco", "ins_vault": "1 appuntamento su {one} firma. Al giorno 60 sono {deals60} progetti per {pipe60}. Le monete fantasma sono il tuo anno intero: {dealsYr} progetti, {gap}.", "ins_vault_m": "{meet60} × {close} × {deal} = {pipe60}", "nogl": "La vista 3D non è disponibile su questo dispositivo. Tutti i numeri restano qui sotto.", "illus": "La vista 3D illustra il flusso. I numeri sono esatti.", "vp_label": "Vista 3D della tua macchina di outreach", "cap_warm": "Giorni 1–{w}: le tue caselle si scaldano, così le email arrivano in inbox e non nello spam.", "cap_send": "Giorno {s}: partono le prime email, {epd} al giorno.", "cap_reply": "Arrivano le risposte. Circa 1 su {one} dice «interessato».", "cap_meet": "Giorno {b}: arriva il tuo primo appuntamento. Poi circa {m} al mese.", "cap_end": "Giorno 60: {meet} appuntamenti e {pipe} in gioco. La maggior parte dei contratti si firma dopo il giorno 60.", "fs_on": "Modalità presentazione (schermo intero)", "fs_off": "Esci da schermo intero"}};
+Object.keys(NEW).forEach(l=>Object.assign(I18N[l],NEW[l]));
+const HZ = 60;
+
+const store = { get(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }, set(k,v){ try{ localStorage.setItem(k,v); }catch(e){} } };
+const navLang=(navigator.language||"en").toLowerCase();
+let LANG=store.get("os-lang") || (I18N[navLang.slice(0,2)]?navLang.slice(0,2):"en"); if(!I18N[LANG]) LANG="en";
+const REGION_CUR={US:"USD",GB:"GBP",CA:"CAD",AU:"AUD",NZ:"NZD",CH:"CHF",JP:"JPY",IN:"INR",BR:"BRL",MX:"MXN",AE:"AED",SG:"SGD",ZA:"ZAR",NG:"NGN",MA:"MAD",SA:"SAR",SE:"SEK",NO:"NOK",DK:"DKK",PL:"PLN",FR:"EUR",DE:"EUR",ES:"EUR",IT:"EUR",PT:"EUR",NL:"EUR",BE:"EUR",IE:"EUR",AT:"EUR",FI:"EUR",GR:"EUR",LU:"EUR"};
+const region=((navigator.language||"").split("-")[1]||"").toUpperCase();
+let CUR=store.get("os-cur") || REGION_CUR[region] || (["fr","de","es","it"].includes(navLang.slice(0,2))?"EUR":"USD");
+const L=()=>I18N[LANG], LOC=()=>L().loc;
+const t=(k,v={})=>(L()[k] ?? I18N.en[k] ?? k).replace(/\{(\w+)\}/g,(_,x)=>v[x] ?? "");
+const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+const coarse=matchMedia("(pointer: coarse)").matches;
+
+/* ---------- formatting ---------- */
+const nf=o=>{ try{ return new Intl.NumberFormat(LOC(),o); }catch(e){ return new Intl.NumberFormat("en-US",o); } };
+const fmt=(n,d=0)=>nf({minimumFractionDigits:d,maximumFractionDigits:d}).format(n);
+const r1=n=>Math.round(n*10)/10;
+const nice=n=>{ if(!isFinite(n)) return "—"; if(n>=10) return fmt(Math.round(n)); const r=r1(n); return fmt(r,Number.isInteger(r)?0:1); };
+const big=n=>n>=10000?nf({notation:"compact",maximumFractionDigits:1}).format(n):nice(n);
+const bigInt=n=>n>=100000?nf({notation:"compact",maximumFractionDigits:1}).format(n):fmt(n);
+const pct=x=>nf({style:"percent",maximumFractionDigits:1}).format(x);
+const sig3=n=>{ if(Math.abs(n)<1000) return n; const p=Math.pow(10,Math.floor(Math.log10(Math.abs(n)))-2); return Math.round(n/p)*p; };
+const mC=n=>{ try{ return nf({style:"currency",currency:CUR,notation:"compact",maximumFractionDigits:1}).format(sig3(n)); }catch(e){ return fmt(n); } };
+const mF=n=>{ try{ return nf({style:"currency",currency:CUR,maximumFractionDigits:0,minimumFractionDigits:0}).format(Math.round(n)); }catch(e){ return fmt(n); } };
+function curParts(){ try{ const p=nf({style:"currency",currency:CUR}).formatToParts(1); const ci=p.findIndex(x=>x.type==="currency"), ii=p.findIndex(x=>x.type==="integer"); return {sym:p[ci].value,before:ci<ii}; }catch(e){ return {sym:CUR,before:true}; } }
+const moneyDigits=s=>{ const v=parseFloat(String(s).replace(/[^0-9]/g,"")); return isFinite(v)&&v>0?v:0; };
+const pctNum=s=>{ const v=parseFloat(String(s).replace(",",".").replace(/[^0-9.]/g,"")); return isFinite(v)&&v>0?v:0; };
+const oneIn=x=>x>0?nice(1/x):"—";
+const RANGE={gap:[10000,5000000],deal:[500,1000000]};
+const toLog=(tv,[a,b])=>a*Math.pow(b/a,tv/1000);
+const fromLog=(v,[a,b])=>Math.max(0,Math.min(1000,1000*Math.log(v/a)/Math.log(b/a)));
+const round2=v=>{ if(v<=0) return 0; const p=Math.pow(10,Math.floor(Math.log10(v))-1); return Math.round(v/p)*p; };
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const ease=x=>1-Math.pow(1-clamp(x,0,1),3);
+const easeBack=x=>{ x=clamp(x,0,1); const c1=1.70158,c3=c1+1; return 1+c3*Math.pow(x-1,3)+c1*Math.pow(x-1,2); };
+const projFmt=v=>v<10?fmt(r1(v),Number.isInteger(r1(v))?0:1):big(v);
+
+/* ---------- model ---------- */
+const S={gap:120000,deal:30000,close:10};
+const num=id=>{ const v=parseFloat($(id).value); return isFinite(v)&&v>0?v:0; };
+function model(){
+  const gap=S.gap, deal=S.deal, close=S.close/100, pos=num("pos")/100, book=num("book")/100;
+  const seq=num("seq"), days=num("days"), perbox=num("perbox"), perdom=num("perdom"), reserve=$("reserve").checked;
+  const ok=!!(gap&&deal&&close&&pos&&book&&seq&&days&&perbox&&perdom)&&close<=1&&book<=1&&pos<=1;
+  const dealsYr=ok?gap/deal:0, dealsMo=dealsYr/12, meetMo=ok?dealsMo/close:0, posMo=ok?meetMo/book:0;
+  const leads=ok?Math.ceil(posMo/pos):0, epm=leads*seq, epd=ok?Math.ceil(epm/days):0;
+  const send=ok?Math.ceil((epm/days)/perbox):0, boxes=reserve?send*2:send, doms=ok?Math.ceil(boxes/perdom):0;
+  const intIn=(id,lo,hi,d)=>{ const v=parseFloat($(id).value); return isFinite(v)?Math.max(lo,Math.min(hi,Math.round(v))):d; };
+  const warm=intIn("warm",0,59,20), lag=intIn("lag",0,30,5);
+  const sendDays=Math.max(0,HZ-warm), bookStart=Math.min(HZ,warm+lag), bookDays=Math.max(0,HZ-bookStart);
+  const leads60=Math.round(leads*sendDays/30), meet60=meetMo*bookDays/30, deals60=meet60*close, pipe60=deals60*deal;
+  const firstMeet=meetMo>0?Math.max(bookStart+1,Math.ceil(bookStart+30/meetMo-1e-9)):Infinity;
+  return {gap,deal,close,pos,book,seq,days,perbox,perdom,reserve,ok,dealsYr,dealsMo,meetMo,posMo,leads,epm,epd,send,boxes,doms,
+    warm,lag,sendDays,bookStart,bookDays,leads60,meet60,deals60,pipe60,firstMeet};
+}
+/* values reached by a given day */
+function at(m,d){
+  const sendT=Math.max(0,Math.min(d,HZ)-m.warm), bookT=Math.max(0,Math.min(d,HZ)-m.bookStart);
+  const leadsD=m.leads*sendT/30, repliesD=m.posMo*Math.max(0,sendT-1)/30, meetD=m.meetMo*bookT/30;
+  return {leads:leadsD, replies:repliesD, meet:meetD, deals:meetD*m.close, pipe:meetD*m.close*m.deal};
+}
+function dailyMeetings(m){
+  const c=new Array(HZ).fill(0); if(!m.ok) return c;
+  const cum=x=>Math.max(0,x-m.bookStart)*m.meetMo/30;
+  for(let d=0;d<HZ;d++) c[d]=Math.floor(cum(d+1)+1e-9)-Math.floor(cum(d)+1e-9);
+  return c;
+}
+
+/* ---------- state ---------- */
+let M=model(), DAY=60, FOCUS="over", SCRUB=false;
+const STATIONS=["over","infra","market","reply","meet","vault"];
+const SCOL={over:"#8e99a1",infra:"#f0a03c",market:"#41b6cc",reply:"#ffd57f",meet:"#44a6c6",vault:"#ffd57f"};
+const PLAY={on:false};
+
+/* ---------- count-up ---------- */
+const shown={};
+function tween(id,to,f){
+  const el=$(id), from=shown[id]; shown[id]=to;
+  if(reduce||from===undefined||from===to||PLAY.on||SCRUB){ cancelAnimationFrame(el._r); el.textContent=f(to); return; }
+  cancelAnimationFrame(el._r); const t0=performance.now(), dur=420;
+  const step=tt=>{ const k=Math.min(1,(tt-t0)/dur), e=1-Math.pow(1-k,3); el.textContent=k<1?f(from+(to-from)*e):f(to); if(k<1) el._r=requestAnimationFrame(step); };
+  el._r=requestAnimationFrame(step);
+}
+
+/* ============================================================
+   3D ENGINE
+   ============================================================ */
+const G={ok:false,visible:true,hidden:false};
+const ST={infra:-21,market:-7,meet:7,vault:20};
+const PLANET={y:5.1,R:3.8};
+/* camera views: direction from target, target, and the world box (S wide, V tall) that must fit the free area */
+const VIEW={
+  over:{d:[0,.46,1],t:[0,3.3,0],S:54,V:13},
+  overP:{d:[.95,.95,.72],t:[.5,2.4,0],S:30,V:34},
+  infra:{d:[0,.5,1],t:[ST.infra,2.5,0],S:15,V:10.5},
+  market:{d:[0,.3,1],t:[ST.market,5,0],S:13,V:15},
+  reply:{d:[0,.42,1],t:[-.5,4.2,0],S:25,V:12},
+  meet:{d:[0,.9,1],t:[ST.meet,1.5,0],S:14,V:10},
+  vault:{d:[0,.5,1],t:[ST.vault,2.2,0],S:13,V:10}
+};
+function webglOK(){ try{ const c=document.createElement("canvas"); return !!(window.WebGLRenderingContext&&(c.getContext("webgl2")||c.getContext("webgl"))); }catch(e){ return false; } }
+function hash(i){ const x=Math.sin(i*127.1+311.7)*43758.5453; return x-Math.floor(x); }
+const C3=hex=>new THREE.Color(hex);
+function disposeObj(o){ if(!o) return; o.traverse(c=>{ if(c.geometry) c.geometry.dispose(); if(c.material){ (Array.isArray(c.material)?c.material:[c.material]).forEach(mm=>mm.dispose()); } }); if(o.parent) o.parent.remove(o); }
+
+/* point sprites: soft round dots, additive */
+function dotMaterial(){
+  return new THREE.ShaderMaterial({
+    uniforms:{uPR:{value:G.R.getPixelRatio()},uK:{value:G.ptK||1}},
+    vertexShader:"attribute vec3 aColor;attribute float aSize;varying vec3 vC;uniform float uPR;uniform float uK;void main(){vC=aColor;vec4 mv=modelViewMatrix*vec4(position,1.0);gl_PointSize=aSize*uPR*uK*(150.0/-mv.z);gl_Position=projectionMatrix*mv;}",
+    fragmentShader:"varying vec3 vC;void main(){vec2 p=gl_PointCoord-.5;float d=length(p);float a=smoothstep(.5,.0,d);a*=a;gl_FragColor=vec4(vC*a,a);}",
+    transparent:true,depthWrite:false,blending:THREE.AdditiveBlending
+  });
+}
+/* rim glow (atmosphere) */
+function rimMaterial(hex,k){
+  return new THREE.ShaderMaterial({
+    uniforms:{uC:{value:C3(hex)},uK:{value:k}},
+    vertexShader:"varying vec3 vN;varying vec3 vV;void main(){vec4 mv=modelViewMatrix*vec4(position,1.0);vN=normalize(normalMatrix*normal);vV=normalize(-mv.xyz);gl_Position=projectionMatrix*mv;}",
+    fragmentShader:"uniform vec3 uC;uniform float uK;varying vec3 vN;varying vec3 vV;void main(){float f=1.0-max(dot(normalize(vN),normalize(vV)),0.0);float a=pow(f,3.0)*uK;gl_FragColor=vec4(uC*a,a);}",
+    transparent:true,depthWrite:false,blending:THREE.AdditiveBlending
+  });
+}
+/* hologram beam rising from a pad */
+function beamMaterial(){
+  return new THREE.ShaderMaterial({
+    uniforms:{uC:{value:C3(0x41b6cc)},uO:{value:0},uT:{value:0}},
+    vertexShader:"varying vec2 vUv;varying vec3 vN;varying vec3 vV;void main(){vUv=uv;vec4 mv=modelViewMatrix*vec4(position,1.0);vN=normalize(normalMatrix*normal);vV=normalize(-mv.xyz);gl_Position=projectionMatrix*mv;}",
+    fragmentShader:"uniform vec3 uC;uniform float uO;uniform float uT;varying vec2 vUv;varying vec3 vN;varying vec3 vV;void main(){float f=1.0-abs(dot(normalize(vN),normalize(vV)));float h=pow(1.0-vUv.y,2.2);float scan=.85+.15*sin(vUv.y*60.0-uT*3.0);float a=(.25+.75*pow(f,1.5))*h*scan*uO;gl_FragColor=vec4(uC*a,a);}",
+    transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,side:THREE.DoubleSide
+  });
+}
+/* procedural floor: anti-aliased grid that fades out, glow pools under stations, flowing conveyor line */
+function floorMaterial(){
+  return new THREE.ShaderMaterial({
+    extensions:{derivatives:true},
+    uniforms:{uTime:{value:0},uBg:{value:C3(0x05070a)},
+      uPool:{value:[new THREE.Vector3(ST.infra,0,.5),new THREE.Vector3(ST.market,0,.5),new THREE.Vector3(ST.meet,0,.5),new THREE.Vector3(ST.vault,0,.5)]},
+      uPoolCol:{value:[C3(0xf0a03c),C3(0x41b6cc),C3(0x44a6c6),C3(0xffd57f)]},
+      uFlow:{value:new THREE.Vector2(ST.infra+5.9,ST.vault-5.9)},uFlowOn:{value:1}},
+    vertexShader:"varying vec3 vW;void main(){vec4 w=modelMatrix*vec4(position,1.0);vW=w.xyz;gl_Position=projectionMatrix*viewMatrix*w;}",
+    fragmentShader:[
+      "uniform float uTime;uniform vec3 uBg;uniform vec3 uPool[4];uniform vec3 uPoolCol[4];uniform vec2 uFlow;uniform float uFlowOn;varying vec3 vW;",
+      "float grid(vec2 p,float s,float w){vec2 q=p/s;vec2 g=abs(fract(q-.5)-.5)/fwidth(q);return 1.0-smoothstep(w-.5,w+.5,min(g.x,g.y));}",
+      "void main(){",
+      " vec2 p=vW.xz; float d=length(p*vec2(.7,1.35));",
+      " vec3 c=uBg+vec3(.010,.028,.034)*smoothstep(64.0,0.0,d);",
+      " float fade=smoothstep(54.0,4.0,d);",
+      " c+=vec3(.05,.10,.12)*grid(p,2.0,.6)*fade*.42;",
+      " c+=vec3(.07,.14,.16)*grid(p,10.0,.8)*fade*.62;",
+      " for(int i=0;i<4;i++){float pd=length(p-uPool[i].xy);float g=smoothstep(12.0,0.0,pd);c+=uPoolCol[i]*g*g*.17*uPool[i].z;}",
+      " float onP=smoothstep(uFlow.x-.6,uFlow.x,p.x)*smoothstep(uFlow.y+.6,uFlow.y,p.x);",
+      " float u=clamp((p.x-uFlow.x)/(uFlow.y-uFlow.x),0.0,1.0);",
+      " vec3 fc=mix(vec3(.25,.71,.80),vec3(1.0,.78,.40),u);",
+      " float ph=fract(p.x*.45-uTime*.7); float dash=smoothstep(.0,.12,ph)*smoothstep(.5,.3,ph);",
+      " float lz=abs(p.y);",
+      " c+=fc*onP*uFlowOn*(smoothstep(.10,.0,lz)*(.22+.78*dash)+smoothstep(1.4,.0,lz)*.05);",
+      " gl_FragColor=vec4(c,1.0);",
+      "}"].join("\n")
+  });
+}
+
+function init3D(){
+  if(!window.THREE||!THREE.EffectComposer||!THREE.OrbitControls||!THREE.UnrealBloomPass||!webglOK()){ noGL(); return; }
+  try{
+    const vp=$("vp"), w=vp.clientWidth, h=vp.clientHeight;
+    const R=new THREE.WebGLRenderer({antialias:true,powerPreference:"high-performance"});
+    R.setPixelRatio(Math.min(window.devicePixelRatio||1, coarse?1.5:2));
+    R.setSize(w,h,false);
+    R.domElement.className="gl"; R.domElement.setAttribute("aria-label",t("vp_label")); R.domElement.setAttribute("role","img");
+    vp.prepend(R.domElement);
+    const scene=new THREE.Scene();
+    scene.background=C3(0x05070a);
+    scene.fog=new THREE.FogExp2(0x05070a,.006);
+    const cam=new THREE.PerspectiveCamera(38,w/h,.1,800);
+    const ctl=new THREE.OrbitControls(cam,R.domElement);
+    ctl.enableDamping=true; ctl.dampingFactor=.07; ctl.enablePan=false; ctl.maxPolarAngle=1.45; ctl.minPolarAngle=.12;
+    ctl.minDistance=6; ctl.maxDistance=190; ctl.rotateSpeed=.55; ctl.zoomSpeed=.8;
+    ctl.touches={ONE:THREE.TOUCH.ROTATE,TWO:THREE.TOUCH.DOLLY_ROTATE};
+    R.domElement.style.touchAction="pan-y"; /* vertical swipes still scroll the page on phones */
+    if(THREE.RoomEnvironment){ const pm=new THREE.PMREMGenerator(R); scene.environment=pm.fromScene(new THREE.RoomEnvironment(),.04).texture; pm.dispose(); }
+    const comp=new THREE.EffectComposer(R); comp.setPixelRatio(R.getPixelRatio()); comp.setSize(w,h);
+    comp.addPass(new THREE.RenderPass(scene,cam));
+    const bloomRes=coarse?new THREE.Vector2(w/2,h/2):new THREE.Vector2(w,h);
+    const bloom=new THREE.UnrealBloomPass(bloomRes,.9,.55,.22); comp.addPass(bloom);
+    scene.add(new THREE.HemisphereLight(0x9adbe8,0x080605,.38));
+    const key=new THREE.DirectionalLight(0xfff4e6,1.05); key.position.set(16,30,22); scene.add(key);
+    const rim=new THREE.DirectionalLight(0x41b6cc,.55); rim.position.set(-24,12,-26); scene.add(rim);
+    Object.assign(G,{R,scene,cam,ctl,comp,bloom,ok:true,last:performance.now(),built:{t:0},sway:new THREE.Vector3(),swayCur:new THREE.Vector3(),mouse:{x:0,y:0,on:false},lastInteract:0});
+    G.COL={teal:C3(0x41b6cc),amber:C3(0xf0a03c),hot:C3(0xffd57f),gold:C3(0xf2b84b),dim:C3(0x132029),dim2:C3(0x2b7484),white:C3(0xffffff)};
+    applyView();
+    buildStatic();
+    rebuild();
+    bindPointer();
+    new ResizeObserver(()=>{ resize(); }).observe(vp);
+    if("IntersectionObserver" in window) new IntersectionObserver(es=>{ G.visible=es[0].isIntersecting; },{threshold:0}).observe(vp);
+    document.addEventListener("visibilitychange",()=>{ G.hidden=document.hidden; });
+    requestAnimationFrame(loop);
+    intro();
+  }catch(e){ console.error(e); noGL(); }
+}
+function noGL(){ G.ok=false; $("nogl").hidden=false; $("hint").hidden=true; }
+
+/* free area of the monitor (not covered by HUD, inspector, transport, console) */
+function freeBox(){
+  const vp=$("vp"), r=vp.getBoundingClientRect(), W=r.width, H=r.height, desk=W>=1080;
+  const hud=$("hud").getBoundingClientRect(), tp=$("tp").getBoundingClientRect();
+  const top=clamp(hud.bottom-r.top+8,40,H*.45), bottom=clamp(r.bottom-tp.top+(desk?54:44),60,H*.5);
+  const off=desk?$("inspector").offsetWidth+16:0, insB=desk?$("inspector").getBoundingClientRect().bottom-r.top:0;
+  return {W,H,desk,off,insB,top,bottom,availW:Math.max(180,W-off-(desk?60:20)),availH:Math.max(120,H-top-bottom)};
+}
+/* move the lens center into the free area: view offset left (inspector) and down/up (HUD vs transport) */
+function applyView(){
+  const B=freeBox(); if(!B.W||!B.H) return;
+  const dy=Math.round((B.top-B.bottom)/2), fullW=B.W+B.off, fullH=B.H+2*Math.abs(dy);
+  G.focal=(B.H/2)/Math.tan(19*Math.PI/180);
+  G.cam.fov=2*Math.atan((fullH/2)/G.focal)*180/Math.PI;
+  G.cam.aspect=fullW/fullH;
+  if(B.off||dy) G.cam.setViewOffset(fullW,fullH,B.off,dy<0?2*Math.abs(dy):0,B.W,B.H); else G.cam.clearViewOffset();
+  G.cam.updateProjectionMatrix();
+  G.ptK=clamp(B.H/700,.7,1.25);
+  G.box=B;
+}
+function framing(k){
+  const B=G.box||freeBox(), portrait=B.W/B.H<.95;
+  const v=VIEW[(k==="over"&&portrait)?"overP":k]||VIEW.over;
+  const dist=clamp(Math.max(G.focal*v.S/B.availW,G.focal*v.V/B.availH),7,175);
+  const dir=new THREE.Vector3(...v.d).normalize(), tgt=new THREE.Vector3(...v.t);
+  return {p:tgt.clone().add(dir.multiplyScalar(dist)),t:tgt};
+}
+let resizeT=0;
+function resizeBuffers(){
+  const vp=$("vp"), w=vp.clientWidth, h=vp.clientHeight; if(!w||!h) return false;
+  G.R.setSize(w,h,false); G.comp.setSize(w,h); G.bloom.setSize(coarse?w/2:w,coarse?h/2:h);
+  applyView(); return true;
+}
+function resize(){
+  if(!G.ok||!resizeBuffers()) return; fitHud();
+  clearTimeout(resizeT); resizeT=setTimeout(()=>{ applyView(); if(!G.flying) flyTo(FOCUS,true); },120);
+}
+
+/* floor, pads, beam, dust, streams */
+function buildStatic(){
+  const {scene}=G;
+  const floor=new THREE.Mesh(new THREE.PlaneGeometry(260,260),floorMaterial());
+  floor.rotation.x=-Math.PI/2; scene.add(floor); G.floor=floor;
+  G.rings={}; G.hits=[]; G.padGroups={};
+  const cols={infra:0xf0a03c,market:0x41b6cc,meet:0x44a6c6,vault:0xffd57f};
+  const padMat=new THREE.MeshStandardMaterial({color:0x0b1115,metalness:.8,roughness:.36});
+  const tickGeo=new THREE.BoxGeometry(.05,.03,.32);
+  for(const k of ["infra","market","meet","vault"]){
+    const g=new THREE.Group(); g.position.set(ST[k],0,0);
+    const pad=new THREE.Mesh(new THREE.CylinderGeometry(5.6,5.85,.18,96),padMat); pad.position.y=.09; g.add(pad);
+    const ring=new THREE.Mesh(new THREE.TorusGeometry(5.72,.05,8,200),new THREE.MeshBasicMaterial({color:cols[k]}));
+    ring.rotation.x=Math.PI/2; ring.position.y=.18; ring.userData.base=C3(cols[k]); ring.userData.g=0; g.add(ring);
+    const inner=new THREE.Mesh(new THREE.RingGeometry(5.12,5.16,200),new THREE.MeshBasicMaterial({color:cols[k],transparent:true,opacity:.3,side:THREE.DoubleSide}));
+    inner.rotation.x=-Math.PI/2; inner.position.y=.185; g.add(inner);
+    const ticks=new THREE.InstancedMesh(tickGeo,new THREE.MeshBasicMaterial({color:cols[k],transparent:true,opacity:.45}),60);
+    const o=new THREE.Object3D(); for(let i=0;i<60;i++){ const a=i/60*Math.PI*2; o.position.set(Math.cos(a)*5.38,.19,Math.sin(a)*5.38); o.rotation.set(0,-a+Math.PI/2,0); o.scale.set(1,1,i%5===0?1.6:1); o.updateMatrix(); ticks.setMatrixAt(i,o.matrix); }
+    g.add(ticks);
+    const hit=new THREE.Mesh(new THREE.CylinderGeometry(6.2,6.2,11,16),new THREE.MeshBasicMaterial({visible:false}));
+    hit.position.y=5; hit.userData.station=k; g.add(hit); G.hits.push(hit);
+    scene.add(g); G.rings[k]=ring; G.padGroups[k]=g;
+  }
+  /* hologram beam that follows the focused station */
+  const beam=new THREE.Mesh(new THREE.CylinderGeometry(5.5,5.65,12,96,1,true),beamMaterial());
+  beam.position.set(0,6.1,0); beam.renderOrder=5; scene.add(beam); G.beam=beam; G.beamX=0; G.beamO=0;
+  /* ambient dust */
+  const D=coarse?260:700, dp=new Float32Array(D*3), dc=new Float32Array(D*3), ds=new Float32Array(D);
+  for(let i=0;i<D;i++){ dp[i*3]=(hash(i)-.5)*100; dp[i*3+1]=hash(i+7)*26+.5; dp[i*3+2]=(hash(i+13)-.5)*70; const c=hash(i+3)<.72?[.14,.34,.4]:[.4,.28,.12]; dc.set(c,i*3); ds[i]=.5+hash(i+5)*1.1; }
+  G.dust=pointsFrom(dp,dc,ds); scene.add(G.dust);
+  /* conveyor sparks along the floor line */
+  const P=46; G.pulseSeed=Array.from({length:P},(_,i)=>i/P+hash(i)*.01);
+  G.pulses=pointsFrom(new Float32Array(P*3),new Float32Array(P*3),new Float32Array(P)); scene.add(G.pulses);
+  /* email stream, reply orbs, sparks */
+  G.stream=makeStream(coarse?480:1100,"email"); G.orbs=makeStream(coarse?60:130,"orb");
+  G.sparks=makeSparks(coarse?160:320);
+}
+function pointsFrom(p,c,s){
+  const geo=new THREE.BufferGeometry(); geo.setAttribute("position",new THREE.BufferAttribute(p,3)); geo.setAttribute("aColor",new THREE.BufferAttribute(c,3)); geo.setAttribute("aSize",new THREE.BufferAttribute(s,1));
+  const pts=new THREE.Points(geo,dotMaterial()); pts.frustumCulled=false; return pts;
+}
+function makeStream(K,kind){
+  const p=pointsFrom(new Float32Array(K*3),new Float32Array(K*3),new Float32Array(K)); G.scene.add(p);
+  return {p,K,kind,prog:Float32Array.from({length:K},(_,i)=>hash(i*3.1)),speed:Float32Array.from({length:K},(_,i)=>.35+hash(i*5.7)*.5),from:new Float32Array(K*3),to:new Float32Array(K*3),seeded:false};
+}
+function makeSparks(K){
+  const p=pointsFrom(new Float32Array(K*3),new Float32Array(K*3),new Float32Array(K)); G.scene.add(p);
+  return {p,K,vel:new Float32Array(K*3),life:new Float32Array(K),col:new Float32Array(K*3),next:0};
+}
+function burst(x,y,z,color,n,power){
+  const S=G.sparks; if(!S||reduce) return;
+  for(let k=0;k<n;k++){
+    const i=S.next; S.next=(S.next+1)%S.K;
+    const a=Math.random()*Math.PI*2, sp=(.6+Math.random())*power;
+    S.p.geometry.attributes.position.array.set([x,y,z],i*3);
+    S.vel.set([Math.cos(a)*sp,(1.2+Math.random()*1.6)*power,Math.sin(a)*sp],i*3);
+    S.life[i]=1; S.col.set([color.r,color.g,color.b],i*3);
+  }
+}
+
+/* ---------- per-model builds ---------- */
+function rebuild(){
+  if(!G.ok) return;
+  const m=M;
+  buildInfra(m); buildMarket(m); buildCalendar(m); buildVault(m); seedStreams();
+  placeLabelAnchors();
+  G.built.t=performance.now();
+  paint(true);
+  scaleNote();
+}
+function buildInfra(m){
+  disposeObj(G.infra); G.leds=null;
+  const g=new THREE.Group(); g.position.set(ST.infra,.18,0); G.scene.add(g); G.infra=g;
+  const maxB=240, unit=m.boxes>maxB?Math.ceil(m.boxes/maxB):1, nB=m.ok?Math.ceil(m.boxes/unit):0;
+  G.bladeUnit=unit; G.bladePos=[]; G.infraTop=2.4; G.infraS=1;
+  if(!nB) return;
+  const per=Math.max(1,Math.min(10,Math.round(m.perdom))), nD=Math.ceil(nB/per);
+  const bw=.2, step=.34, pw=per*step+.34, pd=1.2, gx=.55, gz=.8;
+  const cols=Math.max(1,Math.min(nD,Math.ceil(Math.sqrt(nD*(pd+gz)/(pw+gx)*1.6)))), rows=Math.ceil(nD/cols);
+  const W=cols*(pw+gx), D=rows*(pd+gz), s=Math.min(2.7,8.6/Math.max(W,D,1));
+  const metal=new THREE.MeshStandardMaterial({color:0x151c22,metalness:.6,roughness:.55,envMapIntensity:.45});
+  const bladeMat=new THREE.MeshStandardMaterial({color:0x0e1418,metalness:.7,roughness:.35});
+  const ped=new THREE.InstancedMesh(new THREE.BoxGeometry(pw,.26,pd),metal,nD);
+  const bl=new THREE.InstancedMesh(new THREE.BoxGeometry(bw,1.6,.98),bladeMat,nB);
+  const led=new THREE.InstancedMesh(new THREE.BoxGeometry(bw*.5,1.22,.02),new THREE.MeshBasicMaterial({color:0xffffff}),nB);
+  const cap=new THREE.InstancedMesh(new THREE.BoxGeometry(bw*.9,.04,.9),new THREE.MeshBasicMaterial({color:0xffffff}),nB);
+  const o=new THREE.Object3D(); let idx=0;
+  for(let d=0;d<nD;d++){
+    const col=d%cols,row=Math.floor(d/cols), x=(col-(cols-1)/2)*(pw+gx), z=(row-(rows-1)/2)*(pd+gz);
+    const cnt=Math.min(per,nB-d*per), pwi=cnt*step+.34;
+    o.position.set(x,.13,z); o.scale.set(pwi/pw,1,1); o.updateMatrix(); ped.setMatrixAt(d,o.matrix); o.scale.set(1,1,1);
+    for(let k=0;k<per&&idx<nB;k++,idx++){
+      const bx=x-pwi/2+.34+k*step;
+      o.position.set(bx,1.06,z); o.updateMatrix(); bl.setMatrixAt(idx,o.matrix);
+      o.position.set(bx,1.06,z+.5); o.updateMatrix(); led.setMatrixAt(idx,o.matrix);
+      o.position.set(bx,1.88,z); o.updateMatrix(); cap.setMatrixAt(idx,o.matrix);
+      led.setColorAt(idx,G.COL.amber); cap.setColorAt(idx,G.COL.amber);
+      if(G.bladePos.length<260) G.bladePos.push(new THREE.Vector3(ST.infra+bx*s,.18+1.9*s,z*s));
+    }
+  }
+  g.add(ped,bl,led,cap); g.scale.setScalar(s);
+  G.leds=led; G.caps=cap; G.nB=nB; G.infraS=s; G.infraTop=.18+1.95*s;
+}
+function buildMarket(m){
+  disposeObj(G.market);
+  const g=new THREE.Group(); g.position.set(ST.market,PLANET.y,0); G.scene.add(g); G.market=g;
+  const spin=new THREE.Group(); g.add(spin); G.spin=spin; spin.rotation.y=G.spinA||0;
+  const R=PLANET.R, N=m.ok?Math.min(coarse?2400:4800,Math.max(0,Math.round(m.leads60))):0;
+  G.mN=N; G.mUnit=N?m.leads60/N:1; G.mDot=clamp(Math.sqrt(1500/Math.max(N,1)),.55,1.9);
+  const base=new Float32Array(N*3), pos=new Float32Array(N*3), col=new Float32Array(N*3), siz=new Float32Array(N);
+  G.mContact=new Float32Array(N); G.mReplyDay=new Float32Array(N); G.mReply=new Uint8Array(N); G.replyIdx=[];
+  for(let i=0;i<N;i++){
+    const y=1-2*(i+.5)/N, r=Math.sqrt(Math.max(0,1-y*y)), th=i*2.399963;
+    base[i*3]=Math.cos(th)*r; base[i*3+1]=y; base[i*3+2]=Math.sin(th)*r;
+    pos[i*3]=base[i*3]*R; pos[i*3+1]=y*R; pos[i*3+2]=base[i*3+2]*R;
+    G.mContact[i]=m.warm+(i/N)*m.sendDays;
+    if(hash(i*1.37+.37)<m.pos){ G.mReply[i]=1; G.mReplyDay[i]=G.mContact[i]+1.5+hash(i+9)*3; G.replyIdx.push(i); }
+  }
+  const pts=pointsFrom(pos,col,siz); pts.frustumCulled=false; spin.add(pts); G.mPts=pts; G.mBase=base;
+  const core=new THREE.Mesh(new THREE.SphereGeometry(R*.955,64,40),new THREE.MeshStandardMaterial({color:0x061118,metalness:.2,roughness:.85,emissive:0x02070a,envMapIntensity:.35}));
+  g.add(core);
+  const atm=new THREE.Mesh(new THREE.SphereGeometry(R*1.1,64,40),rimMaterial(0x41b6cc,1.15)); g.add(atm); G.atm=atm;
+  const fr=new THREE.Mesh(new THREE.TorusGeometry(1,.02,6,180),new THREE.MeshBasicMaterial({color:0x9aeaf6})); fr.rotation.x=Math.PI/2; g.add(fr); G.front=fr;
+  const orbit=new THREE.Mesh(new THREE.RingGeometry(R*1.42,R*1.44,200),new THREE.MeshBasicMaterial({color:0x41b6cc,transparent:true,opacity:.28,side:THREE.DoubleSide}));
+  orbit.rotation.x=-Math.PI/2+.38; orbit.rotation.y=.2; g.add(orbit); G.orbitRing=orbit;
+  const stem=new THREE.Mesh(new THREE.CylinderGeometry(.05,.5,PLANET.y-R*.95,24,1,true),new THREE.MeshBasicMaterial({color:0x41b6cc,transparent:true,opacity:.1,blending:THREE.AdditiveBlending,depthWrite:false}));
+  stem.position.y=-(R*.95+(PLANET.y-R*.95)/2); g.add(stem);
+  G.mLastDay=-1;
+}
+function buildCalendar(m){
+  disposeObj(G.cal); const g=new THREE.Group(); g.position.set(ST.meet,.2,0); G.scene.add(g); G.cal=g;
+  const tiles=new THREE.InstancedMesh(new THREE.BoxGeometry(.9,.07,.9),new THREE.MeshBasicMaterial({color:0xffffff}),HZ);
+  const o=new THREE.Object3D(); G.tilePos=[];
+  for(let d=0;d<HZ;d++){ const col=d%10,row=Math.floor(d/10); const x=(col-4.5)*1.02, z=(row-2.5)*1.02; G.tilePos.push([x,z]); o.position.set(x,0,z); o.updateMatrix(); tiles.setMatrixAt(d,o.matrix); tiles.setColorAt(d,C3(0x0b1115)); }
+  g.add(tiles); G.tiles=tiles;
+  const c=dailyMeetings(m), maxC=Math.max(1,...c), unit=maxC>10?Math.ceil(maxC/10):1;
+  G.voxUnit=unit; G.vox=[]; G.dayCount=c;
+  for(let d=0;d<HZ;d++){ const h=Math.ceil(c[d]/unit); for(let k=0;k<h;k++) G.vox.push({d,k}); }
+  G.meetTop=.2+.04+Math.ceil(maxC/unit)*.66;
+  const vm=new THREE.MeshStandardMaterial({color:0x237f92,emissive:0x1a8396,emissiveIntensity:.55,roughness:.35,metalness:.1,envMapIntensity:.5});
+  const vx=new THREE.InstancedMesh(new THREE.BoxGeometry(.62,.62,.62),vm,Math.max(1,G.vox.length));
+  vx.count=G.vox.length; g.add(vx); G.voxMesh=vx; G.voxAppear=new Float32Array(HZ).fill(-1); G.voxBurst=new Uint8Array(HZ);
+  const sel=new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(1.0,.14,1.0)),new THREE.LineBasicMaterial({color:0xffd57f}));
+  g.add(sel); G.todayMark=sel;
+}
+function coinGeometry(){
+  const pts=[[0,.07],[.6,.07],[.64,.088],[.78,.088],[.8,0],[.78,-.088],[.64,-.088],[.6,-.07],[0,-.07]].map(([x,y])=>new THREE.Vector2(x,y));
+  const g=new THREE.LatheGeometry(pts.reverse(),56); g.computeVertexNormals(); return g;
+}
+function buildVault(m){
+  disposeObj(G.vault); const g=new THREE.Group(); g.position.set(ST.vault,.2,0); G.scene.add(g); G.vault=g;
+  const maxT=Math.max(m.dealsYr,m.deals60,1), unit=maxT>200?Math.ceil(maxT/200):1;
+  const ghostN=m.ok?Math.min(200,Math.max(1,Math.ceil(m.dealsYr/unit-1e-9))):0;
+  G.coinUnit=unit; G.ghostN=ghostN;
+  const towers=Math.ceil(ghostN/10), tcols=Math.min(6,Math.max(1,Math.ceil(Math.sqrt(towers*1.4)))), trows=Math.ceil(towers/tcols);
+  const spacing=1.9, s=Math.min(2.3,8.2/Math.max(tcols*spacing,trows*spacing,1));
+  G.vaultS=s; G.vaultTop=.2+(Math.min(10,Math.max(1,ghostN))*.2+.3)*s;
+  G.slot=i=>{ const tw=Math.floor(i/10), lv=i%10, c=tw%tcols, r=Math.floor(tw/tcols); return [(c-(tcols-1)/2)*spacing+(hash(i)-.5)*.05,.1+lv*.2,(r-(trows-1)/2)*spacing+(hash(i+3)-.5)*.05]; };
+  const geo=coinGeometry();
+  const gold=new THREE.MeshStandardMaterial({color:0xf3b94a,metalness:1,roughness:.26,emissive:0x140a00,emissiveIntensity:1,envMapIntensity:1.25});
+  const gk=clamp(1-Math.log10(Math.max(1,ghostN))/2.3,0,1);
+  const coins=new THREE.InstancedMesh(geo,gold,Math.max(1,ghostN)); coins.count=0; g.add(coins); G.coins=coins;
+  const ghost=new THREE.InstancedMesh(geo,new THREE.MeshBasicMaterial({color:0xf0a03c,transparent:true,opacity:.04+.1*gk,depthWrite:false}),Math.max(1,ghostN));
+  const ge=new THREE.InstancedMesh(new THREE.CylinderGeometry(.8,.8,.02,56,1,true),new THREE.MeshBasicMaterial({color:0xf0a03c,transparent:true,opacity:.18+.37*gk,depthWrite:false,side:THREE.DoubleSide}),Math.max(1,ghostN));
+  const o=new THREE.Object3D();
+  for(let i=0;i<ghostN;i++){ const [x,y,z]=G.slot(i); o.position.set(x,y,z); o.updateMatrix(); ghost.setMatrixAt(i,o.matrix); o.position.y=y; o.updateMatrix(); ge.setMatrixAt(i,o.matrix); }
+  ghost.count=ghostN; ge.count=ghostN; g.add(ghost,ge);
+  G.prog=null; G.progFrac=-1;
+  g.scale.setScalar(s); G.coinAppear=new Float32Array(Math.max(1,ghostN)).fill(-1); G.coinBurst=new Uint8Array(Math.max(1,ghostN));
+}
+function setProgress(frac,slot){
+  if(Math.abs(frac-G.progFrac)<.01&&G.progSlot===slot) return;
+  G.progFrac=frac; G.progSlot=slot;
+  if(G.prog){ G.vault.remove(G.prog); G.prog.geometry.dispose(); G.prog.material.dispose(); G.prog=null; }
+  if(frac<.02||slot>=G.ghostN) return;
+  const ring=new THREE.Mesh(new THREE.TorusGeometry(.98,.05,8,72,Math.PI*2*frac),new THREE.MeshBasicMaterial({color:0xffd57f}));
+  const [x,y,z]=G.slot(slot); ring.position.set(x,y,z); ring.rotation.x=-Math.PI/2; ring.rotation.z=Math.PI/2;
+  G.vault.add(ring); G.prog=ring;
+}
+function planetWorld(i,out,lift){
+  const a=G.spin.rotation.y, R=PLANET.R*(lift||1), bx=G.mBase[i*3]*R, by=G.mBase[i*3+1]*R, bz=G.mBase[i*3+2]*R;
+  const ca=Math.cos(a), sa=Math.sin(a);
+  out[0]=ST.market+bx*ca+bz*sa; out[1]=PLANET.y+by; out[2]=-bx*sa+bz*ca; return out;
+}
+const _o=[0,0,0];
+function respawn(S,i){
+  if(S.kind==="email"){
+    const b=G.bladePos.length?G.bladePos[Math.floor(Math.random()*G.bladePos.length)]:{x:ST.infra,y:1.5,z:0};
+    S.from[i*3]=b.x; S.from[i*3+1]=b.y; S.from[i*3+2]=b.z;
+    let ux=Math.random()*2-1, uy=Math.random()*2-1, uz=Math.random()*2-1; const l=Math.hypot(ux,uy,uz)||1; ux/=l; uy/=l; uz/=l; if(ux>0) ux=-ux;
+    const R=PLANET.R*1.02; S.to[i*3]=ST.market+ux*R; S.to[i*3+1]=PLANET.y+uy*R; S.to[i*3+2]=uz*R;
+  } else {
+    const ids=G.replyIdx||[]; let j=-1;
+    if(ids.length){ for(let tries=0;tries<6;tries++){ const c=ids[Math.floor(Math.random()*ids.length)]; if(G.mReplyDay[c]<=DAY){ j=c; break; } } if(j<0) j=ids[Math.floor(Math.random()*ids.length)]; }
+    if(j>=0) planetWorld(j,_o,1.06); else { _o[0]=ST.market; _o[1]=PLANET.y; _o[2]=0; }
+    S.from[i*3]=_o[0]; S.from[i*3+1]=_o[1]; S.from[i*3+2]=_o[2];
+    const m=M, lo=Math.min(HZ-1,m.bookStart), d=Math.min(HZ-1,Math.floor(lo+Math.random()*Math.max(1,Math.min(HZ,Math.max(DAY,lo+1))-lo)));
+    const tp=G.tilePos[d]||[0,0]; S.to[i*3]=ST.meet+tp[0]; S.to[i*3+1]=.9; S.to[i*3+2]=tp[1];
+  }
+}
+function seedStreams(){ [G.stream,G.orbs].forEach(S=>{ for(let i=0;i<S.K;i++) respawn(S,i); }); }
+
+/* ---------- day-dependent paint ---------- */
+function paint(force){
+  if(!G.ok) return;
+  const m=M, d=DAY, N=G.mN;
+  if(N&&(force||Math.abs(G.mLastDay-d)>.04)){
+    const a=G.mPts.geometry.attributes, col=a.aColor.array, siz=a.aSize.array, pos=a.position.array, k=G.mDot, R=PLANET.R, C=G.COL;
+    for(let i=0;i<N;i++){
+      let c=C.dim, s=1.35*k, lift=1;
+      if(d>=G.mContact[i]){ c=C.dim2; s=1.7*k; if(G.mReply[i]&&d>=G.mReplyDay[i]){ c=C.hot; s=Math.max(3.4,5*k); lift=1.07; } }
+      col[i*3]=c.r; col[i*3+1]=c.g; col[i*3+2]=c.b; siz[i]=s;
+      pos[i*3]=G.mBase[i*3]*R*lift; pos[i*3+1]=G.mBase[i*3+1]*R*lift; pos[i*3+2]=G.mBase[i*3+2]*R*lift;
+    }
+    a.aColor.needsUpdate=a.aSize.needsUpdate=a.position.needsUpdate=true; G.mLastDay=d;
+  }
+  if(G.front){
+    const fr=m.sendDays?clamp((d-m.warm)/m.sendDays,0,1):0, y=1-2*fr, rr=Math.sqrt(Math.max(0,1-y*y))*PLANET.R*1.02;
+    G.front.visible=m.ok&&fr>0&&fr<1&&rr>.1; G.front.position.y=y*PLANET.R*1.0; G.front.scale.set(Math.max(.01,rr),Math.max(.01,rr),1);
+  }
+  if(G.tiles){
+    for(let k=0;k<HZ;k++){
+      let c;
+      if(k>=d) c=0x10181d; else if(k<m.warm) c=0x3d280c; else if(k<m.bookStart) c=0x0d2c33; else c=(G.dayCount[k]>0?0x11424d:0x0f3640);
+      G.tiles.setColorAt(k,C3(c));
+    }
+    G.tiles.instanceColor.needsUpdate=true;
+    const td=clamp(Math.ceil(d)-1,0,HZ-1), tp=G.tilePos[td]; G.todayMark.position.set(tp[0],.02,tp[1]); G.todayMark.visible=d>0&&d<HZ;
+  }
+}
+function scaleNote(){
+  const L=[];
+  if(G.mUnit>1.05) L.push(t("dot_unit",{n:nice(G.mUnit)}));
+  if(G.bladeUnit>1) L.push(t("blade_unit",{n:fmt(G.bladeUnit)}));
+  if(G.voxUnit>1) L.push(t("voxel_unit",{n:fmt(G.voxUnit)}));
+  if(G.coinUnit>1) L.push(t("coin_unit",{n:fmt(G.coinUnit)}));
+  $("scaleNote").innerHTML=L.map(s=>`<span style="display:block">${s}</span>`).join("");
+}
+
+/* ---------- frame loop ---------- */
+let tmpV=null;
+const DTMAX=(window.__P3D_TEST&&window.__P3D_TEST.dtMax)||.05;
+function loop(now){
+  requestAnimationFrame(loop);
+  if(!G.ok||!G.visible||G.hidden){ G.last=now; G.qSkip=now; return; }
+  const ft=now-G.last, dt=Math.min(DTMAX,ft/1000); G.last=now; const T=now/1000;
+  adaptQuality(now,ft);
+  if(PLAY.on) stepPlay(dt);
+  const m=M, d=DAY, C=G.COL, sending=m.ok&&d>m.warm&&m.sendDays>0;
+  /* rack LEDs: amber breathing while warming, teal flicker once sending */
+  if(G.leds){
+    const n=G.nB, tick=Math.floor(T*9), tmp=G._c||(G._c=new THREE.Color());
+    for(let i=0;i<n;i++){
+      if(!sending){ const k=.45+.55*(.5+.5*Math.sin(T*2.6+i*.35)); tmp.copy(C.amber).multiplyScalar(k); }
+      else { const on=hash(i*7.3+tick)>.28; tmp.copy(C.teal).multiplyScalar(on?1.25:.35); }
+      G.leds.setColorAt(i,tmp); G.caps.setColorAt(i,tmp);
+    }
+    G.leds.instanceColor.needsUpdate=true; G.caps.instanceColor.needsUpdate=true;
+  }
+  /* ring + pool glow: hovered or focused station lights up */
+  const fu=G.floor.material.uniforms; fu.uTime.value=T;
+  ["infra","market","meet","vault"].forEach((k,idx)=>{
+    const r=G.rings[k], on=G.hover===k||FOCUS===k||(FOCUS==="reply"&&(k==="market"||k==="meet"))||FOCUS==="over";
+    r.userData.g+=((on?1:0)-r.userData.g)*.1;
+    const base=k==="infra"?(sending?C.teal:C.amber):r.userData.base;
+    r.material.color.copy(base).multiplyScalar(.45+.6*r.userData.g+.06*Math.sin(T*2+idx));
+    fu.uPool.value[idx].z=.25+.85*r.userData.g*(FOCUS==="over"?.55:1);
+    if(k==="infra") fu.uPoolCol.value[0].copy(sending?C.teal:C.amber);
+  });
+  /* hologram beam follows the focus */
+  { const bx=FOCUS==="over"?null:(FOCUS==="reply"?ST.market:ST[FOCUS]); const tgtO=bx==null||reduce?0:.55;
+    if(bx!=null){ if(G.beamO<.02) G.beamX=bx; G.beamX+=(bx-G.beamX)*.12; }
+    G.beamO+=(tgtO-G.beamO)*.08; G.beam.position.x=G.beamX; G.beam.visible=G.beamO>.01;
+    const bu=G.beam.material.uniforms; bu.uO.value=G.beamO; bu.uT.value=T; bu.uC.value.copy(FOCUS==="vault"?C.hot:(FOCUS==="infra"?(sending?C.teal:C.amber):C.teal)); }
+  /* build-in animation of the racks */
+  const bt=reduce?1:ease((now-G.built.t)/700);
+  if(G.infra) G.infra.scale.set(G.infraS,G.infraS*Math.max(.001,bt),G.infraS);
+  /* planet spin */
+  if(G.spin){ G.spinA=(G.spinA||0)+(reduce?0:dt*.06); G.spin.rotation.y=G.spinA; if(G.orbitRing) G.orbitRing.rotation.z=T*.05; }
+  /* streams */
+  updateStream(G.stream,dt,sending?clamp(.2+Math.log10(m.epd+1)/4,.2,1):0,C.teal,1.6,5.5);
+  const orbLevel=(m.ok&&d>m.warm+2&&m.meetMo>0&&(G.replyIdx||[]).length)?clamp(.3+Math.log10(m.posMo+1)/3,.3,1):0;
+  updateStream(G.orbs,dt*.62,orbLevel,C.hot,3.2,6.5);
+  /* conveyor sparks */
+  { const a=G.pulses.geometry.attributes, p=a.position.array, c=a.aColor.array, s=a.aSize.array, x0=ST.infra+6, x1=ST.vault-6;
+    for(let i=0;i<G.pulseSeed.length;i++){ const u=(G.pulseSeed[i]+T*.04)%1; p[i*3]=x0+u*(x1-x0); p[i*3+1]=.06; p[i*3+2]=0; c[i*3]=.25+.75*u; c[i*3+1]=.71+.07*u; c[i*3+2]=.8-.4*u; s[i]=2.2; }
+    a.position.needsUpdate=a.aColor.needsUpdate=a.aSize.needsUpdate=true; }
+  G.dust.rotation.y=T*.005;
+  /* calendar voxels drop in */
+  if(G.voxMesh&&G.vox.length){
+    const o=G._o||(G._o=new THREE.Object3D());
+    for(let i=0;i<G.vox.length;i++){
+      const v=G.vox[i], vis=d>=v.d+1;
+      if(vis&&G.voxAppear[v.d]<0){ G.voxAppear[v.d]=PLAY.on?now:now-2000; G.voxBurst[v.d]=PLAY.on?0:1; }
+      if(!vis){ G.voxAppear[v.d]=-1; G.voxBurst[v.d]=0; }
+      let sc=0; if(vis) sc=reduce?1:easeBack((now-G.voxAppear[v.d]-v.k*60)/380);
+      const [x,z]=G.tilePos[v.d];
+      o.position.set(x,.36+v.k*.66+(1-Math.min(1,sc))*1.4,z); o.scale.setScalar(Math.max(.0001,sc)); o.rotation.set(0,0,0); o.updateMatrix(); G.voxMesh.setMatrixAt(i,o.matrix);
+      if(vis&&!G.voxBurst[v.d]&&now-G.voxAppear[v.d]>380){ G.voxBurst[v.d]=1; burst(ST.meet+x,.9,z,C.teal,6,1.1); }
+    }
+    G.voxMesh.instanceMatrix.needsUpdate=true;
+  }
+  /* vault coins drop and clink */
+  if(G.coins&&G.ghostN){
+    const a=at(m,d), solidF=a.deals/G.coinUnit, solid=Math.min(G.ghostN,Math.floor(solidF+1e-9)), frac=solidF-Math.floor(solidF+1e-9);
+    const o=G._o2||(G._o2=new THREE.Object3D()), s=G.vaultS;
+    for(let i=0;i<G.ghostN;i++){ if(i<solid){ if(G.coinAppear[i]<0){ G.coinAppear[i]=PLAY.on?now+i%3*40:now-2000; G.coinBurst[i]=PLAY.on?0:1; } } else { G.coinAppear[i]=-1; G.coinBurst[i]=0; } }
+    G.coins.count=solid;
+    for(let i=0;i<solid;i++){
+      const [x,y,z]=G.slot(i), k=reduce?1:clamp((now-G.coinAppear[i])/560,0,1), drop=(1-ease(k))*7;
+      o.position.set(x,y+drop,z); o.rotation.set((1-k)*2.4,i*.7+(1-k)*3,0); o.scale.setScalar(1); o.updateMatrix(); G.coins.setMatrixAt(i,o.matrix);
+      if(k>=1&&!G.coinBurst[i]){ G.coinBurst[i]=1; burst(ST.vault+x*s,.2+y*s+.1,z*s,C.hot,16,1.6); }
+    }
+    G.coins.instanceMatrix.needsUpdate=true;
+    setProgress(solid<G.ghostN?frac:0,solid);
+    if(G.prog) G.prog.rotation.z=Math.PI/2-T*.0;
+  }
+  /* sparks physics */
+  { const S=G.sparks, a=S.p.geometry.attributes, p=a.position.array, c=a.aColor.array, sz=a.aSize.array;
+    for(let i=0;i<S.K;i++){
+      if(S.life[i]<=0){ sz[i]=0; continue; }
+      S.life[i]-=dt*1.25; S.vel[i*3+1]-=9*dt;
+      p[i*3]+=S.vel[i*3]*dt; p[i*3+1]=Math.max(.05,p[i*3+1]+S.vel[i*3+1]*dt); p[i*3+2]+=S.vel[i*3+2]*dt;
+      const l=Math.max(0,S.life[i]); c[i*3]=S.col[i*3]*l; c[i*3+1]=S.col[i*3+1]*l; c[i*3+2]=S.col[i*3+2]*l; sz[i]=2.6*l+.4;
+    }
+    a.position.needsUpdate=a.aColor.needsUpdate=a.aSize.needsUpdate=true; }
+  /* camera: controls + subtle parallax sway (removed before the next controls update) */
+  G.cam.position.sub(G.swayCur);
+  G.ctl.update();
+  const idle=!G.flying&&!G.dragging;
+  if(idle&&!reduce){
+    const dist=G.cam.position.distanceTo(G.ctl.target), k=dist*.012;
+    const right=G._r||(G._r=new THREE.Vector3()), up=G._u||(G._u=new THREE.Vector3());
+    right.setFromMatrixColumn(G.cam.matrixWorld,0); up.setFromMatrixColumn(G.cam.matrixWorld,1);
+    G.sway.copy(right).multiplyScalar((G.mouse.x*1.2+Math.sin(T*.13)*.6)*k).addScaledVector(up,(G.mouse.y*.6+Math.sin(T*.11)*.25)*k);
+  } else G.sway.set(0,0,0);
+  G.swayCur.lerp(G.sway,.04);
+  G.cam.position.add(G.swayCur);
+  G.comp.render();
+  placeLabels();
+}
+/* weak GPU: step pixel ratio down, then drop bloom */
+function adaptQuality(now,ft){
+  if(window.__P3D_TEST||ft>250||now-(G.qSkip||0)<1500) return;
+  G.ema=G.ema?G.ema*.95+ft*.05:ft;
+  if(G.ema<34||now-(G.qT||0)<2500) return;
+  G.qT=now; G.ema=0;
+  const pr=G.R.getPixelRatio();
+  if(pr>1.01){ const n=Math.max(1,pr-.5); G.R.setPixelRatio(n); G.comp.setPixelRatio(n); resizeBuffers(); }
+  else if(G.bloom.enabled){ G.bloom.enabled=false; }
+}
+function updateStream(S,dt,level,color,size,arc){
+  const a=S.p.geometry.attributes, p=a.position.array, c=a.aColor.array, s=a.aSize.array;
+  const active=Math.floor(S.K*level);
+  for(let i=0;i<S.K;i++){
+    if(i>=active){ s[i]=0; continue; }
+    S.prog[i]+=dt*S.speed[i]*(reduce?.18:.55); if(S.prog[i]>1){ S.prog[i]-=1; respawn(S,i); }
+    const u=S.prog[i], fx=S.from[i*3],fy=S.from[i*3+1],fz=S.from[i*3+2], tx=S.to[i*3],ty=S.to[i*3+1],tz=S.to[i*3+2];
+    const mx=(fx+tx)/2, mz=(fz+tz)/2, my=Math.max(fy,ty)+arc+Math.abs(tx-fx)*.06;
+    const iu=1-u;
+    p[i*3]=iu*iu*fx+2*iu*u*mx+u*u*tx; p[i*3+1]=iu*iu*fy+2*iu*u*my+u*u*ty; p[i*3+2]=iu*iu*fz+2*iu*u*mz+u*u*tz;
+    const f=Math.sin(Math.PI*u); c[i*3]=color.r*f; c[i*3+1]=color.g*f; c[i*3+2]=color.b*f; s[i]=size*(.45+.55*f);
+  }
+  a.position.needsUpdate=a.aColor.needsUpdate=a.aSize.needsUpdate=true;
+}
+
+/* ---------- labels over the scene ---------- */
+const LBL={};
+function buildLabels(){
+  const box=$("labels"); box.textContent="";
+  [["infra","lab_infra"],["market","lab_market"],["reply","lab_reply"],["meet","lab_meet"],["vault","lab_vault"]].forEach(([k,key])=>{
+    const b=document.createElement("button"); b.type="button"; b.className="lbl"; b.style.setProperty("--c",SCOL[k]);
+    b.innerHTML=`<b></b><span>${t(key)}</span>`; b.addEventListener("click",()=>{ stopPlay(); focus(k); }); box.appendChild(b);
+    LBL[k]={el:b,v:[0,0,0],num:b.querySelector("b"),cap:t(key).length};
+  });
+  placeLabelAnchors();
+}
+function placeLabelAnchors(){
+  const set=(k,x,y,z)=>{ if(LBL[k]) LBL[k].v=[x,y,z]; };
+  set("infra",ST.infra,(G.infraTop||2.4)+1.1,0);
+  set("market",ST.market,PLANET.y+PLANET.R+1.25,0);
+  set("reply",0,PLANET.y+3.6,0);
+  set("meet",ST.meet,Math.max(2.6,(G.meetTop||1)+1.1),0);
+  set("vault",ST.vault,Math.max(2.6,(G.vaultTop||1)+1.1),0);
+}
+const LPRI=["vault","meet","market","infra","reply"];
+function placeLabels(){
+  if(!G.ok) return; const B=G.box; if(!B) return;
+  if(!tmpV) tmpV=new THREE.Vector3();
+  const placed=[], small=B.W<620;
+  for(const k of LPRI){ const L=LBL[k]; if(!L) continue; const v=tmpV.set(L.v[0],L.v[1],L.v[2]).project(G.cam);
+    if(v.z>1||v.x<-1.15||v.x>1.15||v.y<-1.15||v.y>1.15){ L.el.hidden=true; continue; }
+    const rel=FOCUS==="over"||FOCUS===k||(FOCUS==="reply"&&(k==="market"||k==="meet"));
+    if(!rel){ L.el.hidden=true; continue; }
+    const sx=(v.x*.5+.5)*B.W, ny=(-v.y*.5+.5)*B.H, sy=Math.max(B.top+70,ny);
+    if(ny<B.top+70&&FOCUS!=="over"&&FOCUS!==k){ L.el.hidden=true; continue; }
+    if(B.desk&&sx>B.W-B.off-20&&sy<B.insB+52){ L.el.hidden=true; continue; }
+    const bw=Math.max(L.num.textContent.length*(small?11:15),(L.cap||10)*(small?6.6:7.6))+14, bh=small?50:62;
+    let y=sy;
+    for(let it=0;it<4;it++){ let hit=null; for(const r of placed){ if(Math.abs(r.x-sx)<(r.w+bw)/2&&y>r.y-r.h-2&&y-bh<r.y+2){ hit=r; break; } } if(!hit) break; y=hit.y-hit.h-4; }
+    if(y<B.top+40&&FOCUS==="over"&&k!=="vault"){ L.el.hidden=true; continue; }
+    placed.push({x:sx,y,w:bw,h:bh});
+    L.el.hidden=false; L.el.style.transform=`translate(${sx.toFixed(1)}px,${y.toFixed(1)}px) translate(-50%,-100%)`;
+    L.el.classList.toggle("dim",FOCUS==="reply"&&k!=="reply");
+  }
+}
+function labelValues(){
+  const m=M, a=at(m,DAY);
+  const set=(k,v)=>{ if(LBL[k]) LBL[k].num.textContent=v; };
+  if(!m.ok){ ["infra","market","reply","meet","vault"].forEach(k=>set(k,"—")); return; }
+  set("infra",fmt(m.boxes)); set("market",bigInt(Math.round(a.leads))); set("reply",big(a.replies)); set("meet",big(a.meet)); set("vault",mC(a.pipe));
+}
+
+/* ---------- camera moves ---------- */
+function flyTo(k,instant){
+  if(!G.ok) return; const f=framing(k);
+  if(instant||reduce||!window.gsap){ gsap&&gsap.killTweensOf&&(gsap.killTweensOf(G.cam.position),gsap.killTweensOf(G.ctl.target)); G.cam.position.copy(f.p); G.ctl.target.copy(f.t); G.ctl.update(); G.flying=false; return; }
+  G.flying=true;
+  gsap.killTweensOf(G.cam.position); gsap.killTweensOf(G.ctl.target);
+  gsap.to(G.cam.position,{x:f.p.x,y:f.p.y,z:f.p.z,duration:1.6,ease:"power3.inOut"});
+  gsap.to(G.ctl.target,{x:f.t.x,y:f.t.y,z:f.t.z,duration:1.6,ease:"power3.inOut",onComplete:()=>{ G.flying=false; }});
+}
+function intro(){
+  const f=framing("over");
+  if(reduce||!window.gsap){ flyTo("over",true); return; }
+  const off=f.p.clone().sub(f.t), a=-.75, ca=Math.cos(a), sa=Math.sin(a);
+  const start=new THREE.Vector3(off.x*ca+off.z*sa,off.y*1.9,-off.x*sa+off.z*ca).multiplyScalar(1.9).add(f.t);
+  G.cam.position.copy(start); G.ctl.target.copy(f.t).add(new THREE.Vector3(0,-2,0)); G.ctl.update();
+  G.flying=true;
+  gsap.to(G.cam.position,{x:f.p.x,y:f.p.y,z:f.p.z,duration:3,ease:"power3.out"});
+  gsap.to(G.ctl.target,{x:f.t.x,y:f.t.y,z:f.t.z,duration:3,ease:"power3.out",onComplete:()=>{ G.flying=false; }});
+}
+
+/* ---------- pointer: hover, click stations, parallax ---------- */
+function bindPointer(){
+  const el=G.R.domElement, ray=new THREE.Raycaster(), ndc=new THREE.Vector2(); let down=null;
+  const pick=e=>{ const r=el.getBoundingClientRect(); ndc.set(((e.clientX-r.left)/r.width)*2-1,-((e.clientY-r.top)/r.height)*2+1); ray.setFromCamera(ndc,G.cam); const hit=ray.intersectObjects(G.hits,false)[0]; return hit?hit.object.userData.station:null; };
+  el.addEventListener("pointermove",e=>{
+    if(e.pointerType==="mouse"){ G.hover=pick(e); el.classList.toggle("hov",!!G.hover); const r=el.getBoundingClientRect(); G.mouse.x=((e.clientX-r.left)/r.width)*2-1; G.mouse.y=((e.clientY-r.top)/r.height)*2-1; }
+  });
+  el.addEventListener("pointerdown",e=>{ down={x:e.clientX,y:e.clientY}; G.dragging=true; G.lastInteract=performance.now(); if(window.gsap&&G.flying){ gsap.killTweensOf(G.cam.position); gsap.killTweensOf(G.ctl.target); G.flying=false; } });
+  const up=e=>{ G.dragging=false; if(down&&e&&Math.hypot(e.clientX-down.x,e.clientY-down.y)<6){ const s=pick(e); if(s){ stopPlay(); focus(s); } } down=null; };
+  el.addEventListener("pointerup",up); el.addEventListener("pointercancel",()=>{ G.dragging=false; down=null; });
+  el.addEventListener("wheel",()=>{ G.lastInteract=performance.now(); if(window.gsap&&G.flying){ gsap.killTweensOf(G.cam.position); gsap.killTweensOf(G.ctl.target); G.flying=false; } },{passive:true});
+  el.addEventListener("pointerleave",()=>{ G.hover=null; el.classList.remove("hov"); G.mouse.x=G.mouse.y=0; });
+}
+
+/* ============================================================
+   UI: focus, inspector, HUD, captions, play
+   ============================================================ */
+function buildChips(){
+  const nav=$("chips"); nav.textContent="";
+  STATIONS.forEach(k=>{ const b=document.createElement("button"); b.type="button"; b.dataset.k=k; b.style.setProperty("--c",SCOL[k]);
+    b.innerHTML=`<i></i>${t("st_"+k)}`; b.setAttribute("aria-pressed",String(k===FOCUS)); b.addEventListener("click",()=>{ stopPlay(); focus(k); }); nav.appendChild(b); });
+}
+function focus(k,opts={}){
+  FOCUS=k; document.querySelectorAll("#chips button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.k===k)));
+  renderInspector(); if(!opts.noFly) flyTo(k);
+}
+function renderInspector(){
+  const m=M, k=FOCUS, B=v=>`<b>${v}</b>`;
+  $("inspector").style.setProperty("--c",SCOL[k]);
+  $("ins-kt").textContent=t("st_"+k);
+  let p="", math="";
+  if(!m.ok){ p=t("empty"); }
+  else if(k==="over"){ p=t("ins_over"); math=`${big(m.meet60)} × ${pct(m.close)} × ${mC(m.deal)} = ${mC(m.pipe60)}`; }
+  else if(k==="infra"){ p=t("ins_infra",{boxes:B(fmt(m.boxes)),doms:B(fmt(m.doms)),perbox:B(fmt(m.perbox)),epd:B(bigInt(m.epd)),warm:B(fmt(m.warm))}); math=t("ins_infra_m",{epd:bigInt(m.epd),perbox:fmt(m.perbox),send:fmt(m.send)})+(m.reserve?` · × 2 = ${fmt(m.boxes)}`:""); }
+  else if(k==="market"){ p=t("ins_market",{leads:B(bigInt(m.leads)),leads60:B(bigInt(m.leads60))}); math=t("ins_market_m",{posMo:nice(m.posMo),pos:pct(m.pos),leads:bigInt(m.leads)}); }
+  else if(k==="reply"){ p=t("ins_reply",{one:B(oneIn(m.pos)),posMo:B(big(m.posMo))}); math=t("ins_reply_m",{leads:bigInt(m.leads),pos:pct(m.pos),posMo:nice(m.posMo)}); }
+  else if(k==="meet"){ p=t("ins_meet",{one:B(oneIn(m.book)),meetMo:B(big(m.meetMo)),b:B(isFinite(m.firstMeet)?fmt(m.firstMeet):"—")}); math=t("ins_meet_m",{posMo:nice(m.posMo),book:pct(m.book),meetMo:nice(m.meetMo)}); }
+  else if(k==="vault"){ p=t("ins_vault",{one:B(oneIn(m.close)),deals60:B(projFmt(m.deals60)),pipe60:B(mC(m.pipe60)),dealsYr:B(big(m.dealsYr)),gap:B(mC(m.gap))}); math=t("ins_vault_m",{meet60:nice(m.meet60),close:pct(m.close),deal:mC(m.deal),pipe60:mC(m.pipe60)}); }
+  $("ins-t").textContent=t("ins_"+k+"_t"); $("ins-p").innerHTML=p; $("ins-m").textContent=math; $("ins-m").hidden=!math;
+  const i=STATIONS.indexOf(k); $("ins-dots").innerHTML=STATIONS.map((_,j)=>`<span class="${j<=i?"on":""}"></span>`).join("");
+}
+function hud(){
+  const m=M, a=at(m,DAY), d=Math.round(DAY);
+  if(m.ok){ tween("h-meet",a.meet,big); tween("h-proj",a.deals,projFmt); tween("h-rev",a.pipe,v=>mC(v)); }
+  else { ["h-meet","h-proj","h-rev"].forEach(id=>{ $(id).textContent="—"; delete shown[id]; }); }
+  $("h-meet-l").textContent=r1(a.meet)===1?t("byday_meet1",{d}):t("byday_meet",{d});
+  $("h-rev-l").textContent=t("byday_pipe",{d});
+  $("h-close").textContent="× "+pct(m.close); $("h-deal").textContent="× "+mC(m.deal);
+  labelValues(); tpHead(); caption();
+}
+/* shrink the HUD numbers until the chain fits on one line (measured with day-60 values, the widest) */
+function fitHud(){
+  const ch=$("chain"), m=M; if(!ch) return;
+  const ids=["h-meet","h-proj","h-rev"], keep=ids.map(id=>$(id).textContent);
+  if(m.ok){ $("h-meet").textContent=big(m.meet60); $("h-proj").textContent=projFmt(m.deals60); $("h-rev").textContent=mC(m.pipe60); }
+  const lim=$("hud").clientWidth;
+  let f=window.innerWidth>=1080?64:46; ch.style.setProperty("--hf",f+"px");
+  for(let g=0;g<30&&ch.scrollWidth>lim+1&&f>18;g++){ f*=.93; ch.style.setProperty("--hf",f.toFixed(1)+"px"); }
+  ids.forEach((id,i)=>$(id).textContent=keep[i]);
+}
+/* storytelling captions while the 60 days play */
+let capHold=0;
+function caption(){
+  const el=$("caption"), m=M, d=DAY, on=m.ok&&(PLAY.on||SCRUB||performance.now()<capHold);
+  if(!on){ el.classList.remove("on"); return; }
+  const B=v=>`<b>${v}</b>`; let s="";
+  if(d>=HZ-.3) s=t("cap_end",{meet:B(big(m.meet60)),pipe:B(mC(m.pipe60))});
+  else if(d<m.warm) s=t("cap_warm",{w:B(fmt(m.warm))});
+  else if(d<m.warm+3) s=t("cap_send",{s:B(fmt(m.warm+1)),epd:B(bigInt(m.epd))});
+  else if(d<m.firstMeet) s=t("cap_reply",{one:B(oneIn(m.pos))});
+  else s=t("cap_meet",{b:B(fmt(m.firstMeet)),m:B(big(m.meetMo))});
+  if(el._s!==s){ el.innerHTML=s; el._s=s; }
+  el.classList.add("on");
+}
+/* in-monitor transport */
+function tpRender(){
+  const m=M; $("tp-warm").style.width=(m.warm/HZ*100)+"%";
+  const box=$("tp-ticks"); box.textContent="";
+  if(m.ok){ const c=dailyMeetings(m); let n=0; for(let d=0;d<HZ&&n<60;d++){ if(c[d]>0){ const i=document.createElement("i"); i.style.left=((d+1)/HZ*100)+"%"; i.dataset.d=d+1; box.appendChild(i); n++; } } }
+}
+function tpHead(){
+  const m=M, p=DAY/HZ*100, w=m.warm/HZ*100;
+  $("tp-fill").style.left=w+"%"; $("tp-fill").style.width=Math.max(0,p-w)+"%"; $("tp-head").style.left=p+"%";
+  $("tp-d").textContent=String(Math.round(DAY)); $("tp-v").textContent=m.ok?mC(at(m,DAY).pipe):"—";
+  $("tpbar").setAttribute("aria-valuenow",String(Math.round(DAY)));
+  document.querySelectorAll("#tp-ticks i").forEach(i=>i.classList.toggle("on",+i.dataset.d<=DAY));
+}
+function setDay(v){
+  DAY=clamp(v,0,HZ); setHead(DAY/HZ); $("stage").setAttribute("aria-valuenow",String(Math.round(DAY)));
+  hud(); paint(false);
+  if(PLAY.on){ const m=M; const k=DAY<m.warm?"infra":DAY<m.warm+Math.max(m.lag,(HZ-m.warm)*.32)?"market":DAY<m.bookStart+(HZ-m.bookStart)*.55?"meet":"vault"; if(k!==FOCUS) focus(k); }
+}
+function startPlay(){ if(DAY>=HZ-.05) setDay(0); PLAY.on=true; $("cta").classList.remove("pulse"); ctaState(); if(!G.ok) fallbackTick(); }
+/* without WebGL the day still plays (numbers, captions, timeline) */
+function fallbackTick(){ let last=performance.now(); const tick=now=>{ if(!PLAY.on||G.ok) return; const dt=Math.min(DTMAX,(now-last)/1000); last=now; stepPlay(dt); requestAnimationFrame(tick); }; requestAnimationFrame(tick); }
+function stopPlay(){ if(!PLAY.on) return; PLAY.on=false; capHold=performance.now()+2500; ctaState(); }
+function stepPlay(dt){ let v=DAY+dt*(HZ/18); if(v>=HZ){ PLAY.on=false; capHold=performance.now()+6000; setDay(HZ); ctaState(); setTimeout(()=>{ if(!PLAY.on&&FOCUS==="vault") focus("over"); },2600); return; } setDay(v); }
+function ctaState(){
+  $("cta").classList.toggle("playing",PLAY.on);
+  const label=PLAY.on?t("pause"):(DAY>=HZ-.05&&G.played?t("replay"):t("play_cta"));
+  $("cta-t").textContent=label; $("cta").setAttribute("aria-label",label);
+  const ico=PLAY.on?'<path d="M1 0h3.5v14H1zM7.5 0H11v14H7.5z"/>':'<path d="M0 0 L12 7 L0 14 Z"/>';
+  $("play-ico").innerHTML=ico; $("cta-ico").innerHTML=ico;
+  $("play").setAttribute("aria-label",PLAY.on?t("pause"):t("play60"));
+  if(PLAY.on) G.played=true;
+}
+function togglePlay(){ if(PLAY.on) stopPlay(); else startPlay(); }
+$("cta").addEventListener("click",togglePlay);
+$("play").addEventListener("click",togglePlay);
+$("prev").addEventListener("click",()=>{ stopPlay(); const i=STATIONS.indexOf(FOCUS); focus(STATIONS[(i-1+STATIONS.length)%STATIONS.length]); });
+$("next").addEventListener("click",()=>{ stopPlay(); const i=STATIONS.indexOf(FOCUS); focus(STATIONS[(i+1)%STATIONS.length]); });
+document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&FOCUS!=="over"&&!document.fullscreenElement){ stopPlay(); focus("over"); } });
+(function bindFs(){
+  const st=$("studio"), ok=!!(document.fullscreenEnabled&&st.requestFullscreen);
+  if(!ok) return; st.classList.add("fs-ok");
+  $("fs").addEventListener("click",()=>{ try{ if(document.fullscreenElement) document.exitFullscreen(); else st.requestFullscreen().catch(()=>{}); }catch(e){} });
+  document.addEventListener("fullscreenchange",()=>{ $("fs").setAttribute("aria-label",document.fullscreenElement?t("fs_off"):t("fs_on")); setTimeout(()=>{ measureOverlays(); resize(); },60); });
+})();
+(function bindTp(){
+  const bar=$("tpbar"); let drag=false;
+  const dayAt=e=>{ const r=bar.getBoundingClientRect(); return clamp((e.clientX-r.left)/r.width,0,1)*HZ; };
+  bar.addEventListener("pointerdown",e=>{ drag=true; SCRUB=true; stopPlay(); bar.setPointerCapture(e.pointerId); setDay(dayAt(e)); });
+  bar.addEventListener("pointermove",e=>{ if(drag) setDay(dayAt(e)); });
+  const end=()=>{ if(drag){ drag=false; SCRUB=false; capHold=performance.now()+2500; hud(); } };
+  bar.addEventListener("pointerup",end); bar.addEventListener("pointercancel",end);
+  bar.addEventListener("keydown",e=>{ const step=e.shiftKey?10:1; if(e.key==="ArrowRight"){ stopPlay(); capHold=performance.now()+2500; setDay(Math.round(DAY)+step); e.preventDefault(); } else if(e.key==="ArrowLeft"){ stopPlay(); capHold=performance.now()+2500; setDay(Math.round(DAY)-step); e.preventDefault(); } else if(e.key==="Home"){ setDay(0); e.preventDefault(); } else if(e.key==="End"){ setDay(HZ); e.preventDefault(); } else if(e.key===" "){ togglePlay(); e.preventDefault(); } });
+})();
+
+/* ============================================================
+   2D TIMELINE (scrubbable)
+   ============================================================ */
+const NS="http://www.w3.org/2000/svg";
+function mk(tag,a,parent,text){ const e=document.createElementNS(NS,tag); for(const k in a) e.setAttribute(k,a[k]); if(text!=null) e.textContent=text; parent.appendChild(e); return e; }
+let TL=null, lastW=0;
+function drawTL(m){
+  const stage=$("stage"), svg=$("tlsvg"), cs=getComputedStyle(stage);
+  lastW=stage.clientWidth;
+  const W=Math.max(260,Math.floor(stage.clientWidth-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight)));
+  svg.textContent="";
+  const narrow=W<560, x0=narrow?74:108, x1=W-8, TW=x1-x0;
+  const rH=24, sH=24, tH=34, gp=8, aH=narrow?70:84;
+  const yS=rH+10, yM=yS+sH+gp, yA=yM+tH+gp, H=yA+aH+2;
+  svg.setAttribute("width",W); svg.setAttribute("height",H); svg.setAttribute("viewBox",`0 0 ${W} ${H}`);
+  const X=d=>x0+d/HZ*TW;
+  const defs=mk("defs",{},svg);
+  const lg=mk("linearGradient",{id:"revfill",x1:"0",y1:"0",x2:"0",y2:"1"},defs);
+  mk("stop",{offset:"0",style:"stop-color:var(--warm);stop-opacity:.45"},lg); mk("stop",{offset:"1",style:"stop-color:var(--warm);stop-opacity:.02"},lg);
+  const pat=mk("pattern",{id:"hatch",width:"6",height:"6",patternUnits:"userSpaceOnUse",patternTransform:"rotate(45)"},defs);
+  mk("line",{x1:"0",y1:"0",x2:"0",y2:"6",style:"stroke:var(--warm);stroke-width:2;stroke-opacity:.35"},pat);
+  const cp=mk("clipPath",{id:"phclip"},defs); const cpr=mk("rect",{x:"0",y:"0",width:String(W),height:String(H)},cp);
+  [[yS,sH],[yM,tH],[yA,aH]].forEach(([y,h])=>{ mk("rect",{x:x0,y,width:TW,height:h,rx:5,class:"bed"},svg); for(let d=10;d<HZ;d+=20) mk("rect",{x:X(d),y:y+1,width:X(d+10)-X(d),height:h-2,class:"band"},svg); });
+  mk("text",{x:0,y:rH-13,class:"gl"},svg,t("day_r"));
+  mk("line",{x1:x0,y1:rH,x2:x1,y2:rH,class:"rl"},svg);
+  for(let d=0;d<=HZ;d+=5){ const x=X(d), major=d%10===0; mk("line",{x1:x,y1:major?rH-10:rH-4,x2:x,y2:rH,class:major?"tick":"tick mn"},svg); if(major&&d>0) mk("text",{x,y:rH-13,"text-anchor":d===HZ?"end":"middle",class:"rlab"},svg,String(d)); }
+  [["V1",t("t_inbox"),yS+sH/2],["V2",t("t_meet"),yM+tH/2],["A1",t("t_pipe"),yA+18]].forEach(([c,nm,cy])=>{ if(!narrow) mk("text",{x:0,y:cy+3.5,class:"tcode"},svg,c); mk("text",{x:narrow?0:26,y:cy+4,class:"tname"},svg,nm); });
+  const items=[];
+  const wx=X(m.warm), ty=yS+sH/2+3.5;
+  if(m.warm>0){ mk("rect",{x:x0+1,y:yS+3,width:Math.max(0,wx-x0-2),height:sH-6,rx:3,class:"ph-warm"},svg); const l1=t("ph_warm_n",{n:m.warm}), l2=t("ph_warm"); const lbl=wx-x0>l1.length*6.6+16?l1:(wx-x0>l2.length*6.6+16?l2:""); if(lbl) mk("text",{x:x0+8,y:ty,class:"phtxt w"},svg,lbl); }
+  if(m.sendDays>0){ mk("rect",{x:wx+1,y:yS+3,width:Math.max(0,x1-wx-2),height:sH-6,rx:3,class:"ph-send"},svg); const l1=t("ph_send_n",{n:fmt(m.epd)}), l2=t("ph_send"); const lbl=x1-wx>l1.length*6.6+16?l1:(x1-wx>l2.length*6.6+16?l2:""); if(lbl&&m.ok) mk("text",{x:wx+8,y:ty,class:"phtxt s"},svg,lbl); if(m.warm>0) mk("line",{x1:wx,y1:yS+sH,x2:wx,y2:yA+aH-8,class:"fsend"},svg); }
+  const n60=m.ok?m.meet60:0, full=Math.floor(n60+1e-9), rem=n60-full;
+  const room=Math.max(20,X(HZ)-X(m.bookStart)), maxM=Math.max(4,Math.floor(room/8)), unit=full>maxM?Math.ceil(full/maxM):1;
+  const dayOf=k=>m.bookStart+k*30/(m.meetMo||1);
+  const ev=[]; let acc=0; while(acc<full){ const a=Math.min(unit,full-acc); acc+=a; ev.push({d:dayOf(acc),amt:a,part:false}); } if(rem>.1) ev.push({d:HZ,amt:rem,part:true});
+  const pitch=ev.length?room/ev.length:room, bw=Math.max(3,Math.min(10,pitch*.55)), bh=18, by=yM+(tH-bh)/2;
+  ev.forEach(e=>{ e.x=Math.min(x1-bw/2-1,X(e.d)); const r=mk("rect",{x:(e.x-bw/2).toFixed(2),y:by,width:bw.toFixed(2),height:bh,rx:Math.min(2,bw/2).toFixed(2),class:e.part?"mk part":"mk"},svg); items.push({el:r,x:e.x}); });
+  const nm=t("no_meet"); if(m.ok&&m.bookStart>0&&m.bookStart<HZ&&X(m.bookStart)-x0>nm.length*6.4+16) mk("text",{x:x0+8,y:yM+tH/2+3.5,class:"wnote"},svg,nm);
+  if(m.ok&&m.bookStart>=HZ) mk("text",{x:x0+8,y:yM+tH/2+3.5,class:"wnote"},svg,t("eats"));
+  const top=yA+22, base=yA+aH-8, Y=v=>base-(m.pipe60?Math.min(1,v/m.pipe60):0)*(base-top);
+  let line=`M${x0},${base}`, cum=0; ev.forEach(e=>{ cum+=e.amt*m.close*m.deal; line+=` H${e.x.toFixed(2)} V${Y(cum).toFixed(2)}`; }); line+=` H${x1}`;
+  const area=line+` V${base} H${x0} Z`;
+  mk("line",{x1:x0,y1:base,x2:x1,y2:base,class:"base"},svg);
+  if(m.ok&&m.pipe60>0){ mk("line",{x1:x0,y1:Y(m.pipe60),x2:x1,y2:Y(m.pipe60),class:"goal"},svg); mk("text",{x:x0+8,y:Y(m.pipe60)-6,class:"glabel"},svg,t("day60",{v:mC(m.pipe60)})); }
+  const dim=mk("g",{class:"dimlayer"},svg); mk("path",{d:area,class:"area"},dim); mk("path",{d:line,class:"rev"},dim);
+  const lit=mk("g",{"clip-path":"url(#phclip)"},svg); mk("path",{d:area,class:"area"},lit); mk("path",{d:line,class:"rev"},lit);
+  if(m.ok&&m.pipe60>0){ const ed=mk("circle",{cx:x1,cy:Y(m.pipe60),r:4,class:"enddot"},svg); items.push({el:ed,x:x1-.6}); }
+  const head=mk("g",{},svg); mk("line",{x1:0,y1:2,x2:0,y2:H,class:"phl"},head); mk("path",{d:"M-6,0 H6 V9 L0,15 L-6,9 Z",class:"phh"},head);
+  TL={x0,TW,items,ev,cpr,head,close:m.close,deal:m.deal,pipe:m.pipe60,ok:m.ok};
+  svg.setAttribute("aria-label",`${t("year60")}`);
+  $("unit-note").textContent=unit>1?t("unit",{n:fmt(unit)}):"";
+}
+function setHead(p){
+  if(!TL) return; const px=TL.x0+p*TL.TW;
+  TL.head.setAttribute("transform",`translate(${px.toFixed(2)},0)`); TL.cpr.setAttribute("width",Math.max(0,px).toFixed(2));
+  for(const it of TL.items) it.el.classList.toggle("ahead",it.x>px+.5);
+  const a=at(M,p*HZ); $("tc-r").textContent=TL.ok?mF(a.pipe):"—";
+  $("tc-m").textContent=String(Math.round(clamp(p,0,1)*HZ)).padStart(2,"0");
+}
+(function bindScrub(){
+  const st=$("stage"); let drag=false;
+  const dayAt=e=>{ const r=$("tlsvg").getBoundingClientRect(); return clamp((e.clientX-r.left-TL.x0)/TL.TW,0,1)*HZ; };
+  st.addEventListener("pointerdown",e=>{ if(!TL) return; drag=true; SCRUB=true; stopPlay(); st.setPointerCapture(e.pointerId); setDay(dayAt(e)); });
+  st.addEventListener("pointermove",e=>{ if(drag) setDay(dayAt(e)); });
+  const end=()=>{ if(drag){ drag=false; SCRUB=false; capHold=performance.now()+2500; hud(); } };
+  st.addEventListener("pointerup",end); st.addEventListener("pointercancel",end);
+  st.addEventListener("keydown",e=>{ const step=e.shiftKey?10:1; if(e.key==="ArrowRight"){ stopPlay(); setDay(Math.round(DAY)+step); e.preventDefault(); } else if(e.key==="ArrowLeft"){ stopPlay(); setDay(Math.round(DAY)-step); e.preventDefault(); } else if(e.key==="Home"){ setDay(0); e.preventDefault(); } else if(e.key==="End"){ setDay(HZ); e.preventDefault(); } });
+})();
+
+/* ============================================================
+   FULL PLAN + INPUTS
+   ============================================================ */
+function renderFull(){
+  const m=M;
+  $("sentence").innerHTML=m.ok?t("sentence60",{w:`<b>${fmt(m.warm)}</b>`,leads:`<b>${fmt(m.leads60)}</b>`,boxes:`<b>${fmt(m.boxes)}</b>`,doms:`<b>${fmt(m.doms)}</b>`,meet:`<b>${big(m.meet60)}</b>`,pipe:`<b>${mC(m.pipe60)}</b>`}):t("empty");
+  const st=[[bigInt(m.leads),t("f_leads"),"c0",null],[nice(m.posMo),t("f_int"),"c1",pct(m.pos)],[big(m.meetMo),t("f_meet"),"c2",pct(m.book)],[m.dealsMo<1?fmt(m.dealsMo,2):big(m.dealsMo),t("f_proj"),"c3",pct(m.close)]];
+  $("flow").innerHTML=st.map((s,i)=>(i?`<div class="fop"><em>× ${s[3]}</em></div>`:"")+`<div class="fcell ${s[2]}"><b>${m.ok?s[0]:"—"}</b><span>${s[1]}</span></div>`).join("");
+  $("o-boxes").textContent=fmt(m.boxes); $("o-doms").textContent=fmt(m.doms); $("o-epd").textContent=bigInt(m.epd); $("o-epm").textContent=bigInt(m.epm); $("o-warm").textContent=fmt(m.warm);
+  $("o-boxes-note").textContent=m.reserve?t("n_boxes_r",{s:fmt(m.send)}):t("n_boxes",{n:fmt(m.perbox)});
+  $("o-doms-note").textContent=t("n_doms",{n:fmt(m.perdom)}); $("o-epm-note").textContent=t("n_epm",{n:fmt(m.seq)});
+  const rows=[
+    [t("r_clients"),`${mC(m.gap)} ÷ ${mC(m.deal)} ÷ 12`,fmt(m.dealsMo,2)],
+    [t("r_calls"),`${fmt(m.dealsMo,2)} ÷ ${pct(m.close)} ${t("w_close")}`,fmt(m.meetMo,1)],
+    [t("r_pos"),`${fmt(m.meetMo,1)} ÷ ${pct(m.book)} ${t("w_book")}`,fmt(m.posMo,1)],
+    [t("r_leads"),`${fmt(m.posMo,1)} ÷ ${pct(m.pos)} ${t("w_pos")}`,fmt(m.leads),1],
+    [t("r_epm"),`${fmt(m.leads)} × ${fmt(m.seq)} ${t("w_seq")}`,fmt(m.epm)],
+    [t("r_epd"),`${fmt(m.epm)} ÷ ${fmt(m.days)} ${t("w_days")}`,fmt(m.epd)],
+    [t("r_send"),`${fmt(m.epm/(m.days||1),1)} ÷ ${fmt(m.perbox)} ${t("w_perbox")}`,fmt(m.send),m.reserve?0:1]];
+  if(m.reserve) rows.push([t("r_backup"),`${fmt(m.send)} × 2`,fmt(m.boxes),1]);
+  rows.push([t("r_doms"),`${fmt(m.boxes)} ÷ ${fmt(m.perdom)} ${t("w_perdom")}`,fmt(m.doms),1]);
+  rows.push([t("r_senddays"),t("f_senddays",{w:fmt(m.warm)}),fmt(m.sendDays)]);
+  rows.push([t("r_leads60"),`${fmt(m.leads)} × ${fmt(m.sendDays)} ÷ 30`,fmt(m.leads60)]);
+  rows.push([t("r_meet60"),`${fmt(m.meetMo,1)} × ${fmt(m.bookDays)} ÷ 30 ${t("f_meet60_tail",{l:fmt(m.lag)})}`,fmt(m.meet60,1),1]);
+  rows.push([t("r_pipe60"),`${fmt(m.meet60,1)} × ${pct(m.close)} × ${mC(m.deal)}`,mC(m.pipe60),1]);
+  $("steps").innerHTML=m.ok?rows.map(r=>`<tr><td>${r[0]}</td><td class="f">${r[1]}</td><td class="r${r[3]?" hl":""}">${r[2]}</td></tr>`).join(""):`<tr><td colspan="3">${t("empty")}</td></tr>`;
+}
+let rebuildTimer=0;
+function recompute(){
+  M=model(); drawTL(M); setHead(DAY/HZ); tpRender(); hud(); renderFull(); renderInspector(); fitHud();
+  document.querySelectorAll("#presets .chip").forEach(c=>c.setAttribute("aria-pressed",String(+c.dataset.v===S.gap)));
+  clearTimeout(rebuildTimer); rebuildTimer=setTimeout(()=>{ rebuild(); },60);
+}
+function paintR(id){ const R=$(id); const p=(R.value-R.min)/(R.max-R.min)*100; R.style.setProperty("--p",clamp(p,0,100)+"%"); }
+function syncMoney(k){ $(k).value=fmt(S[k]); $(k+"R").value=fromLog(Math.max(S[k],RANGE[k][0]),RANGE[k]); paintR(k+"R"); }
+function syncAll(){ syncMoney("gap"); syncMoney("deal"); $("close").value=S.close; $("closeR").value=Math.min(80,S.close); paintR("closeR"); }
+["gap","deal"].forEach(k=>{
+  $(k+"R").addEventListener("input",()=>{ S[k]=round2(toLog(+$(k+"R").value,RANGE[k])); $(k).value=fmt(S[k]); paintR(k+"R"); recompute(); });
+  $(k).addEventListener("input",()=>{ S[k]=moneyDigits($(k).value); if(S[k]){ $(k+"R").value=fromLog(Math.max(S[k],RANGE[k][0]),RANGE[k]); paintR(k+"R"); } recompute(); });
+  $(k).addEventListener("blur",()=>{ if(S[k]) $(k).value=fmt(S[k]); });
+});
+$("closeR").addEventListener("input",()=>{ S.close=+$("closeR").value; $("close").value=S.close; paintR("closeR"); recompute(); });
+$("close").addEventListener("input",()=>{ S.close=Math.min(100,pctNum($("close").value)); if(S.close){ $("closeR").value=Math.min(80,S.close); paintR("closeR"); } recompute(); });
+["pos","book","seq","days","perbox","perdom","warm","lag","reserve"].forEach(id=>$(id).addEventListener("input",recompute));
+$("reset").addEventListener("click",()=>{ Object.entries({pos:1,book:33,seq:2,days:26,perbox:20,perdom:3,warm:20,lag:5}).forEach(([k,v])=>$(k).value=v); $("reserve").checked=false; recompute(); });
+const PRESETS=[100000,500000,1000000,5000000];
+function buildPresets(){
+  const box=$("presets"); box.textContent="";
+  PRESETS.forEach(v=>{ const b=document.createElement("button"); b.type="button"; b.className="chip"; b.dataset.v=v; b.textContent=mC(v); b.setAttribute("aria-pressed",String(v===S.gap)); b.addEventListener("click",()=>{ S.gap=v; syncMoney("gap"); recompute(); }); box.appendChild(b); });
+}
+function buildSelects(){
+  $("lang").innerHTML=Object.entries(I18N).map(([k,v])=>`<option value="${k}"${k===LANG?" selected":""}>${v.name}</option>`).join("");
+  let dn=null; try{ dn=new Intl.DisplayNames([LOC()],{type:"currency"}); }catch(e){}
+  const name=c=>{ try{ return dn?dn.of(c):c; }catch(e){ return c; } };
+  let all=[]; try{ all=Intl.supportedValuesOf("currency"); }catch(e){}
+  const popular=["USD","EUR","GBP","CAD","AUD","CHF","JPY","INR","BRL","MXN","AED","SGD","ZAR","NGN","MAD","SAR","SEK","PLN","NZD","HKD"];
+  const rest=all.filter(c=>!popular.includes(c)).sort();
+  const opt=c=>`<option value="${c}"${c===CUR?" selected":""}>${c} · ${name(c)}</option>`;
+  $("cur").innerHTML=`<optgroup label="${t("popular")}">${popular.map(opt).join("")}</optgroup>`+(rest.length?`<optgroup label="${t("all")}">${rest.map(opt).join("")}</optgroup>`:"");
+  if(!$("cur").value){ CUR="USD"; $("cur").value="USD"; }
+}
+function applyI18n(){
+  document.documentElement.lang=LANG;
+  document.querySelectorAll("[data-i18n]").forEach(el=>{ el.textContent=t(el.dataset.i18n); });
+  const cp=curParts();
+  document.querySelectorAll(".val .cb").forEach(e=>e.textContent=cp.before?cp.sym:"");
+  document.querySelectorAll(".val .ca").forEach(e=>e.textContent=cp.before?"":cp.sym);
+  $("hint").textContent=coarse?t("hint_touch"):t("hint");
+  $("fs").setAttribute("aria-label",t("fs_on")); $("fs").title=t("fs_on");
+  $("vp").setAttribute("aria-label",t("vp_label"));
+  ["gap","deal","close"].forEach(k=>{ const lab=document.querySelector(`label[for=${k}R]`); if(lab) lab.title=t(k+"_h"); });
+  buildSelects(); buildPresets(); buildChips(); buildLabels(); syncAll(); ctaState();
+  if(G.R) G.R.domElement.setAttribute("aria-label",t("vp_label"));
+}
+$("lang").addEventListener("change",e=>{ LANG=e.target.value; store.set("os-lang",LANG); for(const k in shown) delete shown[k]; applyI18n(); recompute(); scaleNote(); });
+$("cur").addEventListener("change",e=>{ CUR=e.target.value; store.set("os-cur",CUR); for(const k in shown) delete shown[k]; applyI18n(); recompute(); });
+
+/* overlay sizes feed the CSS (console + transport heights) */
+function measureOverlays(){
+  document.documentElement.style.setProperty("--hdr",document.querySelector(".top").offsetHeight+"px");
+  const st=$("studio"); st.style.setProperty("--ch",$("console").offsetHeight+"px"); st.style.setProperty("--tph",$("tp").offsetHeight+"px");
+}
+
+/* ---------- boot ---------- */
+applyI18n();
+M=model(); drawTL(M); setHead(1); tpRender(); hud(); renderFull(); renderInspector();
+measureOverlays(); fitHud();
+new ResizeObserver(()=>{ measureOverlays(); }).observe($("console"));
+new ResizeObserver(()=>{ measureOverlays(); }).observe(document.querySelector(".top"));
+init3D();
+labelValues();
+new ResizeObserver(()=>{ const w=$("stage").clientWidth; if(Math.abs(w-lastW)>1){ drawTL(M); setHead(DAY/HZ); } }).observe($("stage"));
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,1019 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}#nl-badge-frame{display:none!important}</style>
+<meta name="description" content="What to charge per booked meeting, shown as a 3D project coin cut into meetings. Free.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Zayaneflow Tools">
+<meta property="og:title" content="2-Second Meeting Pricer">
+<meta property="og:description" content="What to charge per booked meeting, shown as a 3D project coin cut into meetings. Free.">
+<meta property="og:url" content="https://zayaneflow-tools.netlify.app/pricer/">
+<meta property="og:image" content="https://zayaneflow-tools.netlify.app/media/og-pricer.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://zayaneflow-tools.netlify.app/pricer/">
+<title>2-Second Meeting Pricer</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Cdefs%3E%3CradialGradient%20id%3D%22prc%22%20cx%3D%22.35%22%20cy%3D%22.3%22%20r%3D%22.8%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23fff3d1%22/%3E%3Cstop%20offset%3D%22.5%22%20stop-color%3D%22%23ffd57f%22/%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23e08f2c%22/%3E%3C/radialGradient%3E%3ClinearGradient%20id%3D%22prb%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%220%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22%231b2228%22/%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%230d1115%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20x%3D%221%22%20y%3D%221%22%20width%3D%2246%22%20height%3D%2246%22%20rx%3D%2212%22%20fill%3D%22url%28%23prb%29%22%20stroke%3D%22%232f3a43%22/%3E%3Ccircle%20cx%3D%2224%22%20cy%3D%2224%22%20r%3D%2217%22%20fill%3D%22none%22%20stroke%3D%22%2341b6cc%22%20stroke-width%3D%221.6%22%20stroke-dasharray%3D%222.2%203.1%22%20opacity%3D%22.75%22/%3E%3Ccircle%20cx%3D%2224%22%20cy%3D%2224%22%20r%3D%2212.5%22%20fill%3D%22url%28%23prc%29%22/%3E%3Ccircle%20cx%3D%2224%22%20cy%3D%2224%22%20r%3D%2210.2%22%20fill%3D%22none%22%20stroke%3D%22%231c1206%22%20stroke-opacity%3D%22.22%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M26.2%2015.5%2018.6%2025.6h4.9l-1.7%207%207.6-10.1h-4.9z%22%20fill%3D%22%231c1206%22/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Martian+Mono:wght@400;500&display=swap">
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/shaders/CopyShader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/shaders/LuminosityHighPassShader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/postprocessing/Pass.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/postprocessing/EffectComposer.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/postprocessing/RenderPass.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/postprocessing/ShaderPass.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/postprocessing/UnrealBloomPass.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/controls/OrbitControls.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/environments/RoomEnvironment.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/geometries/RoundedBoxGeometry.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<style>
+/* A gold project coin, sliced into the meetings it takes to win it. Each slice is what one meeting is worth;
+   your fee is a sliver of each slice; put together, the slivers are what the client pays per project.
+   Price hero top-left, inspector + call line top-right, step transport above a fader console.
+   Same teal-to-amber grade as the planner. Single dark theme by choice. */
+:root{
+  color-scheme:dark;
+  --bg:#05070a; --panel:#11161a; --panel-2:#171e24; --inset:#06080a;
+  --glass:rgba(11,15,19,.74); --line:#222a31; --line-2:#34404a;
+  --fg:#eaedef; --muted:#8e99a1; --faint:#5f6b75;
+  --cold:#41b6cc; --mid:#44a6c6; --warm:#f0a03c; --hot:#ffd57f; --on-warm:#1c1206; --warm-soft:rgba(240,160,60,.12);
+  --display:"Big Shoulders Display","Arial Narrow","Roboto Condensed",Impact,sans-serif;
+  --sans:"Instrument Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --mono:"Martian Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box}
+html{background:var(--bg)}
+body{
+  background:radial-gradient(1100px 560px at 70% -10%, rgba(240,160,60,.07), transparent 60%),var(--bg);
+  color:var(--fg);font-family:var(--sans);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  padding-block:12px 56px;min-height:100%;
+}
+button,select,input{font:inherit}
+:focus-visible{outline:2px solid var(--hot);outline-offset:2px}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.shell{max-width:1600px;margin:0 auto;display:grid;gap:12px}
+.shell>*,.top>*,.studio>*{min-width:0}
+
+.top{display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:space-between}
+.mark{display:flex;align-items:center;gap:12px;font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;min-width:0}
+.logo{width:32px;height:32px;flex:none;filter:drop-shadow(0 4px 14px rgba(0,0,0,.5))}
+.ctrls{display:flex;gap:8px;flex-wrap:wrap}
+.sel{appearance:none;-webkit-appearance:none;background:var(--inset) url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6'><path d='M1 1l4 4 4-4' fill='none' stroke='%238e99a1' stroke-width='1.5'/></svg>") no-repeat right 12px center;
+  border:1px solid var(--line);border-radius:999px;color:var(--fg);font-size:13px;font-weight:500;padding:7px 30px 7px 12px;max-width:190px;cursor:pointer}
+.sel option,.sel optgroup{background:#13181c;color:var(--fg)}
+@media (max-width:620px){ .mark span{font-size:11px;letter-spacing:.12em} .ctrls{margin-left:auto} .sel{max-width:150px;font-size:12.5px} }
+
+/* studio */
+.studio{position:relative;display:grid;gap:12px}
+.viewport{position:relative;height:clamp(500px,138vw,660px);border-radius:16px;overflow:hidden;border:1px solid var(--line);background:#05070a;
+  box-shadow:0 30px 80px -40px rgba(0,0,0,.9),inset 0 0 0 1px rgba(255,255,255,.02);touch-action:pan-y}
+@media (min-width:640px){ .viewport{height:clamp(560px,76vh,780px)} }
+.viewport canvas.gl{position:absolute;inset:0;width:100%!important;height:100%!important;display:block;cursor:grab;outline:none}
+.viewport canvas.gl.hov{cursor:pointer}
+.viewport canvas.gl:active{cursor:grabbing}
+.viewport::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse at center, transparent 58%, rgba(0,0,0,.5) 100%),
+    linear-gradient(var(--line-2),var(--line-2)) 12px 12px/20px 1.5px no-repeat,
+    linear-gradient(var(--line-2),var(--line-2)) 12px 12px/1.5px 20px no-repeat,
+    linear-gradient(var(--line-2),var(--line-2)) calc(100% - 12px) 12px/20px 1.5px no-repeat,
+    linear-gradient(var(--line-2),var(--line-2)) calc(100% - 13.5px) 12px/1.5px 20px no-repeat}
+.labels{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.lbl{position:absolute;left:0;top:0;pointer-events:none;color:var(--fg);text-align:center;display:grid;justify-items:center;gap:3px;padding:0 8px;will-change:transform;transition:opacity .3s}
+.lbl span{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:#aeb7bd;text-shadow:0 1px 8px #000;white-space:nowrap}
+.lbl b{font-family:var(--display);font-weight:800;font-size:30px;line-height:.9;letter-spacing:.01em;font-variant-numeric:tabular-nums;text-shadow:0 2px 18px rgba(0,0,0,.95);white-space:nowrap}
+.lbl em{font-style:normal;font-family:var(--mono);font-size:10px;color:var(--hot);white-space:nowrap}
+.lbl.above::after{content:"";width:1px;height:18px;background:linear-gradient(var(--c,var(--hot)),transparent);margin-top:3px}
+.lbl.side{justify-items:start;text-align:left;padding-left:16px}
+.lbl.side::before{content:"";position:absolute;left:0;top:50%;width:12px;height:1px;background:linear-gradient(90deg,transparent,var(--hot))}
+.lbl.box{background:rgba(6,9,12,.78);border:1px solid var(--line-2);border-radius:10px;padding:7px 12px 8px;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.lbl.hot b{color:var(--hot)} .lbl.cold b{color:var(--cold)}
+.lbl.dim{opacity:.35}
+.lbl[hidden]{display:none}
+.hud{position:absolute;left:22px;top:18px;right:22px;pointer-events:none;display:grid;gap:8px;justify-items:start}
+.eyebrow{margin:0;font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.price{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+.price b{font-family:var(--display);font-weight:900;font-size:clamp(64px,8.4vw,124px);line-height:.82;font-variant-numeric:tabular-nums;white-space:nowrap;
+  background-image:linear-gradient(180deg,#fff6dc 0%,var(--hot) 48%,#e39a33 100%);-webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 0 40px rgba(255,213,127,.3));padding-bottom:6px}
+.price span{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.chainline{display:flex;flex-wrap:wrap;align-items:center;gap:7px;font-family:var(--mono);font-size:11.5px;color:var(--muted)}
+.chainline em{font-style:normal;color:var(--fg);background:rgba(17,22,26,.85);border:1px solid var(--line-2);border-radius:999px;padding:3px 9px;white-space:nowrap}
+.chainline em.w{color:var(--hot);border-color:rgba(240,160,60,.5)}
+
+.caption{position:absolute;left:50%;bottom:calc(var(--tph,58px) + 24px);transform:translate(-50%,6px);width:max-content;max-width:min(640px,calc(100% - 28px));
+  text-align:center;font-size:15px;font-weight:500;line-height:1.4;color:var(--fg);background:rgba(7,10,13,.8);border:1px solid var(--line-2);border-radius:12px;
+  padding:9px 15px;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);opacity:0;transition:opacity .35s,transform .35s;pointer-events:none;text-wrap:balance}
+.caption.on{opacity:1;transform:translate(-50%,0)}
+.caption b{color:var(--hot);font-weight:600}
+.transport3{position:absolute;left:12px;right:12px;bottom:12px;display:flex;align-items:center;gap:10px;padding:7px;background:rgba(7,10,13,.8);
+  border:1px solid var(--line-2);border-radius:999px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.tp-play{position:relative;flex:none;display:flex;align-items:center;gap:9px;font-weight:600;font-size:14px;color:var(--on-warm);
+  background:linear-gradient(180deg,var(--hot),var(--warm));border:0;border-radius:999px;padding:10px 18px 10px 15px;cursor:pointer;box-shadow:0 8px 30px -8px rgba(240,160,60,.65);white-space:nowrap}
+.tp-play svg{width:12px;height:12px;fill:currentColor;flex:none}
+.tp-play.playing{background:var(--panel-2);color:var(--fg);box-shadow:inset 0 0 0 1px var(--line-2)}
+.tp-play.pulse::before{content:"";position:absolute;inset:-5px;border-radius:999px;border:2px solid rgba(255,213,127,.55);animation:ring 1.8s ease-out infinite}
+@keyframes ring{0%{opacity:.9;transform:scale(.96)}100%{opacity:0;transform:scale(1.18)}}
+.steps{display:flex;gap:3px;flex:1;min-width:0;padding:3px;background:var(--inset);border:1px solid var(--line);border-radius:999px}
+.steps button{position:relative;flex:1 1 0;min-width:0;display:flex;align-items:center;justify-content:center;gap:7px;font-size:12.5px;font-weight:500;color:var(--muted);background:none;border:0;border-radius:999px;padding:7px 8px;cursor:pointer;white-space:nowrap;overflow:hidden}
+.steps button i{font-style:normal;font-family:var(--mono);font-size:10px;width:18px;height:18px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--line-2);color:var(--faint);flex:none}
+.steps button span{overflow:hidden;text-overflow:ellipsis}
+.steps button[aria-pressed="true"]{background:var(--panel-2);color:var(--fg);box-shadow:inset 0 0 0 1px var(--line-2)}
+.steps button[aria-pressed="true"] i,.steps button.done i{border-color:var(--warm);color:var(--hot)}
+.steps button:hover{color:var(--fg)}
+.tp-fs{flex:none;width:34px;height:34px;border-radius:50%;border:1px solid var(--line-2);background:var(--inset);color:var(--fg);display:none;place-items:center;cursor:pointer}
+.tp-fs svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.6}
+.tp-fs:hover{border-color:var(--muted)}
+@media (min-width:1080px){ .fs-ok .tp-fs{display:grid} }
+@media (min-width:1080px) and (max-width:1299px){ .steps button:not([aria-pressed="true"]) span{display:none} .steps button[aria-pressed="true"]{flex:2.6 1 0} }
+.studio:fullscreen{height:100vh!important;max-height:none;background:var(--bg)}
+.studio:fullscreen .viewport{border-radius:0;border:0}
+.vnotes{position:absolute;right:18px;bottom:calc(var(--tph,58px) + 26px);display:grid;gap:3px;text-align:right;font-family:var(--mono);font-size:9.5px;color:var(--faint);pointer-events:none;max-width:46%}
+.nogl{position:absolute;inset:0;display:grid;place-items:center;padding:24px;text-align:center;color:var(--muted);font-size:14px;background:radial-gradient(circle at 50% 50%, rgba(240,160,60,.1), transparent 60%)}
+.nogl p{max-width:42ch;margin:0}
+@media (max-width:620px){
+  .caption{font-size:13.5px;padding:8px 12px}
+  .tp-play span{display:none}
+  .tp-play{padding:11px 13px}
+  .steps button span{display:none}
+  .steps button{padding:7px 4px}
+  .lbl b{font-size:22px} .lbl span{font-size:8.5px}
+  .vnotes{display:none}
+  .hud{left:16px;top:14px;right:16px}
+  .chainline{font-size:10.5px;gap:5px}
+}
+
+/* panels */
+.panel{background:linear-gradient(180deg,rgba(23,30,36,.92),rgba(14,19,23,.94));border:1px solid var(--line);border-radius:14px;min-width:0;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.04),0 24px 60px -28px rgba(0,0,0,.8)}
+.console{padding:14px 16px 16px;display:grid;gap:16px}
+.ctl{display:grid;gap:4px;min-width:0}
+.ctl-top{display:flex;justify-content:space-between;align-items:flex-end;gap:10px}
+.ctl label{font-weight:600;font-size:13.5px;line-height:1.25;min-width:0}
+.ctl .hint2{display:block;font-weight:400;font-size:11.5px;color:var(--muted);margin-top:1px}
+.val{display:flex;align-items:baseline;gap:2px;font-family:var(--display);font-weight:700;font-size:28px;line-height:1;flex:none}
+.val .u{color:var(--faint);font-size:19px}
+.val input{width:8.6ch;font:inherit;color:var(--fg);background:transparent;border:0;border-bottom:1px dashed var(--line-2);text-align:right;padding:0 0 2px;font-variant-numeric:tabular-nums}
+.val input.short{width:3.2ch}
+.val input:focus{outline:none;border-bottom-color:var(--hot)}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:26px;background:transparent;margin:0;cursor:pointer}
+input[type=range]:focus-visible{outline:none}
+input[type=range]::-webkit-slider-runnable-track{height:4px;border-radius:4px;background:linear-gradient(90deg,var(--cold),var(--warm)) 0 0/var(--p,50%) 100% no-repeat,var(--line-2)}
+input[type=range]::-moz-range-track{height:4px;border-radius:4px;background:var(--line-2)}
+input[type=range]::-moz-range-progress{height:4px;border-radius:4px;background:linear-gradient(90deg,var(--cold),var(--warm))}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:26px;margin-top:-11px;border:0;border-radius:4px;
+  background:linear-gradient(180deg,#f3f5f7 0 45%,#272d34 45% 55%,#c6cdd3 55% 100%);box-shadow:0 2px 8px rgba(0,0,0,.6),0 0 0 1px rgba(0,0,0,.45)}
+input[type=range]::-moz-range-thumb{width:16px;height:26px;border:0;border-radius:4px;background:linear-gradient(180deg,#f3f5f7 0 45%,#272d34 45% 55%,#c6cdd3 55% 100%)}
+input[type=range]:focus-visible::-webkit-slider-thumb{box-shadow:0 0 0 3px var(--bg),0 0 0 5px var(--hot)}
+.toggle{display:flex;justify-content:space-between;align-items:center;gap:14px}
+.toggle label{font-size:13.5px;font-weight:600;flex:1;min-width:0;line-height:1.3}
+.toggle label span.h{display:block;font-size:11.5px;font-weight:400;color:var(--muted)}
+@media (min-width:1080px){ .toggle label span.h{display:none} }
+.switch{position:relative;width:46px;height:28px;flex:none}
+.switch input{position:absolute;inset:0;opacity:0;margin:0;cursor:pointer;z-index:1}
+.switch i{position:absolute;inset:0;background:var(--line-2);border-radius:28px;transition:background .2s}
+.switch i::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:var(--fg);transition:transform .2s}
+.switch input:checked + i{background:var(--warm)}
+.switch input:checked + i::after{transform:translateX(18px)}
+.switch input:focus-visible + i{outline:2px solid var(--hot);outline-offset:2px}
+
+.inspector{padding:16px;display:grid;gap:11px;align-content:start}
+.ins-k{display:flex;align-items:center;gap:8px;margin:0;font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--c,var(--hot))}
+.ins-k i{width:8px;height:8px;border-radius:50%;background:var(--c,var(--hot));box-shadow:0 0 10px var(--c,var(--hot))}
+.inspector h3{margin:0;font-family:var(--display);font-weight:800;font-size:30px;line-height:1;letter-spacing:.01em;text-wrap:balance}
+.inspector p{margin:0;color:#c9d1d6;font-size:14px;line-height:1.55}
+.inspector p b{color:var(--hot);font-weight:600}
+.mathline{font-family:var(--mono);font-size:11.5px;color:var(--fg);background:var(--inset);border:1px solid var(--line);border-radius:8px;padding:9px 11px;line-height:1.6;overflow-wrap:anywhere}
+.stepper{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.dots{display:flex;gap:5px}
+.dots span{width:18px;height:3px;border-radius:2px;background:var(--line-2)}
+.dots span.on{background:var(--c,var(--hot))}
+.nav{display:flex;gap:6px}
+.nav button{width:34px;height:30px;border-radius:8px;border:1px solid var(--line-2);background:var(--inset);color:var(--fg);cursor:pointer;display:grid;place-items:center}
+.nav button:hover{border-color:var(--muted)}
+.nav svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2}
+.say{display:grid;gap:9px;margin-top:4px;padding:13px 14px;border-radius:12px;border:1px solid rgba(240,160,60,.35);background:linear-gradient(180deg,rgba(240,160,60,.09),rgba(240,160,60,.02))}
+.say h4{margin:0;font-family:var(--mono);font-size:10px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--warm)}
+.say p{margin:0;font-size:15px;font-weight:500;line-height:1.45;color:var(--fg)}
+.copy{justify-self:start;font-size:12.5px;font-weight:600;color:var(--on-warm);background:var(--warm);border:0;border-radius:999px;padding:7px 14px;cursor:pointer}
+.copy:hover{background:var(--hot)}
+
+@media (min-width:1080px){
+  .studio{display:block;height:clamp(660px,calc(100vh - var(--hdr,52px) - 36px),980px)}
+  .viewport{position:absolute;inset:0;height:auto}
+  .console{position:absolute;left:16px;right:16px;bottom:16px;grid-template-columns:repeat(3,minmax(0,1fr)) minmax(220px,.9fr);align-items:end;gap:30px;padding:13px 20px 14px;
+    background:var(--glass);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+  .console .hint2{display:none}
+  .toggle{padding-bottom:2px}
+  .inspector{position:absolute;right:16px;top:16px;width:350px;max-height:calc(100% - var(--ch,96px) - 40px);overflow:auto;background:var(--glass);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+  .transport3{left:28px;right:394px;bottom:calc(var(--ch,96px) + 30px)}
+  .caption{left:calc((100% - 366px)/2);bottom:calc(var(--ch,96px) + var(--tph,58px) + 46px)}
+  .vnotes{right:28px;bottom:calc(var(--ch,96px) + 34px);max-width:340px}
+  .hud{right:400px;left:24px;top:22px}
+}
+@media (max-width:1079px){ .inspector{order:1} .console{order:2} }
+
+/* the numbers, below the fold */
+.full{display:grid;gap:16px;padding-top:26px;border-top:1px dashed var(--line-2);margin-top:6px}
+.full h2{margin:0;font-family:var(--display);font-weight:800;font-size:clamp(28px,3.4vw,40px);line-height:1;letter-spacing:.01em}
+.numbers{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;align-items:start}
+@media (max-width:860px){ .numbers{grid-template-columns:minmax(0,1fr)} }
+.numbers .panel{padding:18px;display:grid;gap:16px}
+.sec-label{margin:0;font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.mrow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 16px;align-items:baseline;padding-bottom:14px;border-bottom:1px solid var(--line)}
+.mrow:last-child{border-bottom:0;padding-bottom:0}
+.mrow .ml{font-size:14px;color:var(--muted)}
+.mrow .res{font-family:var(--display);font-weight:800;font-size:34px;line-height:1;font-variant-numeric:tabular-nums;text-align:right}
+.mrow .eq{grid-column:1 / -1;font-family:var(--mono);font-size:11.5px;color:var(--faint)}
+.mrow.hl .res{color:var(--hot)} .mrow.c .res{color:var(--cold)}
+.proj-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+.proj-top b{font-family:var(--display);font-weight:800;font-size:30px;line-height:1;font-variant-numeric:tabular-nums}
+.bar{display:flex;height:34px;border-radius:7px;overflow:hidden;background:var(--line)}
+.bar .cost{background:repeating-linear-gradient(90deg,var(--warm) 0 calc(var(--seg) - 2px),#b8661a calc(var(--seg) - 2px) var(--seg));transition:flex-basis .4s ease;min-width:4px}
+.bar .keep{flex:1;background:linear-gradient(90deg,rgba(65,182,204,.55),rgba(65,182,204,.25))}
+.legend2{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:13px}
+.legend2 .a{color:var(--hot)} .legend2 .b{color:var(--cold);text-align:right}
+.legend2 small{display:block;font-family:var(--mono);font-size:11px;color:var(--faint)}
+.roi{display:flex;align-items:baseline;gap:10px}
+.roi b{font-family:var(--display);font-weight:900;font-size:44px;line-height:1;color:var(--cold)}
+.roi span{font-size:13px;color:var(--muted)}
+.foot{margin:0;font-size:12.5px;color:var(--faint);max-width:76ch}
+@media (prefers-reduced-motion:reduce){.switch i,.switch i::after,.lbl,.caption,.bar .cost{transition:none} .tp-play.pulse::before{animation:none}}
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <header class="top">
+    <div class="mark"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" class="logo" aria-hidden="true"><defs><radialGradient id="prc" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#fff3d1"/><stop offset=".5" stop-color="#ffd57f"/><stop offset="1" stop-color="#e08f2c"/></radialGradient><linearGradient id="prb" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1b2228"/><stop offset="1" stop-color="#0d1115"/></linearGradient></defs><rect x="1" y="1" width="46" height="46" rx="12" fill="url(#prb)" stroke="#2f3a43"/><circle cx="24" cy="24" r="17" fill="none" stroke="#41b6cc" stroke-width="1.6" stroke-dasharray="2.2 3.1" opacity=".75"/><circle cx="24" cy="24" r="12.5" fill="url(#prc)"/><circle cx="24" cy="24" r="10.2" fill="none" stroke="#1c1206" stroke-opacity=".22" stroke-width="1"/><path d="M26.2 15.5 18.6 25.6h4.9l-1.7 7 7.6-10.1h-4.9z" fill="#1c1206"/></svg><span data-i18n="brand">2-Second Meeting Pricer</span></div>
+    <div class="ctrls">
+      <label class="vh" for="lang" data-i18n="lang">Language</label><select id="lang" class="sel"></select>
+      <label class="vh" for="cur" data-i18n="cur">Currency</label><select id="cur" class="sel"></select>
+    </div>
+  </header>
+
+  <section class="studio" id="studio">
+    <div class="viewport" id="vp" role="group">
+      <div class="labels" id="labels"></div>
+      <div class="hud" id="hud" aria-live="polite">
+        <p class="eyebrow" data-i18n="eyebrow">What to charge per booked meeting</p>
+        <div class="price"><b id="h-price">—</b><span data-i18n="per">per meeting</span></div>
+        <div class="chainline" id="chain"></div>
+      </div>
+      <div class="vnotes" id="vnotes"><span id="hint"></span><span id="unitNote"></span></div>
+      <div class="caption" id="caption" aria-live="polite"></div>
+      <div class="transport3" id="tp">
+        <button class="tp-play pulse" id="cta" type="button"><svg viewBox="0 0 12 14" aria-hidden="true" id="cta-ico"><path d="M0 0 L12 7 L0 14 Z"/></svg><span id="cta-t" data-i18n="play_cta">Play the pitch</span></button>
+        <div class="steps" id="steps" role="group"></div>
+        <button class="tp-fs" id="fs" type="button"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M1 5V1h4M9 1h4v4M13 9v4H9M5 13H1V9"/></svg></button>
+      </div>
+      <div class="nogl" id="nogl" hidden><p data-i18n="nogl"></p></div>
+    </div>
+
+    <aside class="panel console" id="console">
+      <div class="ctl">
+        <div class="ctl-top">
+          <label for="cutR"><span data-i18n="cut_l"></span><span class="hint2" data-i18n="cut_h"></span></label>
+          <div class="val"><input id="cut" class="short" type="text" inputmode="decimal" value="10"><span class="u">%</span></div>
+        </div>
+        <input id="cutR" type="range" min="1" max="50" step="1" value="10">
+      </div>
+      <div class="ctl">
+        <div class="ctl-top">
+          <label for="closeR"><span data-i18n="close_l"></span><span class="hint2" data-i18n="close_h"></span></label>
+          <div class="val"><input id="close" class="short" type="text" inputmode="decimal" value="20"><span class="u">%</span></div>
+        </div>
+        <input id="closeR" type="range" min="1" max="80" step="1" value="20">
+      </div>
+      <div class="ctl">
+        <div class="ctl-top">
+          <label for="dealR"><span data-i18n="deal_l"></span><span class="hint2" data-i18n="deal_h"></span></label>
+          <div class="val"><span class="u cb"></span><input id="deal" type="text" inputmode="numeric" value="30000"><span class="u ca"></span></div>
+        </div>
+        <input id="dealR" type="range" min="0" max="1000" step="1">
+      </div>
+      <div class="toggle">
+        <label for="halve"><span data-i18n="halve"></span><span class="h" data-i18n="halve_h"></span></label>
+        <div class="switch"><input id="halve" type="checkbox" role="switch" checked><i></i></div>
+      </div>
+    </aside>
+
+    <aside class="panel inspector" id="inspector" aria-live="polite">
+      <p class="ins-k"><i></i><span id="ins-kt"></span></p>
+      <h3 id="ins-t"></h3>
+      <p id="ins-p"></p>
+      <div class="mathline" id="ins-m"></div>
+      <div class="stepper">
+        <div class="dots" id="ins-dots"></div>
+        <div class="nav">
+          <button type="button" id="prev" aria-label="Previous"><svg viewBox="0 0 12 12"><path d="M8 1 3 6l5 5"/></svg></button>
+          <button type="button" id="next" aria-label="Next"><svg viewBox="0 0 12 12"><path d="M4 1l5 5-5 5"/></svg></button>
+        </div>
+      </div>
+      <div class="say">
+        <h4 data-i18n="say">Line to say on the call</h4>
+        <p id="line"></p>
+        <button class="copy" id="copy" type="button" data-i18n="copy">Copy the line</button>
+      </div>
+    </aside>
+  </section>
+
+  <section class="full">
+    <h2 data-i18n="full_title">The numbers</h2>
+    <div class="numbers">
+      <div class="panel">
+        <p class="sec-label" data-i18n="math_title">The math</p>
+        <div class="mrow c"><span class="ml" data-i18n="m_cold"></span><span class="res" id="r-cold"></span><span class="eq" id="e-cold"></span></div>
+        <div class="mrow"><span class="ml" data-i18n="m_value"></span><span class="res" id="r-value"></span><span class="eq" id="e-value"></span></div>
+        <div class="mrow hl"><span class="ml" data-i18n="m_price"></span><span class="res" id="r-price"></span><span class="eq" id="e-price"></span></div>
+      </div>
+      <div class="panel">
+        <div class="proj-top"><p class="sec-label" data-i18n="bar_title">One signed project</p><b id="p-deal"></b></div>
+        <div class="bar" aria-hidden="true"><div class="cost" id="bar-cost"></div><div class="keep"></div></div>
+        <div class="legend2">
+          <div class="a"><span id="l-cost"></span><small id="l-cost-eq"></small></div>
+          <div class="b"><span id="l-keep"></span></div>
+        </div>
+        <div class="roi"><b id="roi"></b><span data-i18n="roi_h"></span></div>
+      </div>
+    </div>
+    <p class="foot" id="foot"></p>
+  </section>
+</div>
+
+<script>
+(() => {
+const $ = id => document.getElementById(id);
+const I18N = {
+en:{name:"English",loc:"en-US",brand:"2-Second Meeting Pricer",lang:"Language",cur:"Currency",eyebrow:"What to charge per booked meeting",per:"per meeting",inputs:"Your numbers",
+cut_l:"Your cut",cut_h:"Share of what one meeting is worth to them",close_l:"Their close rate",close_h:"The rate they tell you",deal_l:"Average project",deal_h:"What one new client pays them",
+halve:"Halve the close rate for cold meetings",halve_h:"Cold meetings sign less often than referrals",math_title:"The math",m_cold:"Cold close rate",m_value:"One meeting is worth to them",m_price:"Your price",
+bar_title:"One signed project",bar_cost:"They spend {cost} in meetings",bar_keep:"They keep {keep}",roi_h:"return on what they pay you",say:"Line to say on the call",
+line:"{price} per meeting that shows up. No meeting, no bill. You pay about {cost} in meetings for every {deal} project you sign.",copy:"Copy the line",copied:"Copied",
+empty:"Enter all three numbers to see your price.",foot:"Formula: your cut × (close rate ÷ 2) × average project value. Cold meetings sign less often than referrals, so the close rate is halved.",foot_nohalve:"Formula: your cut × close rate × average project value.",
+popular:"Popular",all:"All currencies",meetings:"meetings"},
+fr:{name:"Français",loc:"fr-FR",brand:"2-Second Meeting Pricer",lang:"Langue",cur:"Devise",eyebrow:"Combien facturer par rendez-vous réservé",per:"par rendez-vous",inputs:"Vos chiffres",
+cut_l:"Votre part",cut_h:"Part de ce que vaut un rendez-vous pour lui",close_l:"Son taux de closing",close_h:"Celui qu'il vous annonce",deal_l:"Projet moyen",deal_h:"Ce que lui paie un nouveau client",
+halve:"Diviser le closing par 2 pour les rendez-vous à froid",halve_h:"Les rendez-vous à froid signent moins que les recommandations",math_title:"Le calcul",m_cold:"Closing à froid",m_value:"Ce que vaut un rendez-vous pour lui",m_price:"Votre prix",
+bar_title:"Un projet signé",bar_cost:"Il dépense {cost} en rendez-vous",bar_keep:"Il garde {keep}",roi_h:"de retour sur ce qu'il vous paie",say:"La phrase à dire en call",
+line:"{price} par rendez-vous qui se présente. Pas de rendez-vous, pas de facture. Vous payez environ {cost} de rendez-vous pour chaque projet de {deal} signé.",copy:"Copier la phrase",copied:"Copié",
+empty:"Entrez les trois chiffres pour voir votre prix.",foot:"Formule : votre part × (closing ÷ 2) × valeur moyenne d'un projet. Les rendez-vous à froid signent moins que les recommandations, donc le closing est divisé par deux.",foot_nohalve:"Formule : votre part × closing × valeur moyenne d'un projet.",
+popular:"Populaires",all:"Toutes les devises",meetings:"rendez-vous"},
+es:{name:"Español",loc:"es-ES",brand:"2-Second Meeting Pricer",lang:"Idioma",cur:"Moneda",eyebrow:"Cuánto cobrar por reunión agendada",per:"por reunión",inputs:"Tus números",
+cut_l:"Tu parte",cut_h:"Porcentaje de lo que vale una reunión para él",close_l:"Su tasa de cierre",close_h:"La que te dice",deal_l:"Proyecto medio",deal_h:"Lo que le paga un cliente nuevo",
+halve:"Dividir la tasa de cierre entre 2 para reuniones en frío",halve_h:"Las reuniones en frío firman menos que las recomendaciones",math_title:"El cálculo",m_cold:"Cierre en frío",m_value:"Lo que vale una reunión para él",m_price:"Tu precio",
+bar_title:"Un proyecto firmado",bar_cost:"Gasta {cost} en reuniones",bar_keep:"Se queda {keep}",roi_h:"de retorno sobre lo que te paga",say:"La frase para la llamada",
+line:"{price} por reunión a la que se presenten. Sin reunión, no hay factura. Pagas unos {cost} en reuniones por cada proyecto de {deal} que firmas.",copy:"Copiar la frase",copied:"Copiado",
+empty:"Introduce los tres números para ver tu precio.",foot:"Fórmula: tu parte × (tasa de cierre ÷ 2) × valor medio del proyecto. Las reuniones en frío firman menos que las recomendaciones, así que la tasa de cierre se divide entre dos.",foot_nohalve:"Fórmula: tu parte × tasa de cierre × valor medio del proyecto.",
+popular:"Populares",all:"Todas las monedas",meetings:"reuniones"},
+de:{name:"Deutsch",loc:"de-DE",brand:"2-Second Meeting Pricer",lang:"Sprache",cur:"Währung",eyebrow:"Was du pro gebuchtem Termin verlangst",per:"pro Termin",inputs:"Deine Zahlen",
+cut_l:"Dein Anteil",cut_h:"Anteil daran, was ein Termin für ihn wert ist",close_l:"Seine Abschlussquote",close_h:"Die, die er dir nennt",deal_l:"Durchschnittliches Projekt",deal_h:"Was ihm ein neuer Kunde zahlt",
+halve:"Abschlussquote für kalte Termine halbieren",halve_h:"Kalte Termine schließen seltener ab als Empfehlungen",math_title:"Die Rechnung",m_cold:"Kalte Abschlussquote",m_value:"So viel ist ein Termin für ihn wert",m_price:"Dein Preis",
+bar_title:"Ein unterschriebenes Projekt",bar_cost:"Er gibt {cost} für Termine aus",bar_keep:"Er behält {keep}",roi_h:"Rendite auf das, was er dir zahlt",say:"Der Satz fürs Gespräch",
+line:"{price} pro Termin, der stattfindet. Kein Termin, keine Rechnung. Du zahlst etwa {cost} an Terminen für jedes Projekt über {deal}, das du abschließt.",copy:"Satz kopieren",copied:"Kopiert",
+empty:"Gib alle drei Zahlen ein, um deinen Preis zu sehen.",foot:"Formel: dein Anteil × (Abschlussquote ÷ 2) × durchschnittlicher Projektwert. Kalte Termine schließen seltener ab als Empfehlungen, deshalb wird die Abschlussquote halbiert.",foot_nohalve:"Formel: dein Anteil × Abschlussquote × durchschnittlicher Projektwert.",
+popular:"Beliebt",all:"Alle Währungen",meetings:"Termine"},
+pt:{name:"Português",loc:"pt-BR",brand:"2-Second Meeting Pricer",lang:"Idioma",cur:"Moeda",eyebrow:"Quanto cobrar por reunião agendada",per:"por reunião",inputs:"Seus números",
+cut_l:"Sua parte",cut_h:"Fatia do que uma reunião vale para ele",close_l:"Taxa de fechamento dele",close_h:"A que ele te informa",deal_l:"Projeto médio",deal_h:"O que um cliente novo paga a ele",
+halve:"Dividir a taxa de fechamento por 2 em reuniões frias",halve_h:"Reuniões frias fecham menos que indicações",math_title:"O cálculo",m_cold:"Fechamento a frio",m_value:"Quanto uma reunião vale para ele",m_price:"Seu preço",
+bar_title:"Um projeto fechado",bar_cost:"Ele gasta {cost} em reuniões",bar_keep:"Ele fica com {keep}",roi_h:"de retorno sobre o que ele te paga",say:"A frase para a ligação",
+line:"{price} por reunião que acontecer. Sem reunião, sem cobrança. Você paga cerca de {cost} em reuniões para cada projeto de {deal} que fecha.",copy:"Copiar a frase",copied:"Copiado",
+empty:"Preencha os três números para ver seu preço.",foot:"Fórmula: sua parte × (taxa de fechamento ÷ 2) × valor médio do projeto. Reuniões frias fecham menos que indicações, então a taxa é dividida por dois.",foot_nohalve:"Fórmula: sua parte × taxa de fechamento × valor médio do projeto.",
+popular:"Populares",all:"Todas as moedas",meetings:"reuniões"},
+it:{name:"Italiano",loc:"it-IT",brand:"2-Second Meeting Pricer",lang:"Lingua",cur:"Valuta",eyebrow:"Quanto chiedere per appuntamento fissato",per:"per appuntamento",inputs:"I tuoi numeri",
+cut_l:"La tua quota",cut_h:"Quota di quanto vale un appuntamento per lui",close_l:"Il suo tasso di chiusura",close_h:"Quello che ti dice",deal_l:"Progetto medio",deal_h:"Quanto gli paga un nuovo cliente",
+halve:"Dimezza il tasso di chiusura per gli appuntamenti a freddo",halve_h:"Gli appuntamenti a freddo firmano meno dei referral",math_title:"Il calcolo",m_cold:"Chiusura a freddo",m_value:"Quanto vale per lui un appuntamento",m_price:"Il tuo prezzo",
+bar_title:"Un progetto firmato",bar_cost:"Spende {cost} in appuntamenti",bar_keep:"Gli restano {keep}",roi_h:"di ritorno su quello che ti paga",say:"La frase da dire in chiamata",
+line:"{price} per ogni appuntamento a cui si presentano. Niente appuntamento, niente fattura. Paghi circa {cost} di appuntamenti per ogni progetto da {deal} che firmi.",copy:"Copia la frase",copied:"Copiato",
+empty:"Inserisci i tre numeri per vedere il tuo prezzo.",foot:"Formula: la tua quota × (tasso di chiusura ÷ 2) × valore medio del progetto. Gli appuntamenti a freddo firmano meno dei referral, quindi il tasso viene dimezzato.",foot_nohalve:"Formula: la tua quota × tasso di chiusura × valore medio del progetto.",
+popular:"Popolari",all:"Tutte le valute",meetings:"appuntamenti"}
+};
+const NEW = {"en": {"st_project": "Project", "st_meeting": "One meeting", "st_price": "Your price", "st_total": "Per project", "play_cta": "Play the pitch", "pause": "Pause", "replay": "Replay the pitch", "hint": "Drag to orbit · Scroll to zoom · Hover a slice", "hint_touch": "Swipe sideways to orbit · Tap a slice", "nogl": "The 3D view isn't available on this device. Every number still works below.", "vp_label": "3D view of one signed project split into the meetings it takes", "fs_on": "Presenter mode (full screen)", "fs_off": "Exit full screen", "lab_coin": "one signed project", "lab_tokens": "meetings ≈ 1 signed project", "lab_meeting": "1 meeting is worth", "lab_price": "your price per meeting", "lab_wedge": "to you, per signed project", "lab_keep": "they keep", "lab_slice": "Meeting {i}", "lab_slice_fee": "your fee {price}", "unit_slice": "1 slice = {n} meetings", "ins_project_t": "One signed project", "ins_project": "Your client signs about 1 in {n} meetings. One signed project is worth {deal}. That's this coin.", "ins_project_m": "{close} ÷ 2 = {cold} → 1 in {n} meetings", "ins_project_m2": "{close} → 1 in {n} meetings", "ins_meeting_t": "What one meeting is worth", "ins_meeting": "Split the project across the {n} meetings it takes. One slice is what one meeting is worth to them: {value}.", "ins_meeting_m": "{cold} × {deal} = {value}", "ins_price_t": "Your price", "ins_price": "You take {cut} of each slice: {price} per meeting that shows up. No meeting, no bill.", "ins_price_m": "{cut} × {value} = {price}", "ins_total_t": "What they pay per project", "ins_total": "Add up your fees: about {cost} in meetings for every {deal} project they sign. They keep {keep}, {roi}× what they pay you.", "ins_total_m": "{n} × {price} = {cost} · {deal} − {cost} = {keep}", "cap_project": "It takes about {n} meetings to sign one {deal} project.", "cap_meeting": "So one meeting is worth {value} to them.", "cap_price": "You take {cut} of that: {price} per meeting.", "cap_total": "Per signed project they pay {cost} in meetings and keep {keep}. {roi}× back.", "full_title": "The numbers"}, "fr": {"st_project": "Projet", "st_meeting": "Un rendez-vous", "st_price": "Votre prix", "st_total": "Par projet", "play_cta": "Lancer la démo", "pause": "Pause", "replay": "Rejouer la démo", "hint": "Glissez pour tourner · Molette pour zoomer · Survolez une part", "hint_touch": "Glissez sur le côté pour tourner · Touchez une part", "nogl": "La vue 3D n'est pas disponible sur cet appareil. Tous les chiffres restent ci-dessous.", "vp_label": "Vue 3D d'un projet signé découpé en rendez-vous", "fs_on": "Mode présentation (plein écran)", "fs_off": "Quitter le plein écran", "lab_coin": "un projet signé", "lab_tokens": "rendez-vous ≈ 1 projet signé", "lab_meeting": "1 rendez-vous vaut", "lab_price": "votre prix par rendez-vous", "lab_wedge": "pour vous, par projet signé", "lab_keep": "il garde", "lab_slice": "Rendez-vous {i}", "lab_slice_fee": "votre part {price}", "unit_slice": "1 part = {n} rendez-vous", "ins_project_t": "Un projet signé", "ins_project": "Votre client signe environ 1 rendez-vous sur {n}. Un projet signé vaut {deal}. C'est cette pièce.", "ins_project_m": "{close} ÷ 2 = {cold} → 1 rendez-vous sur {n}", "ins_project_m2": "{close} → 1 rendez-vous sur {n}", "ins_meeting_t": "Ce que vaut un rendez-vous", "ins_meeting": "Découpez le projet entre les {n} rendez-vous qu'il faut. Une part, c'est ce que vaut un rendez-vous pour lui : {value}.", "ins_meeting_m": "{cold} × {deal} = {value}", "ins_price_t": "Votre prix", "ins_price": "Vous prenez {cut} de chaque part : {price} par rendez-vous qui se présente. Pas de rendez-vous, pas de facture.", "ins_price_m": "{cut} × {value} = {price}", "ins_total_t": "Ce qu'il paie par projet", "ins_total": "Additionnez vos parts : environ {cost} de rendez-vous pour chaque projet de {deal} signé. Il garde {keep}, soit {roi}× ce qu'il vous paie.", "ins_total_m": "{n} × {price} = {cost} · {deal} − {cost} = {keep}", "cap_project": "Il faut environ {n} rendez-vous pour signer un projet de {deal}.", "cap_meeting": "Donc un rendez-vous vaut {value} pour lui.", "cap_price": "Vous en prenez {cut} : {price} par rendez-vous.", "cap_total": "Par projet signé, il paie {cost} de rendez-vous et garde {keep}. {roi}× de retour.", "full_title": "Les chiffres"}, "es": {"st_project": "Proyecto", "st_meeting": "Una reunión", "st_price": "Tu precio", "st_total": "Por proyecto", "play_cta": "Reproducir la demo", "pause": "Pausa", "replay": "Repetir la demo", "hint": "Arrastra para girar · Rueda para zoom · Pasa sobre una porción", "hint_touch": "Desliza de lado para girar · Toca una porción", "nogl": "La vista 3D no está disponible en este dispositivo. Todos los números siguen abajo.", "vp_label": "Vista 3D de un proyecto firmado dividido en reuniones", "fs_on": "Modo presentación (pantalla completa)", "fs_off": "Salir de pantalla completa", "lab_coin": "un proyecto firmado", "lab_tokens": "reuniones ≈ 1 proyecto firmado", "lab_meeting": "1 reunión vale", "lab_price": "tu precio por reunión", "lab_wedge": "para ti, por proyecto firmado", "lab_keep": "se queda", "lab_slice": "Reunión {i}", "lab_slice_fee": "tu tarifa {price}", "unit_slice": "1 porción = {n} reuniones", "ins_project_t": "Un proyecto firmado", "ins_project": "Tu cliente firma más o menos 1 de cada {n} reuniones. Un proyecto firmado vale {deal}. Es esta moneda.", "ins_project_m": "{close} ÷ 2 = {cold} → 1 de cada {n} reuniones", "ins_project_m2": "{close} → 1 de cada {n} reuniones", "ins_meeting_t": "Lo que vale una reunión", "ins_meeting": "Reparte el proyecto entre las {n} reuniones que hacen falta. Una porción es lo que vale una reunión para él: {value}.", "ins_meeting_m": "{cold} × {deal} = {value}", "ins_price_t": "Tu precio", "ins_price": "Te quedas con {cut} de cada porción: {price} por reunión a la que se presenten. Sin reunión, no hay factura.", "ins_price_m": "{cut} × {value} = {price}", "ins_total_t": "Lo que paga por proyecto", "ins_total": "Suma tus tarifas: unos {cost} en reuniones por cada proyecto de {deal} que firma. Se queda {keep}, {roi}× lo que te paga.", "ins_total_m": "{n} × {price} = {cost} · {deal} − {cost} = {keep}", "cap_project": "Hacen falta unas {n} reuniones para firmar un proyecto de {deal}.", "cap_meeting": "Así que una reunión vale {value} para él.", "cap_price": "Te quedas con {cut}: {price} por reunión.", "cap_total": "Por proyecto firmado paga {cost} en reuniones y se queda {keep}. {roi}× de retorno.", "full_title": "Los números"}, "de": {"st_project": "Projekt", "st_meeting": "Ein Termin", "st_price": "Dein Preis", "st_total": "Pro Projekt", "play_cta": "Demo abspielen", "pause": "Pause", "replay": "Demo erneut abspielen", "hint": "Ziehen zum Drehen · Scrollen zum Zoomen · Über ein Stück fahren", "hint_touch": "Seitlich wischen zum Drehen · Stück antippen", "nogl": "Die 3D-Ansicht ist auf diesem Gerät nicht verfügbar. Alle Zahlen stehen weiter unten.", "vp_label": "3D-Ansicht eines abgeschlossenen Projekts, aufgeteilt in Termine", "fs_on": "Präsentationsmodus (Vollbild)", "fs_off": "Vollbild beenden", "lab_coin": "ein abgeschlossenes Projekt", "lab_tokens": "Termine ≈ 1 abgeschlossenes Projekt", "lab_meeting": "1 Termin ist wert", "lab_price": "dein Preis pro Termin", "lab_wedge": "für dich, pro Projekt", "lab_keep": "er behält", "lab_slice": "Termin {i}", "lab_slice_fee": "dein Honorar {price}", "unit_slice": "1 Stück = {n} Termine", "ins_project_t": "Ein abgeschlossenes Projekt", "ins_project": "Dein Kunde schließt etwa 1 von {n} Terminen ab. Ein abgeschlossenes Projekt ist {deal} wert. Das ist diese Münze.", "ins_project_m": "{close} ÷ 2 = {cold} → 1 von {n} Terminen", "ins_project_m2": "{close} → 1 von {n} Terminen", "ins_meeting_t": "Was ein Termin wert ist", "ins_meeting": "Teile das Projekt auf die {n} Termine auf, die es braucht. Ein Stück ist das, was ein Termin für ihn wert ist: {value}.", "ins_meeting_m": "{cold} × {deal} = {value}", "ins_price_t": "Dein Preis", "ins_price": "Du nimmst {cut} von jedem Stück: {price} pro Termin, der stattfindet. Kein Termin, keine Rechnung.", "ins_price_m": "{cut} × {value} = {price}", "ins_total_t": "Was er pro Projekt zahlt", "ins_total": "Zähl deine Honorare zusammen: etwa {cost} an Terminen für jedes Projekt über {deal}, das er abschließt. Er behält {keep}, das {roi}-Fache von dem, was er dir zahlt.", "ins_total_m": "{n} × {price} = {cost} · {deal} − {cost} = {keep}", "cap_project": "Es braucht etwa {n} Termine, um ein Projekt über {deal} abzuschließen.", "cap_meeting": "Also ist ein Termin {value} für ihn wert.", "cap_price": "Du nimmst {cut} davon: {price} pro Termin.", "cap_total": "Pro abgeschlossenem Projekt zahlt er {cost} für Termine und behält {keep}. {roi}× zurück.", "full_title": "Die Zahlen"}, "pt": {"st_project": "Projeto", "st_meeting": "Uma reunião", "st_price": "Seu preço", "st_total": "Por projeto", "play_cta": "Reproduzir a demo", "pause": "Pausar", "replay": "Repetir a demo", "hint": "Arraste para girar · Role para dar zoom · Passe o mouse numa fatia", "hint_touch": "Deslize para o lado para girar · Toque numa fatia", "nogl": "A vista 3D não está disponível neste dispositivo. Todos os números continuam abaixo.", "vp_label": "Vista 3D de um projeto fechado dividido em reuniões", "fs_on": "Modo apresentação (tela cheia)", "fs_off": "Sair da tela cheia", "lab_coin": "um projeto fechado", "lab_tokens": "reuniões ≈ 1 projeto fechado", "lab_meeting": "1 reunião vale", "lab_price": "seu preço por reunião", "lab_wedge": "para você, por projeto fechado", "lab_keep": "ele fica com", "lab_slice": "Reunião {i}", "lab_slice_fee": "sua taxa {price}", "unit_slice": "1 fatia = {n} reuniões", "ins_project_t": "Um projeto fechado", "ins_project": "Seu cliente fecha cerca de 1 em cada {n} reuniões. Um projeto fechado vale {deal}. É esta moeda.", "ins_project_m": "{close} ÷ 2 = {cold} → 1 em cada {n} reuniões", "ins_project_m2": "{close} → 1 em cada {n} reuniões", "ins_meeting_t": "Quanto vale uma reunião", "ins_meeting": "Divida o projeto pelas {n} reuniões necessárias. Uma fatia é quanto uma reunião vale para ele: {value}.", "ins_meeting_m": "{cold} × {deal} = {value}", "ins_price_t": "Seu preço", "ins_price": "Você fica com {cut} de cada fatia: {price} por reunião que acontecer. Sem reunião, sem cobrança.", "ins_price_m": "{cut} × {value} = {price}", "ins_total_t": "Quanto ele paga por projeto", "ins_total": "Some suas taxas: cerca de {cost} em reuniões para cada projeto de {deal} que ele fecha. Ele fica com {keep}, {roi}× o que te paga.", "ins_total_m": "{n} × {price} = {cost} · {deal} − {cost} = {keep}", "cap_project": "São necessárias cerca de {n} reuniões para fechar um projeto de {deal}.", "cap_meeting": "Então uma reunião vale {value} para ele.", "cap_price": "Você fica com {cut} disso: {price} por reunião.", "cap_total": "Por projeto fechado ele paga {cost} em reuniões e fica com {keep}. {roi}× de retorno.", "full_title": "Os números"}, "it": {"st_project": "Progetto", "st_meeting": "Un appuntamento", "st_price": "Il tuo prezzo", "st_total": "Per progetto", "play_cta": "Riproduci la demo", "pause": "Pausa", "replay": "Riproduci di nuovo", "hint": "Trascina per ruotare · Scorri per lo zoom · Passa su una fetta", "hint_touch": "Scorri di lato per ruotare · Tocca una fetta", "nogl": "La vista 3D non è disponibile su questo dispositivo. Tutti i numeri restano qui sotto.", "vp_label": "Vista 3D di un progetto firmato diviso negli appuntamenti che servono", "fs_on": "Modalità presentazione (schermo intero)", "fs_off": "Esci da schermo intero", "lab_coin": "un progetto firmato", "lab_tokens": "appuntamenti ≈ 1 progetto firmato", "lab_meeting": "1 appuntamento vale", "lab_price": "il tuo prezzo per appuntamento", "lab_wedge": "a te, per progetto firmato", "lab_keep": "gli restano", "lab_slice": "Appuntamento {i}", "lab_slice_fee": "la tua quota {price}", "unit_slice": "1 fetta = {n} appuntamenti", "ins_project_t": "Un progetto firmato", "ins_project": "Il tuo cliente firma circa 1 appuntamento su {n}. Un progetto firmato vale {deal}. È questa moneta.", "ins_project_m": "{close} ÷ 2 = {cold} → 1 appuntamento su {n}", "ins_project_m2": "{close} → 1 appuntamento su {n}", "ins_meeting_t": "Quanto vale un appuntamento", "ins_meeting": "Dividi il progetto tra i {n} appuntamenti che servono. Una fetta è quanto vale per lui un appuntamento: {value}.", "ins_meeting_m": "{cold} × {deal} = {value}", "ins_price_t": "Il tuo prezzo", "ins_price": "Prendi {cut} di ogni fetta: {price} per ogni appuntamento a cui si presentano. Niente appuntamento, niente fattura.", "ins_price_m": "{cut} × {value} = {price}", "ins_total_t": "Quanto paga per progetto", "ins_total": "Somma le tue quote: circa {cost} di appuntamenti per ogni progetto da {deal} che firma. Gli restano {keep}, {roi}× quello che ti paga.", "ins_total_m": "{n} × {price} = {cost} · {deal} − {cost} = {keep}", "cap_project": "Servono circa {n} appuntamenti per firmare un progetto da {deal}.", "cap_meeting": "Quindi un appuntamento vale {value} per lui.", "cap_price": "Ne prendi {cut}: {price} per appuntamento.", "cap_total": "Per progetto firmato paga {cost} di appuntamenti e gli restano {keep}. {roi}× di ritorno.", "full_title": "I numeri"}};
+Object.keys(NEW).forEach(l=>Object.assign(I18N[l],NEW[l]));
+
+const store = { get(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }, set(k,v){ try{ localStorage.setItem(k,v); }catch(e){} } };
+const navLang=(navigator.language||"en").toLowerCase();
+let LANG=store.get("ppm-lang") || (I18N[navLang.slice(0,2)]?navLang.slice(0,2):"en"); if(!I18N[LANG]) LANG="en";
+const REGION_CUR={US:"USD",GB:"GBP",CA:"CAD",AU:"AUD",NZ:"NZD",CH:"CHF",JP:"JPY",IN:"INR",BR:"BRL",MX:"MXN",AE:"AED",SG:"SGD",ZA:"ZAR",NG:"NGN",MA:"MAD",SA:"SAR",SE:"SEK",NO:"NOK",DK:"DKK",PL:"PLN",FR:"EUR",DE:"EUR",ES:"EUR",IT:"EUR",PT:"EUR",NL:"EUR",BE:"EUR",IE:"EUR",AT:"EUR",FI:"EUR",GR:"EUR",LU:"EUR"};
+const region=((navigator.language||"").split("-")[1]||"").toUpperCase();
+let CUR=store.get("ppm-cur") || REGION_CUR[region] || (["fr","de","es","it"].includes(navLang.slice(0,2))?"EUR":"USD");
+const L=()=>I18N[LANG], LOC=()=>L().loc;
+const t=(k,v={})=>(L()[k] ?? I18N.en[k] ?? k).replace(/\{(\w+)\}/g,(_,x)=>v[x] ?? "");
+const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+const coarse=matchMedia("(pointer: coarse)").matches;
+
+/* ---------- formatting ---------- */
+const nf=o=>{ try{ return new Intl.NumberFormat(LOC(),o); }catch(e){ return new Intl.NumberFormat("en-US",o); } };
+const fmt=(n,d=0)=>nf({minimumFractionDigits:d,maximumFractionDigits:d}).format(n);
+const r1=n=>Math.round(n*10)/10;
+const pct=x=>nf({style:"percent",maximumFractionDigits:1}).format(x);
+const money=n=>{ try{ return nf({style:"currency",currency:CUR,maximumFractionDigits:0,minimumFractionDigits:0}).format(Math.round(n)); }catch(e){ return fmt(n); } };
+const mC=n=>{ try{ return nf({style:"currency",currency:CUR,notation:"compact",maximumFractionDigits:1}).format(n); }catch(e){ return fmt(n); } };
+function curParts(){ try{ const p=nf({style:"currency",currency:CUR}).formatToParts(1); const ci=p.findIndex(x=>x.type==="currency"), ii=p.findIndex(x=>x.type==="integer"); return {sym:p[ci].value,before:ci<ii}; }catch(e){ return {sym:CUR,before:true}; } }
+const moneyDigits=s=>{ const v=parseFloat(String(s).replace(/[^0-9]/g,"")); return isFinite(v)&&v>0?v:0; };
+const pctNum=s=>{ const v=parseFloat(String(s).replace(",",".").replace(/[^0-9.]/g,"")); return isFinite(v)&&v>0?v:0; };
+const RANGE=[500,1000000];
+const toLog=tv=>RANGE[0]*Math.pow(RANGE[1]/RANGE[0],tv/1000);
+const fromLog=v=>Math.max(0,Math.min(1000,1000*Math.log(v/RANGE[0])/Math.log(RANGE[1]/RANGE[0])));
+const round2=v=>{ if(v<=0) return 0; const p=Math.pow(10,Math.floor(Math.log10(v))-1); return Math.round(v/p)*p; };
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const nFmt=n=>{ if(!isFinite(n)||n<=0) return "—"; if(n>=10) return fmt(Math.round(n)); const r=r1(n); return fmt(r,Number.isInteger(r)?0:1); };
+const xFmt=r=>{ const v=r1(r); return fmt(v,Number.isInteger(v)?0:1); };
+
+/* ---------- model ---------- */
+const S={cut:10,close:20,deal:30000};
+function model(){
+  const halve=$("halve").checked, cut=S.cut/100, close=S.close/100, deal=S.deal;
+  const ok=cut>0&&cut<1&&close>0&&close<=1&&deal>0;
+  const cold=halve?close/2:close, value=cold*deal, price=cut*value, cost=cut*deal, keep=deal-cost;
+  return {halve,cut,close,deal,ok,cold,value,price,cost,keep,nMeet:ok?1/cold:0,roi:ok?1/cut:0};
+}
+let M=model(), STEP="total";
+const STEPS=["project","meeting","price","total"];
+const SCOL={project:"#41b6cc",meeting:"#44a6c6",price:"#ffd57f",total:"#f0a03c"};
+const PLAY={on:false,i:0,t:0};
+
+/* ============================================================
+   3D ENGINE
+   ============================================================ */
+const G={ok:false,visible:true,hidden:false};
+let COIN={R:3.6,D:.72,cy:6.3,r0:1.0,rt:4.8};
+function coinDims(m){ const R=3.0+1.5*clamp(Math.log10(Math.max(m.deal,500)/500)/Math.log10(2000),0,1); return {R,D:.72,cy:R+2.75,r0:1.0,rt:R+1.2}; }
+function viewFor(k){
+  const R=COIN.R, cy=COIN.cy;
+  if(k==="project") return {d:[0,.14,1],t:[0,cy,0],S:2*(R+3),V:2*(R+2.3)+1.6};
+  if(k==="meeting") return {d:[.2,.18,1],t:[R*.18,cy+R*.1,0],S:2*(R+2.5),V:2*(R+2.2)+1.4};
+  if(k==="price") return {d:[.3,.2,1],t:[R*.12,cy+R*.28,.5],S:2*(R+1.9),V:2*(R+1.9)+1.2};
+  return {d:[.26,.2,1],t:[R*.14,cy+.25,0],S:2*(R+3.3),V:2*(R+2.6)+1.2};
+}
+function webglOK(){ try{ const c=document.createElement("canvas"); return !!(window.WebGLRenderingContext&&(c.getContext("webgl2")||c.getContext("webgl"))); }catch(e){ return false; } }
+function hash(i){ const x=Math.sin(i*127.1+311.7)*43758.5453; return x-Math.floor(x); }
+const C3=hex=>new THREE.Color(hex);
+function disposeObj(o){ if(!o) return; o.traverse(c=>{ if(c.geometry) c.geometry.dispose(); if(c.material){ (Array.isArray(c.material)?c.material:[c.material]).forEach(mm=>mm.dispose()); } }); if(o.parent) o.parent.remove(o); }
+function dotMaterial(){
+  return new THREE.ShaderMaterial({
+    uniforms:{uPR:{value:G.R.getPixelRatio()},uK:{value:1}},
+    vertexShader:"attribute vec3 aColor;attribute float aSize;varying vec3 vC;uniform float uPR;uniform float uK;void main(){vC=aColor;vec4 mv=modelViewMatrix*vec4(position,1.0);gl_PointSize=aSize*uPR*uK*(150.0/-mv.z);gl_Position=projectionMatrix*mv;}",
+    fragmentShader:"varying vec3 vC;void main(){vec2 p=gl_PointCoord-.5;float d=length(p);float a=smoothstep(.5,.0,d);a*=a;gl_FragColor=vec4(vC*a,a);}",
+    transparent:true,depthWrite:false,blending:THREE.AdditiveBlending
+  });
+}
+function floorMaterial(){
+  return new THREE.ShaderMaterial({
+    extensions:{derivatives:true},
+    uniforms:{uTime:{value:0},uBg:{value:C3(0x05070a)},uPoolC:{value:C3(0xf0a03c)},uPool:{value:.6}},
+    vertexShader:"varying vec3 vW;void main(){vec4 w=modelMatrix*vec4(position,1.0);vW=w.xyz;gl_Position=projectionMatrix*viewMatrix*w;}",
+    fragmentShader:[
+      "uniform float uTime;uniform vec3 uBg;uniform vec3 uPoolC;uniform float uPool;varying vec3 vW;",
+      "float grid(vec2 p,float s,float w){vec2 q=p/s;vec2 g=abs(fract(q-.5)-.5)/fwidth(q);return 1.0-smoothstep(w-.5,w+.5,min(g.x,g.y));}",
+      "void main(){",
+      " vec2 p=vW.xz; float d=length(p);",
+      " vec3 c=uBg+vec3(.010,.024,.03)*smoothstep(46.0,0.0,d);",
+      " float fade=smoothstep(40.0,3.0,d);",
+      " c+=vec3(.05,.10,.12)*grid(p,1.5,.6)*fade*.4;",
+      " c+=vec3(.07,.14,.16)*grid(p,7.5,.8)*fade*.55;",
+      " float g=smoothstep(13.0,0.0,d); c+=uPoolC*g*g*.2*uPool;",
+      " float ring=smoothstep(.12,.0,abs(d-10.5+.25*sin(uTime*.6)))*.10; c+=vec3(.25,.71,.80)*ring*fade;",
+      " gl_FragColor=vec4(c,1.0);",
+      "}"].join("\n")
+  });
+}
+/* annular sector (a slice of the coin, hub excluded) from angle 0 to a, extruded toward the viewer */
+function sectorGeo(a){
+  const R=COIN.R, r0=COIN.r0, D=COIN.D; a=Math.max(a,2e-4);
+  const sh=new THREE.Shape(), seg=Math.max(2,Math.ceil(a/(Math.PI/40)));
+  sh.moveTo(r0,0); sh.lineTo(R,0);
+  for(let i=1;i<=seg;i++){ const q=a*i/seg; sh.lineTo(Math.cos(q)*R,Math.sin(q)*R); }
+  sh.lineTo(Math.cos(a)*r0,Math.sin(a)*r0);
+  for(let i=seg-1;i>=0;i--){ const q=a*i/seg; sh.lineTo(Math.cos(q)*r0,Math.sin(q)*r0); }
+  const bev=a*r0>.22;
+  const g=new THREE.ExtrudeGeometry(sh,{depth:D,bevelEnabled:bev,bevelThickness:.07,bevelSize:.06,bevelOffset:-.06,bevelSegments:2,curveSegments:1,steps:1});
+  g.translate(0,0,-D/2); g.computeVertexNormals(); return g;
+}
+
+function init3D(){
+  if(!window.THREE||!THREE.EffectComposer||!THREE.OrbitControls||!THREE.UnrealBloomPass||!webglOK()){ noGL(); return; }
+  try{
+    const vp=$("vp"), w=vp.clientWidth, h=vp.clientHeight;
+    const R=new THREE.WebGLRenderer({antialias:true,powerPreference:"high-performance"});
+    R.setPixelRatio(Math.min(window.devicePixelRatio||1, coarse?1.5:2));
+    R.setSize(w,h,false);
+    R.domElement.className="gl"; R.domElement.setAttribute("role","img"); R.domElement.setAttribute("aria-label",t("vp_label"));
+    vp.prepend(R.domElement);
+    const scene=new THREE.Scene(); scene.background=C3(0x05070a); scene.fog=new THREE.FogExp2(0x05070a,.008);
+    const cam=new THREE.PerspectiveCamera(38,w/h,.1,600);
+    const ctl=new THREE.OrbitControls(cam,R.domElement);
+    ctl.enableDamping=true; ctl.dampingFactor=.07; ctl.enablePan=false; ctl.maxPolarAngle=1.62; ctl.minPolarAngle=.3;
+    ctl.minDistance=6; ctl.maxDistance=120; ctl.rotateSpeed=.55; ctl.zoomSpeed=.8;
+    ctl.minAzimuthAngle=-1.2; ctl.maxAzimuthAngle=1.2;
+    ctl.touches={ONE:THREE.TOUCH.ROTATE,TWO:THREE.TOUCH.DOLLY_ROTATE};
+    R.domElement.style.touchAction="pan-y";
+    if(THREE.RoomEnvironment){ const pm=new THREE.PMREMGenerator(R); scene.environment=pm.fromScene(new THREE.RoomEnvironment(),.04).texture; pm.dispose(); }
+    const comp=new THREE.EffectComposer(R); comp.setPixelRatio(R.getPixelRatio()); comp.setSize(w,h);
+    comp.addPass(new THREE.RenderPass(scene,cam));
+    const bloom=new THREE.UnrealBloomPass(coarse?new THREE.Vector2(w/2,h/2):new THREE.Vector2(w,h),.6,.45,.55); comp.addPass(bloom);
+    scene.add(new THREE.HemisphereLight(0x9adbe8,0x080605,.35));
+    const key=new THREE.DirectionalLight(0xfff1dc,1.1); key.position.set(10,18,22); scene.add(key);
+    const rim=new THREE.DirectionalLight(0x41b6cc,.6); rim.position.set(-16,8,-14); scene.add(rim);
+    Object.assign(G,{R,scene,cam,ctl,comp,bloom,ok:true,last:performance.now(),sway:new THREE.Vector3(),swayCur:new THREE.Vector3(),mouse:{x:0,y:0},first:true});
+    G.COL={teal:C3(0x41b6cc),amber:C3(0xf0a03c),hot:C3(0xffd57f),white:C3(0xffffff)};
+    applyView();
+    buildStatic();
+    rebuild();
+    bindPointer();
+    new ResizeObserver(()=>resize()).observe(vp);
+    if("IntersectionObserver" in window) new IntersectionObserver(es=>{ G.visible=es[0].isIntersecting; },{threshold:0}).observe(vp);
+    document.addEventListener("visibilitychange",()=>{ G.hidden=document.hidden; });
+    requestAnimationFrame(loop);
+    intro();
+  }catch(e){ console.error(e); noGL(); }
+}
+function noGL(){ G.ok=false; $("nogl").hidden=false; $("hint").hidden=true; }
+
+function freeBox(){
+  const vp=$("vp"), r=vp.getBoundingClientRect(), W=r.width, H=r.height, desk=W>=1080;
+  const hud=$("hud").getBoundingClientRect(), tp=$("tp").getBoundingClientRect();
+  const top=clamp(hud.bottom-r.top+8,40,H*.5), bottom=clamp(r.bottom-tp.top+(desk?54:44),60,H*.5);
+  const off=desk?$("inspector").offsetWidth+16:0, insB=desk?$("inspector").getBoundingClientRect().bottom-r.top:0;
+  return {W,H,desk,off,insB,top,bottom,availW:Math.max(180,W-off-(desk?60:20)),availH:Math.max(120,H-top-bottom)};
+}
+function applyView(){
+  const B=freeBox(); if(!B.W||!B.H) return;
+  const dy=Math.round((B.top-B.bottom)/2), fullW=B.W+B.off, fullH=B.H+2*Math.abs(dy);
+  G.focal=(B.H/2)/Math.tan(19*Math.PI/180);
+  G.cam.fov=2*Math.atan((fullH/2)/G.focal)*180/Math.PI; G.cam.aspect=fullW/fullH;
+  if(B.off||dy) G.cam.setViewOffset(fullW,fullH,B.off,dy<0?2*Math.abs(dy):0,B.W,B.H); else G.cam.clearViewOffset();
+  G.cam.updateProjectionMatrix(); G.box=B;
+}
+function framing(k){
+  const B=G.box||freeBox(), v=viewFor(k);
+  const dist=clamp(Math.max(G.focal*v.S/B.availW,G.focal*v.V/B.availH),7,110);
+  const dir=new THREE.Vector3(...v.d).normalize(), tgt=new THREE.Vector3(...v.t);
+  return {p:tgt.clone().add(dir.multiplyScalar(dist)),t:tgt};
+}
+let resizeT=0;
+function resizeBuffers(){ const vp=$("vp"), w=vp.clientWidth, h=vp.clientHeight; if(!w||!h) return false; G.R.setSize(w,h,false); G.comp.setSize(w,h); G.bloom.setSize(coarse?w/2:w,coarse?h/2:h); applyView(); return true; }
+function resize(){ if(!G.ok||!resizeBuffers()) return; clearTimeout(resizeT); resizeT=setTimeout(()=>{ applyView(); if(!G.flying) flyTo(STEP,true); },120); }
+
+function pointsFrom(p,c,s){
+  const geo=new THREE.BufferGeometry(); geo.setAttribute("position",new THREE.BufferAttribute(p,3)); geo.setAttribute("aColor",new THREE.BufferAttribute(c,3)); geo.setAttribute("aSize",new THREE.BufferAttribute(s,1));
+  const pts=new THREE.Points(geo,dotMaterial()); pts.frustumCulled=false; return pts;
+}
+function buildStatic(){
+  const {scene}=G;
+  const floor=new THREE.Mesh(new THREE.PlaneGeometry(200,200),floorMaterial()); floor.rotation.x=-Math.PI/2; scene.add(floor); G.floor=floor;
+  /* dust */
+  const D=coarse?220:560, dp=new Float32Array(D*3), dc=new Float32Array(D*3), ds=new Float32Array(D);
+  for(let i=0;i<D;i++){ dp[i*3]=(hash(i)-.5)*70; dp[i*3+1]=hash(i+7)*22+.5; dp[i*3+2]=(hash(i+13)-.5)*50-6; const c=hash(i+3)<.6?[.14,.34,.4]:[.42,.29,.12]; dc.set(c,i*3); ds[i]=.5+hash(i+5)*1.1; }
+  G.dust=pointsFrom(dp,dc,ds); scene.add(G.dust);
+  /* sparks */
+  const K=coarse?160:300; G.sparks={p:pointsFrom(new Float32Array(K*3),new Float32Array(K*3),new Float32Array(K)),K,vel:new Float32Array(K*3),life:new Float32Array(K),col:new Float32Array(K*3),next:0}; scene.add(G.sparks.p);
+}
+function burst(x,y,z,color,n,power){
+  const S=G.sparks; if(!S||reduce) return;
+  for(let k=0;k<n;k++){
+    const i=S.next; S.next=(S.next+1)%S.K;
+    const a=Math.random()*Math.PI*2, b=Math.random()*Math.PI-.5*Math.PI, sp=(.6+Math.random())*power;
+    S.p.geometry.attributes.position.array.set([x,y,z],i*3);
+    S.vel.set([Math.cos(a)*Math.cos(b)*sp,(1+Math.random()*1.5)*power,Math.sin(a)*Math.cos(b)*sp+.6*power],i*3);
+    S.life[i]=1; S.col.set([color.r,color.g,color.b],i*3);
+  }
+}
+
+/* ---------- the coin, its slices and the meeting tokens ---------- */
+function rebuild(){
+  if(!G.ok) return;
+  const m=M;
+  disposeObj(G.coinG); disposeObj(G.padG); G.slices=[]; G.feeMesh=G.keepMesh=G.feeP=G.keepP=G.tokens=G.goldTok=null;
+  if(!m.ok){ $("unitNote").textContent=""; return; }
+  COIN=coinDims(m);
+  /* pad under the coin */
+  const pg=new THREE.Group(); G.scene.add(pg); G.padG=pg;
+  const pad=new THREE.Mesh(new THREE.CylinderGeometry(COIN.R+2.6,COIN.R+2.85,.18,96),new THREE.MeshStandardMaterial({color:0x0b1115,metalness:.8,roughness:.38}));
+  pad.position.y=.09; pg.add(pad);
+  const ring=new THREE.Mesh(new THREE.TorusGeometry(COIN.R+2.72,.05,8,200),new THREE.MeshBasicMaterial({color:0xf0a03c})); ring.rotation.x=Math.PI/2; ring.position.y=.18; pg.add(ring); G.padRing=ring;
+  const ticks=new THREE.InstancedMesh(new THREE.BoxGeometry(.05,.03,.3),new THREE.MeshBasicMaterial({color:0xf0a03c,transparent:true,opacity:.45}),72);
+  const o=new THREE.Object3D(); for(let i=0;i<72;i++){ const a=i/72*Math.PI*2; o.position.set(Math.cos(a)*(COIN.R+2.36),.19,Math.sin(a)*(COIN.R+2.36)); o.rotation.set(0,-a+Math.PI/2,0); o.scale.set(1,1,i%6===0?1.6:1); o.updateMatrix(); ticks.setMatrixAt(i,o.matrix); }
+  pg.add(ticks);
+  const beam=new THREE.Mesh(new THREE.CylinderGeometry(.06,.9,COIN.cy-COIN.R-.2,24,1,true),new THREE.MeshBasicMaterial({color:0xf0a03c,transparent:true,opacity:.12,blending:THREE.AdditiveBlending,depthWrite:false}));
+  beam.position.y=(COIN.cy-COIN.R-.2)/2; pg.add(beam);
+  /* coin group (faces the viewer, sways a little) */
+  const g=new THREE.Group(); g.position.set(0,COIN.cy,0); G.scene.add(g); G.coinG=g;
+  const unit=m.nMeet>60?Math.ceil(m.nMeet/60-1e-9):1; G.unit=unit;
+  const Ns=m.nMeet/unit, nFull=Math.floor(Ns+1e-6), rem=Ns-nFull, th=2*Math.PI*m.cold*unit, hasPart=rem>.02;
+  const n=nFull+(hasPart?1:0); G.nFull=nFull; G.nSl=n;
+  const feeTotal=2*Math.PI*m.cut; let accF=0, accK=0;
+  for(let i=0;i<n;i++){
+    const span=i<nFull?th:rem*th, a0=Math.PI/2-i*th, fa=m.cut*span, ka=(1-m.cut)*span;
+    const s={span,a0,fa,ka,fA:a0-fa,kA:a0-span};
+    accF+=fa; s.fB=Math.PI/2-accF; accK+=ka; s.kB=Math.PI/2-feeTotal-accK;
+    s.f={rot:s.fA,exp:0,pop:0,bri:1,sc:1}; s.k={rot:s.kA,exp:0,pop:0,bri:1,sc:1};
+    G.slices.push(s);
+  }
+  const keepMat=new THREE.MeshStandardMaterial({color:0xc98a2e,metalness:1,roughness:.36,emissive:0x120800,envMapIntensity:.85});
+  const feeMat=new THREE.MeshStandardMaterial({color:0xf7c46a,metalness:.9,roughness:.25,emissive:0x3d2600,emissiveIntensity:.85,envMapIntensity:1});
+  if(nFull>0){
+    G.feeMesh=new THREE.InstancedMesh(sectorGeo(m.cut*th),feeMat,nFull); G.keepMesh=new THREE.InstancedMesh(sectorGeo((1-m.cut)*th),keepMat,nFull);
+    for(let i=0;i<nFull;i++){ G.feeMesh.setColorAt(i,G.COL.white); G.keepMesh.setColorAt(i,G.COL.white); }
+    g.add(G.feeMesh,G.keepMesh);
+  }
+  if(hasPart){ G.feeP=new THREE.Mesh(sectorGeo(m.cut*rem*th),feeMat.clone()); G.keepP=new THREE.Mesh(sectorGeo((1-m.cut)*rem*th),keepMat.clone()); g.add(G.feeP,G.keepP); }
+  /* hub */
+  const hub=new THREE.Mesh(new THREE.CylinderGeometry(COIN.r0-.08,COIN.r0-.08,COIN.D+.16,64),new THREE.MeshStandardMaterial({color:0x2a2116,metalness:.9,roughness:.35}));
+  hub.rotation.x=Math.PI/2; g.add(hub);
+  const hubRing=new THREE.Mesh(new THREE.TorusGeometry(COIN.r0-.12,.035,8,96),new THREE.MeshBasicMaterial({color:0xffd57f})); hubRing.position.z=COIN.D/2+.09; g.add(hubRing);
+  /* meeting tokens around the coin: one per slice */
+  const circ=2*Math.PI*COIN.rt, size=clamp(circ/Math.max(n,1)*.6,.18,.95);
+  const tg=THREE.RoundedBoxGeometry?new THREE.RoundedBoxGeometry(1,1,.26,2,.14):new THREE.BoxGeometry(1,1,.26);
+  G.tokens=new THREE.InstancedMesh(tg,new THREE.MeshStandardMaterial({color:0x237f92,emissive:0x1a8396,emissiveIntensity:.6,roughness:.35,metalness:.1,envMapIntensity:.6}),Math.max(1,n));
+  G.tokens.count=n; G.tokSize=size; G.tokSc=new Float32Array(n).fill(G.first?0:1); g.add(G.tokens);
+  G.goldTok=new THREE.Mesh(tg.clone(),new THREE.MeshStandardMaterial({color:0xffc659,emissive:0x7a4a00,emissiveIntensity:1,metalness:.6,roughness:.25}));
+  G.goldTok.visible=false; g.add(G.goldTok); G.goldIdx=Math.max(0,nFull-1);
+  /* halo of points */
+  const H=coarse?120:220, hp=new Float32Array(H*3), hc=new Float32Array(H*3), hs=new Float32Array(H);
+  for(let i=0;i<H;i++){ const a=i/H*Math.PI*2, r=COIN.rt+.9+hash(i)*.25; hp[i*3]=Math.cos(a)*r; hp[i*3+1]=Math.sin(a)*r; hp[i*3+2]=(hash(i+4)-.5)*.3; const k=.3+hash(i+9)*.5; hc.set([.25*k,.71*k,.8*k],i*3); hs[i]=1+hash(i+2); }
+  G.halo=pointsFrom(hp,hc,hs); g.add(G.halo);
+  /* first build flies in; later rebuilds snap to the current step */
+  G.slices.forEach((s,i)=>{ const tf=target("f",i,s,0), tk=target("k",i,s,0); Object.assign(s.f,tf); Object.assign(s.k,tk); if(G.first){ s.f.exp=s.k.exp=5+hash(i)*2; s.f.sc=s.k.sc=0; s.f.rot-=1.2; s.k.rot-=1.2; } });
+  G.first=false;
+  G.lastHoverIdx=-1;
+  $("unitNote").textContent=unit>1?t("unit_slice",{n:fmt(unit)}):"";
+  placeAnchors();
+}
+/* where each piece wants to be for the current step */
+function target(part,i,s,now){
+  const isF=part==="f", st=STEP; let rot, exp=0, pop=0, bri=1, sc=1;
+  if(st==="total"){ rot=isF?s.fB:s.kB; if(isF){ exp=1.25; pop=.35; bri=1.25; } }
+  else{
+    rot=isF?s.fA:s.kA;
+    if(st==="meeting"){ exp=.16; bri=.45; if(i===0){ exp=.6; bri=1.2; } }
+    else if(st==="price"){ exp=.16; bri=.5; if(i===0){ if(isF){ exp=1.15; pop=1.4; bri=1.9+.35*Math.sin(now/230); } else { exp=.6; bri=.8; } } }
+  }
+  if(G.hoverIdx===i&&!PLAY.on){ bri*=1.35; exp+=.14; }
+  if(G.build){ const ta=G.build.t0+G.build.coinAt+i*G.build.cs; if(now<ta){ exp=5; sc=0; } }
+  return {rot,exp,pop,bri,sc};
+}
+const _m=new THREE.Matrix4(), _q=new THREE.Quaternion(), _p=new THREE.Vector3(), _s=new THREE.Vector3(), _e=new THREE.Euler(), _c=new THREE.Color();
+function pieceMatrix(rot,al,exp,pop,sc){
+  const b=rot+al/2; _p.set(Math.cos(b)*exp,Math.sin(b)*exp,pop); _e.set(0,0,rot); _q.setFromEuler(_e); _s.setScalar(Math.max(1e-4,sc));
+  return _m.compose(_p,_q,_s);
+}
+function animCoin(dt,now){
+  if(!G.slices||!G.slices.length) return;
+  const k1=1-Math.exp(-dt*7), kA=1-Math.exp(-dt*3.4);
+  G.slices.forEach((s,i)=>{
+    ["f","k"].forEach(part=>{
+      const c=s[part], tg=target(part,i,s,now);
+      c.rot+=(tg.rot-c.rot)*kA; c.exp+=(tg.exp-c.exp)*k1; c.pop+=(tg.pop-c.pop)*k1; c.bri+=(tg.bri-c.bri)*k1; c.sc+=(tg.sc-c.sc)*k1;
+      const al=part==="f"?s.fa:s.ka, mtx=pieceMatrix(c.rot,al,c.exp,c.pop,c.sc);
+      if(i<G.nFull){ const mesh=part==="f"?G.feeMesh:G.keepMesh; mesh.setMatrixAt(i,mtx); mesh.setColorAt(i,_c.setScalar(c.bri)); }
+      else { const mesh=part==="f"?G.feeP:G.keepP; mesh.matrix.copy(mtx); mesh.matrix.decompose(mesh.position,mesh.quaternion,mesh.scale); mesh.material.color.set(part==="f"?0xf7c46a:0xc98a2e).multiplyScalar(c.bri); }
+    });
+  });
+  if(G.feeMesh){ G.feeMesh.instanceMatrix.needsUpdate=G.keepMesh.instanceMatrix.needsUpdate=true; G.feeMesh.instanceColor.needsUpdate=G.keepMesh.instanceColor.needsUpdate=true; }
+  /* tokens */
+  const o=G._o||(G._o=new THREE.Object3D()), size=G.tokSize;
+  let goldOn=false;
+  G.slices.forEach((s,i)=>{
+    let tgt=1; if(G.build&&now<G.build.t0+i*G.build.ts) tgt=0;
+    G.tokSc[i]+=(tgt-G.tokSc[i])*k1;
+    const b=s.a0-s.span/2, part=i>=G.nFull?Math.max(.45,Math.sqrt(s.span/((G.slices[0]||s).span))):1;
+    const isGold=STEP==="project"&&i===G.goldIdx&&(!G.build||now>G.build.t0+G.build.goldAt);
+    o.position.set(Math.cos(b)*COIN.rt,Math.sin(b)*COIN.rt,0); o.rotation.set(0,0,b-Math.PI/2);
+    const sc=size*part*Math.max(1e-4,G.tokSc[i])*(isGold?1.18+.06*Math.sin(now/180):1); o.scale.set(sc,sc,sc); o.updateMatrix();
+    if(isGold){ G.goldTok.position.copy(o.position); G.goldTok.rotation.copy(o.rotation); G.goldTok.scale.copy(o.scale); goldOn=true; o.scale.setScalar(1e-4); o.updateMatrix(); }
+    G.tokens.setMatrixAt(i,o.matrix);
+  });
+  G.tokens.instanceMatrix.needsUpdate=true;
+  if(goldOn&&!G.goldTok.visible&&G.build&&!G.build.goldBurst){ G.build.goldBurst=true; const wp=G.goldTok.getWorldPosition(new THREE.Vector3()); burst(wp.x,wp.y,wp.z,G.COL.hot,18,1.4); }
+  G.goldTok.visible=goldOn;
+}
+
+/* ---------- frame loop ---------- */
+const DTMAX=(window.__P3D_TEST&&window.__P3D_TEST.dtMax)||.05;
+function loop(now){
+  requestAnimationFrame(loop);
+  if(!G.ok||!G.visible||G.hidden){ G.last=now; G.qSkip=now; return; }
+  const ft=now-G.last, dt=Math.min(DTMAX,ft/1000); G.last=now; const T=now/1000;
+  adaptQuality(now,ft);
+  if(PLAY.on) stepPlay(dt,now);
+  if(G.build&&now>G.build.t0+4500) G.build=null;
+  G.floor.material.uniforms.uTime.value=T;
+  if(G.coinG){
+    const idle=!G.dragging&&!reduce;
+    G.coinG.rotation.y=idle?Math.sin(T*.35)*.09:G.coinG.rotation.y*.95;
+    G.coinG.rotation.x=idle?Math.sin(T*.27)*.03:0;
+    animCoin(dt,now);
+    if(G.halo) G.halo.rotation.z=-T*.05;
+    G.padRing.material.color.copy(G.COL.amber).multiplyScalar(.7+.25*Math.sin(T*1.6));
+  }
+  G.dust.rotation.y=T*.004;
+  /* sparks */
+  { const S=G.sparks, a=S.p.geometry.attributes, p=a.position.array, c=a.aColor.array, sz=a.aSize.array;
+    for(let i=0;i<S.K;i++){
+      if(S.life[i]<=0){ sz[i]=0; continue; }
+      S.life[i]-=dt*1.1; S.vel[i*3+1]-=8*dt;
+      p[i*3]+=S.vel[i*3]*dt; p[i*3+1]=Math.max(.05,p[i*3+1]+S.vel[i*3+1]*dt); p[i*3+2]+=S.vel[i*3+2]*dt;
+      const l=Math.max(0,S.life[i]); c[i*3]=S.col[i*3]*l; c[i*3+1]=S.col[i*3+1]*l; c[i*3+2]=S.col[i*3+2]*l; sz[i]=2.6*l+.4;
+    }
+    a.position.needsUpdate=a.aColor.needsUpdate=a.aSize.needsUpdate=true; }
+  /* camera + parallax sway */
+  G.cam.position.sub(G.swayCur); G.ctl.update();
+  if(!G.flying&&!G.dragging&&!reduce){
+    const dist=G.cam.position.distanceTo(G.ctl.target), k=dist*.012, right=G._r||(G._r=new THREE.Vector3()), up=G._u||(G._u=new THREE.Vector3());
+    right.setFromMatrixColumn(G.cam.matrixWorld,0); up.setFromMatrixColumn(G.cam.matrixWorld,1);
+    G.sway.copy(right).multiplyScalar((G.mouse.x*1.1+Math.sin(T*.13)*.5)*k).addScaledVector(up,(G.mouse.y*.5+Math.sin(T*.11)*.2)*k);
+  } else G.sway.set(0,0,0);
+  G.swayCur.lerp(G.sway,.04); G.cam.position.add(G.swayCur);
+  G.comp.render();
+  placeLabels();
+}
+function adaptQuality(now,ft){
+  if(window.__P3D_TEST||ft>250||now-(G.qSkip||0)<1500) return;
+  G.ema=G.ema?G.ema*.95+ft*.05:ft;
+  if(G.ema<34||now-(G.qT||0)<2500) return;
+  G.qT=now; G.ema=0;
+  const pr=G.R.getPixelRatio();
+  if(pr>1.01){ const n=Math.max(1,pr-.5); G.R.setPixelRatio(n); G.comp.setPixelRatio(n); resizeBuffers(); }
+  else if(G.bloom.enabled) G.bloom.enabled=false;
+}
+
+/* ---------- labels ---------- */
+const LBL={};
+const LDEF={coin:{cls:"box",mode:"c"},tokens:{cls:"above cold",mode:"a"},meeting:{cls:"above",mode:"a"},price:{cls:"above hot",mode:"a"},wedge:{cls:"side hot",mode:"s"},keep:{cls:"box",mode:"c"},hover:{cls:"box",mode:"c"}};
+function buildLabels(){
+  const box=$("labels"); box.textContent="";
+  Object.keys(LDEF).forEach(k=>{ const d=LDEF[k], el=document.createElement("div"); el.className="lbl "+d.cls; el.innerHTML="<span></span><b></b><em hidden></em>"; box.appendChild(el);
+    LBL[k]={el,mode:d.mode,v:[0,0,0],sp:el.querySelector("span"),b:el.querySelector("b"),em:el.querySelector("em")}; });
+  placeAnchors(); labelText();
+}
+function placeAnchors(){
+  const m=M, s0=(G.slices||[])[0]; if(!s0) return;
+  const R=COIN.R, rt=COIN.rt, D=COIN.D, set=(k,x,y,z)=>{ if(LBL[k]) LBL[k].v=[x,y,z]; };
+  set("coin",0,0,D/2+.25);
+  const ta=Math.PI*.78; set("tokens",Math.cos(ta)*(rt+.75),Math.sin(ta)*(rt+.75),0);
+  const b0=s0.a0-s0.span/2; set("meeting",Math.cos(b0)*(rt+.8),Math.sin(b0)*(rt+.8),0);
+  const bf=s0.fA+s0.fa/2; set("price",Math.cos(bf)*(R+1.5),Math.sin(bf)*(R+1.5),1.35);
+  const bw=Math.PI/2-Math.PI*m.cut, a1=Math.PI/2-2*Math.PI*m.cut; set("wedge",(a1>0?Math.cos(a1):1)*(R+1.6),Math.sin(bw)*(R+1.1),.4);
+  const bk=Math.PI/2-2*Math.PI*m.cut-Math.PI*(1-m.cut); set("keep",Math.cos(bk)*(R*.62),Math.sin(bk)*(R*.62),D/2+.3);
+}
+function labelText(){
+  const m=M; if(!LBL.coin) return;
+  const set=(k,sp,b,em)=>{ const L=LBL[k]; L.sp.textContent=sp; L.b.textContent=b; if(em){ L.em.textContent=em; L.em.hidden=false; } else L.em.hidden=true; L.h=0; };
+  set("coin",t("lab_coin"),mC(m.deal));
+  set("tokens",t("lab_tokens"),nFmt(m.nMeet));
+  set("meeting",t("lab_meeting"),money(m.value));
+  set("price",t("lab_price"),money(m.price),`${pct(m.cut)} × ${money(m.value)}`);
+  set("wedge",t("lab_wedge"),money(m.cost),`${pct(m.cut)} · ${nFmt(m.nMeet)} × ${money(m.price)}`);
+  set("keep",t("lab_keep"),money(m.keep));
+}
+const SHOW={project:["coin","tokens"],meeting:["meeting","coin"],price:["price"],total:["wedge","keep"]};
+const DIM={meeting:["coin"]};
+let tmpV=null;
+function placeLabels(){
+  if(!G.ok||!G.coinG) { for(const k in LBL) LBL[k].el.hidden=true; return; }
+  const B=G.box; if(!B) return; if(!tmpV) tmpV=new THREE.Vector3();
+  G.coinG.updateMatrixWorld();
+  const show=new Set(SHOW[STEP]||[]), dim=new Set(DIM[STEP]||[]);
+  if(G.hoverIdx>=0&&!PLAY.on) show.add("hover");
+  for(const k in LBL){
+    const L=LBL[k]; if(!show.has(k)){ L.el.hidden=true; continue; }
+    const v=tmpV.set(L.v[0],L.v[1],L.v[2]).applyMatrix4(G.coinG.matrixWorld).project(G.cam);
+    if(v.z>1||Math.abs(v.x)>1.15||Math.abs(v.y)>1.15){ L.el.hidden=true; continue; }
+    let sx=(v.x*.5+.5)*B.W, sy=(-v.y*.5+.5)*B.H;
+    if(!L.h){ L.el.hidden=false; L.h=L.el.offsetHeight||72; L.w=L.el.offsetWidth||180; }
+    let mode=L.mode;
+    if(mode==="s"){ const right=B.desk?B.W-B.off-16:B.W-8; if(sx+L.w>right) mode="a"; }
+    if(mode==="a") sy=Math.max(B.top+L.h+6,sy); else sy=clamp(sy,B.top+L.h/2+6,B.H-B.bottom-L.h/2-6);
+    if(B.desk&&sx>B.W-B.off-30&&sy<B.insB+40){ L.el.hidden=true; continue; }
+    L.el.hidden=false; L.el.classList.toggle("dim",dim.has(k));
+    L.el.classList.toggle("side",mode==="s"); L.el.classList.toggle("above",mode==="a"&&LDEF[k].cls.includes("above")||(mode==="a"&&L.mode==="s"));
+    L.el.style.transform=mode==="s"?`translate(${sx.toFixed(1)}px,${sy.toFixed(1)}px) translate(0,-50%)`:`translate(${sx.toFixed(1)}px,${sy.toFixed(1)}px) translate(-50%,${mode==="a"?"-100%":"-50%"})`;
+  }
+}
+
+/* ---------- camera ---------- */
+function flyTo(k,instant){
+  if(!G.ok) return; const f=framing(k);
+  if(instant||reduce||!window.gsap){ if(window.gsap){ gsap.killTweensOf(G.cam.position); gsap.killTweensOf(G.ctl.target); } G.cam.position.copy(f.p); G.ctl.target.copy(f.t); G.ctl.update(); G.flying=false; return; }
+  G.flying=true; gsap.killTweensOf(G.cam.position); gsap.killTweensOf(G.ctl.target);
+  gsap.to(G.cam.position,{x:f.p.x,y:f.p.y,z:f.p.z,duration:1.5,ease:"power3.inOut"});
+  gsap.to(G.ctl.target,{x:f.t.x,y:f.t.y,z:f.t.z,duration:1.5,ease:"power3.inOut",onComplete:()=>{ G.flying=false; }});
+}
+function intro(){
+  const f=framing(STEP);
+  if(reduce||!window.gsap){ flyTo(STEP,true); return; }
+  const off=f.p.clone().sub(f.t), a=.55, ca=Math.cos(a), sa=Math.sin(a);
+  G.cam.position.set(off.x*ca+off.z*sa,off.y+6,-off.x*sa+off.z*ca).multiplyScalar(1.7).add(f.t); G.ctl.target.copy(f.t); G.ctl.update();
+  G.flying=true;
+  gsap.to(G.cam.position,{x:f.p.x,y:f.p.y,z:f.p.z,duration:2.8,ease:"power3.out",onComplete:()=>{ G.flying=false; }});
+}
+
+/* ---------- pointer: hover a slice ---------- */
+function bindPointer(){
+  const el=G.R.domElement, ray=new THREE.Raycaster(), ndc=new THREE.Vector2(); let down=null;
+  const pick=e=>{
+    const r=el.getBoundingClientRect(); ndc.set(((e.clientX-r.left)/r.width)*2-1,-((e.clientY-r.top)/r.height)*2+1); ray.setFromCamera(ndc,G.cam);
+    const objs=[G.feeMesh,G.keepMesh,G.feeP,G.keepP].filter(Boolean); const hit=ray.intersectObjects(objs,false)[0];
+    if(!hit) return -1; if(hit.object===G.feeP||hit.object===G.keepP) return G.nSl-1; return hit.instanceId??-1;
+  };
+  const setHover=i=>{ G.hoverIdx=i; el.classList.toggle("hov",i>=0); if(i>=0) hoverLabel(i); };
+  el.addEventListener("pointermove",e=>{ if(e.pointerType==="mouse"){ setHover(pick(e)); const r=el.getBoundingClientRect(); G.mouse.x=((e.clientX-r.left)/r.width)*2-1; G.mouse.y=((e.clientY-r.top)/r.height)*2-1; } });
+  el.addEventListener("pointerdown",e=>{ down={x:e.clientX,y:e.clientY}; G.dragging=true; if(window.gsap&&G.flying){ gsap.killTweensOf(G.cam.position); gsap.killTweensOf(G.ctl.target); G.flying=false; } });
+  el.addEventListener("pointerup",e=>{ G.dragging=false; if(down&&Math.hypot(e.clientX-down.x,e.clientY-down.y)<6&&e.pointerType!=="mouse"){ const i=pick(e); setHover(i===G.hoverIdx?-1:i); } down=null; });
+  el.addEventListener("pointercancel",()=>{ G.dragging=false; down=null; });
+  el.addEventListener("pointerleave",()=>{ setHover(-1); G.mouse.x=G.mouse.y=0; });
+}
+G.hoverIdx=-1;
+function hoverLabel(i){
+  const m=M, s=G.slices[i]; if(!s||!LBL.hover) return;
+  const b=s.a0-s.span/2, r=(COIN.r0+COIN.R)/2+.2, frac=i>=G.nFull?s.span/(G.slices[0].span):1;
+  LBL.hover.v=[Math.cos(b)*r,Math.sin(b)*r,COIN.D/2+.4];
+  const u=G.unit, from=i*u+1, to=Math.min(Math.ceil(m.nMeet),(i+1)*u);
+  LBL.hover.sp.textContent=t("lab_slice",{i:u>1?`${from}–${to}`:String(i+1)});
+  LBL.hover.b.textContent=money(m.value*u*frac);
+  LBL.hover.em.textContent=t("lab_slice_fee",{price:money(m.price*u*frac)}); LBL.hover.em.hidden=false; LBL.hover.h=0;
+}
+
+/* ============================================================
+   UI: steps, inspector, HUD, captions, play
+   ============================================================ */
+function buildSteps(){
+  const box=$("steps"); box.textContent="";
+  STEPS.forEach((k,i)=>{ const b=document.createElement("button"); b.type="button"; b.dataset.k=k; b.innerHTML=`<i>${i+1}</i><span>${t("st_"+k)}</span>`; b.title=t("st_"+k);
+    b.setAttribute("aria-pressed",String(k===STEP)); b.addEventListener("click",()=>{ stopPlay(); setStep(k); }); box.appendChild(b); });
+}
+function setStep(k,opts={}){
+  const prev=STEP; STEP=k;
+  const idx=STEPS.indexOf(k);
+  document.querySelectorAll("#steps button").forEach((b,i)=>{ b.setAttribute("aria-pressed",String(b.dataset.k===k)); b.classList.toggle("done",i<idx); });
+  renderInspector(); caption();
+  if(!opts.noFly) flyTo(k);
+  if(k==="total"&&prev!=="total"&&G.ok&&G.coinG){ setTimeout(()=>{ if(STEP!=="total"||!G.coinG) return; const bw=Math.PI/2-Math.PI*M.cut, p=new THREE.Vector3(Math.cos(bw)*(COIN.R+1.2),Math.sin(bw)*(COIN.R+1.2),.4).applyMatrix4(G.coinG.matrixWorld); burst(p.x,p.y,p.z,G.COL.hot,22,1.3); },650); }
+}
+function renderInspector(){
+  const m=M, k=STEP, B=v=>`<b>${v}</b>`;
+  $("inspector").style.setProperty("--c",SCOL[k]);
+  $("ins-kt").textContent=`${STEPS.indexOf(k)+1} · ${t("st_"+k)}`;
+  $("ins-t").textContent=t("ins_"+k+"_t");
+  let p="", math="";
+  if(!m.ok){ p=t("empty"); }
+  else if(k==="project"){ p=t("ins_project",{n:B(nFmt(m.nMeet)),deal:B(money(m.deal))}); math=m.halve?t("ins_project_m",{close:pct(m.close),cold:pct(m.cold),n:nFmt(m.nMeet)}):t("ins_project_m2",{close:pct(m.close),n:nFmt(m.nMeet)}); }
+  else if(k==="meeting"){ p=t("ins_meeting",{n:B(nFmt(m.nMeet)),value:B(money(m.value))}); math=t("ins_meeting_m",{cold:pct(m.cold),deal:money(m.deal),value:money(m.value)}); }
+  else if(k==="price"){ p=t("ins_price",{cut:B(pct(m.cut)),price:B(money(m.price))}); math=t("ins_price_m",{cut:pct(m.cut),value:money(m.value),price:money(m.price)}); }
+  else { p=t("ins_total",{cost:B(money(m.cost)),deal:B(money(m.deal)),keep:B(money(m.keep)),roi:B(xFmt(m.roi))}); math=t("ins_total_m",{n:nFmt(m.nMeet),price:money(m.price),cost:money(m.cost),deal:money(m.deal),keep:money(m.keep)}); }
+  $("ins-p").innerHTML=p; $("ins-m").textContent=math; $("ins-m").hidden=!math;
+  const i=STEPS.indexOf(k); $("ins-dots").innerHTML=STEPS.map((_,j)=>`<span class="${j<=i?"on":""}"></span>`).join("");
+}
+let shownPrice;
+function tweenPrice(to){
+  const el=$("h-price"), from=shownPrice; shownPrice=to;
+  if(reduce||from===undefined||from===to){ cancelAnimationFrame(el._r); el.textContent=money(to); return; }
+  cancelAnimationFrame(el._r); const t0=performance.now(), dur=420;
+  const step=tt=>{ const k=Math.min(1,(tt-t0)/dur), e=1-Math.pow(1-k,3); el.textContent=money(from+(to-from)*e); if(k<1) el._r=requestAnimationFrame(step); };
+  el._r=requestAnimationFrame(step);
+}
+let capHold=0;
+function caption(){
+  const el=$("caption"), m=M, on=m.ok&&(PLAY.on||performance.now()<capHold);
+  if(!on){ el.classList.remove("on"); return; }
+  const B=v=>`<b>${v}</b>`; let s="";
+  if(STEP==="project") s=t("cap_project",{n:B(nFmt(m.nMeet)),deal:B(money(m.deal))});
+  else if(STEP==="meeting") s=t("cap_meeting",{value:B(money(m.value))});
+  else if(STEP==="price") s=t("cap_price",{cut:B(pct(m.cut)),price:B(money(m.price))});
+  else s=t("cap_total",{cost:B(money(m.cost)),keep:B(money(m.keep)),roi:B(xFmt(m.roi))});
+  if(el._s!==s){ el.innerHTML=s; el._s=s; }
+  el.classList.add("on");
+}
+const DUR=[4.2,3.4,3.4,4.4];
+function startPlay(){
+  PLAY.on=true; PLAY.i=0; PLAY.t=0; $("cta").classList.remove("pulse");
+  const n=Math.max(1,G.nSl||1), now=performance.now();
+  G.build=reduce?null:{t0:now,ts:Math.min(.09,1.2/n)*1000,goldAt:1450,coinAt:1700,cs:Math.min(60,1100/n),goldBurst:false};
+  if(G.tokSc) G.tokSc.fill(0);
+  if(G.build) G.slices&&G.slices.forEach(s=>{ s.f.exp=s.k.exp=5; s.f.sc=s.k.sc=0; });
+  setStep("project"); ctaState(); if(!G.ok) fallbackTick();
+}
+function stopPlay(){ if(!PLAY.on) return; PLAY.on=false; G.build=null; capHold=performance.now()+2500; ctaState(); caption(); }
+function stepPlay(dt){
+  PLAY.t+=dt; if(PLAY.t<DUR[PLAY.i]) return;
+  PLAY.i++; PLAY.t=0;
+  if(PLAY.i>=STEPS.length){ PLAY.on=false; capHold=performance.now()+6000; G.played=true; ctaState(); caption(); return; }
+  setStep(STEPS[PLAY.i]);
+}
+function fallbackTick(){ let last=performance.now(); const tick=now=>{ if(!PLAY.on||G.ok) return; const dt=Math.min(DTMAX,(now-last)/1000); last=now; stepPlay(dt); requestAnimationFrame(tick); }; requestAnimationFrame(tick); }
+function ctaState(){
+  $("cta").classList.toggle("playing",PLAY.on);
+  const label=PLAY.on?t("pause"):(G.played?t("replay"):t("play_cta"));
+  $("cta-t").textContent=label; $("cta").setAttribute("aria-label",label);
+  $("cta-ico").innerHTML=PLAY.on?'<path d="M1 0h3.5v14H1zM7.5 0H11v14H7.5z"/>':'<path d="M0 0 L12 7 L0 14 Z"/>';
+}
+$("cta").addEventListener("click",()=>{ if(PLAY.on) stopPlay(); else startPlay(); });
+$("prev").addEventListener("click",()=>{ stopPlay(); const i=STEPS.indexOf(STEP); setStep(STEPS[(i-1+STEPS.length)%STEPS.length]); });
+$("next").addEventListener("click",()=>{ stopPlay(); const i=STEPS.indexOf(STEP); setStep(STEPS[(i+1)%STEPS.length]); });
+(function bindFs(){
+  const st=$("studio"), ok=!!(document.fullscreenEnabled&&st.requestFullscreen); if(!ok) return; st.classList.add("fs-ok");
+  $("fs").addEventListener("click",()=>{ try{ if(document.fullscreenElement) document.exitFullscreen(); else st.requestFullscreen().catch(()=>{}); }catch(e){} });
+  document.addEventListener("fullscreenchange",()=>{ $("fs").setAttribute("aria-label",document.fullscreenElement?t("fs_off"):t("fs_on")); setTimeout(()=>{ measureOverlays(); resize(); },60); });
+})();
+
+/* ---------- numbers ---------- */
+function update(){
+  const m=M;
+  if(!m.ok){
+    $("h-price").textContent="—"; shownPrice=undefined; $("chain").innerHTML="";
+    ["r-cold","r-value","r-price","p-deal","roi"].forEach(id=>$(id).textContent="—");
+    ["e-cold","e-value","e-price","l-cost","l-cost-eq","l-keep"].forEach(id=>$(id).textContent="");
+    $("line").textContent=t("empty"); renderInspector(); return;
+  }
+  tweenPrice(m.price);
+  $("chain").innerHTML=m.halve
+    ? `<em>${pct(m.close)}</em>÷ 2<em>${pct(m.cold)}</em>× ${mC(m.deal)} =<em>${money(m.value)}</em>× ${pct(m.cut)} =<em class="w">${money(m.price)}</em>`
+    : `<em>${pct(m.close)}</em>× ${mC(m.deal)} =<em>${money(m.value)}</em>× ${pct(m.cut)} =<em class="w">${money(m.price)}</em>`;
+  $("r-cold").textContent=pct(m.cold); $("e-cold").textContent=m.halve?`${pct(m.close)} ÷ 2`:pct(m.close);
+  $("r-value").textContent=money(m.value); $("e-value").textContent=`${pct(m.cold)} × ${money(m.deal)}`;
+  $("r-price").textContent=money(m.price); $("e-price").textContent=`${pct(m.cut)} × ${money(m.value)}`;
+  $("p-deal").textContent=money(m.deal);
+  const share=clamp(m.cut*100,.5,100), segs=Math.min(60,Math.max(1,Math.round(m.nMeet)));
+  const bc=$("bar-cost"); bc.style.flexBasis=share+"%"; bc.style.setProperty("--seg",(100/segs)+"%");
+  $("l-cost").textContent=t("bar_cost",{cost:money(m.cost)});
+  $("l-cost-eq").textContent=`≈ ${nFmt(m.nMeet)} ${t("meetings")} × ${money(m.price)}`;
+  $("l-keep").textContent=t("bar_keep",{keep:money(m.keep)});
+  $("roi").textContent=xFmt(m.roi)+"×";
+  $("line").textContent=t("line",{price:money(m.price),cost:money(m.cost),deal:money(m.deal)});
+  $("foot").textContent=m.halve?t("foot"):t("foot_nohalve");
+  renderInspector(); labelText();
+}
+let rebuildT=0;
+function recompute(){ M=model(); update(); caption(); clearTimeout(rebuildT); rebuildT=setTimeout(()=>{ rebuild(); },50); }
+function paintR(id){ const R=$(id); const p=(R.value-R.min)/(R.max-R.min)*100; R.style.setProperty("--p",clamp(p,0,100)+"%"); }
+function syncAll(){
+  $("cut").value=S.cut; $("cutR").value=Math.min(50,S.cut); paintR("cutR");
+  $("close").value=S.close; $("closeR").value=Math.min(80,S.close); paintR("closeR");
+  $("deal").value=fmt(S.deal); $("dealR").value=fromLog(Math.max(S.deal,RANGE[0])); paintR("dealR");
+}
+[["cut",50],["close",80]].forEach(([k,max])=>{
+  $(k+"R").addEventListener("input",()=>{ S[k]=+$(k+"R").value; $(k).value=S[k]; paintR(k+"R"); recompute(); });
+  $(k).addEventListener("input",()=>{ S[k]=Math.min(99,pctNum($(k).value)); if(S[k]){ $(k+"R").value=Math.min(max,S[k]); paintR(k+"R"); } recompute(); });
+});
+$("dealR").addEventListener("input",()=>{ S.deal=round2(toLog(+$("dealR").value)); $("deal").value=fmt(S.deal); paintR("dealR"); recompute(); });
+$("deal").addEventListener("input",()=>{ S.deal=moneyDigits($("deal").value); if(S.deal){ $("dealR").value=fromLog(Math.max(S.deal,RANGE[0])); paintR("dealR"); } recompute(); });
+$("deal").addEventListener("blur",()=>{ if(S.deal) $("deal").value=fmt(S.deal); });
+$("halve").addEventListener("input",recompute);
+$("copy").addEventListener("click",()=>{
+  const txt=$("line").textContent, btn=$("copy");
+  const done=()=>{ btn.textContent=t("copied"); setTimeout(()=>btn.textContent=t("copy"),1500); };
+  const sel=()=>{ const r=document.createRange(); r.selectNodeContents($("line")); const s=getSelection(); s.removeAllRanges(); s.addRange(r); };
+  try{ navigator.clipboard.writeText(txt).then(done,sel); }catch(e){ sel(); }
+});
+function buildSelects(){
+  $("lang").innerHTML=Object.entries(I18N).map(([k,v])=>`<option value="${k}"${k===LANG?" selected":""}>${v.name}</option>`).join("");
+  let dn=null; try{ dn=new Intl.DisplayNames([LOC()],{type:"currency"}); }catch(e){}
+  const name=c=>{ try{ return dn?dn.of(c):c; }catch(e){ return c; } };
+  let all=[]; try{ all=Intl.supportedValuesOf("currency"); }catch(e){}
+  const popular=["USD","EUR","GBP","CAD","AUD","CHF","JPY","INR","BRL","MXN","AED","SGD","ZAR","NGN","MAD","SAR","SEK","PLN","NZD","HKD"];
+  const rest=all.filter(c=>!popular.includes(c)).sort();
+  const opt=c=>`<option value="${c}"${c===CUR?" selected":""}>${c} · ${name(c)}</option>`;
+  $("cur").innerHTML=`<optgroup label="${t("popular")}">${popular.map(opt).join("")}</optgroup>`+(rest.length?`<optgroup label="${t("all")}">${rest.map(opt).join("")}</optgroup>`:"");
+  if(!$("cur").value){ CUR="USD"; $("cur").value="USD"; }
+}
+function applyI18n(){
+  document.documentElement.lang=LANG;
+  document.querySelectorAll("[data-i18n]").forEach(el=>{ el.textContent=t(el.dataset.i18n); });
+  const cp=curParts();
+  document.querySelectorAll(".val .cb").forEach(e=>e.textContent=cp.before?cp.sym:"");
+  document.querySelectorAll(".val .ca").forEach(e=>e.textContent=cp.before?"":cp.sym);
+  $("hint").textContent=coarse?t("hint_touch"):t("hint");
+  $("vp").setAttribute("aria-label",t("vp_label"));
+  $("fs").setAttribute("aria-label",t("fs_on")); $("fs").title=t("fs_on");
+  ["cut","close","deal"].forEach(k=>{ const lab=document.querySelector(`label[for=${k}R]`); if(lab) lab.title=t(k+"_h"); });
+  buildSelects(); buildSteps(); buildLabels(); syncAll(); ctaState();
+  if(G.R) G.R.domElement.setAttribute("aria-label",t("vp_label"));
+}
+$("lang").addEventListener("change",e=>{ LANG=e.target.value; store.set("ppm-lang",LANG); shownPrice=undefined; applyI18n(); recompute(); });
+$("cur").addEventListener("change",e=>{ CUR=e.target.value; store.set("ppm-cur",CUR); shownPrice=undefined; applyI18n(); recompute(); });
+function measureOverlays(){
+  document.documentElement.style.setProperty("--hdr",document.querySelector(".top").offsetHeight+"px");
+  const st=$("studio"); st.style.setProperty("--ch",$("console").offsetHeight+"px"); st.style.setProperty("--tph",$("tp").offsetHeight+"px");
+}
+
+/* ---------- boot ---------- */
+applyI18n();
+M=model(); update(); renderInspector();
+measureOverlays();
+new ResizeObserver(()=>measureOverlays()).observe($("console"));
+new ResizeObserver(()=>measureOverlays()).observe(document.querySelector(".top"));
+init3D();
+setStep(STEP,{noFly:true});
+})();
+</script>
+</body>
+</html>

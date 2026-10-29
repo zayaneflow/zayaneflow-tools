@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}#nl-badge-frame{display:none!important}</style>
+<meta name="description" content="The meeting pricer without the 3D view. Loads fast on any phone. Free.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Zayaneflow Tools">
+<meta property="og:title" content="2-Second Meeting Pricer (light)">
+<meta property="og:description" content="The meeting pricer without the 3D view. Loads fast on any phone. Free.">
+<meta property="og:url" content="https://zayaneflow-tools.netlify.app/pricer-lite/">
+<meta property="og:image" content="https://zayaneflow-tools.netlify.app/media/og-pricer.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://zayaneflow-tools.netlify.app/pricer-lite/">
+<title>2-Second Meeting Pricer (light)</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Cdefs%3E%3CradialGradient%20id%3D%22prc%22%20cx%3D%22.35%22%20cy%3D%22.3%22%20r%3D%22.8%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23fff3d1%22/%3E%3Cstop%20offset%3D%22.5%22%20stop-color%3D%22%23ffd57f%22/%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23e08f2c%22/%3E%3C/radialGradient%3E%3ClinearGradient%20id%3D%22prb%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%220%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22%231b2228%22/%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%230d1115%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20x%3D%221%22%20y%3D%221%22%20width%3D%2246%22%20height%3D%2246%22%20rx%3D%2212%22%20fill%3D%22url%28%23prb%29%22%20stroke%3D%22%232f3a43%22/%3E%3Ccircle%20cx%3D%2224%22%20cy%3D%2224%22%20r%3D%2217%22%20fill%3D%22none%22%20stroke%3D%22%2341b6cc%22%20stroke-width%3D%221.6%22%20stroke-dasharray%3D%222.2%203.1%22%20opacity%3D%22.75%22/%3E%3Ccircle%20cx%3D%2224%22%20cy%3D%2224%22%20r%3D%2212.5%22%20fill%3D%22url%28%23prc%29%22/%3E%3Ccircle%20cx%3D%2224%22%20cy%3D%2224%22%20r%3D%2210.2%22%20fill%3D%22none%22%20stroke%3D%22%231c1206%22%20stroke-opacity%3D%22.22%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M26.2%2015.5%2018.6%2025.6h4.9l-1.7%207%207.6-10.1h-4.9z%22%20fill%3D%22%231c1206%22/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Martian+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: companion to the Outreach Sizer. The price is the hero, faders on the left,
+   the math and one signed project split as a bar on the right, the line to say at the bottom.
+   Same teal-to-amber grade. Single dark theme by choice. */
+:root{
+  color-scheme:dark;
+  --bg:#0b0e11; --panel:#13181c; --panel-2:#192026; --inset:#080a0d;
+  --line:#232b32; --line-2:#34404a;
+  --fg:#eaedef; --muted:#8e99a1; --faint:#5f6b75;
+  --cold:#41b6cc; --warm:#f0a03c; --hot:#ffd57f; --on-warm:#1c1206; --warm-soft:rgba(240,160,60,.12);
+  --display:"Big Shoulders Display","Arial Narrow","Roboto Condensed",Impact,sans-serif;
+  --sans:"Instrument Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --mono:"Martian Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box}
+html{background:var(--bg)}
+body{
+  background:
+    radial-gradient(1000px 520px at 100% -10%, rgba(240,160,60,.12), transparent 62%),
+    radial-gradient(900px 600px at 0% 110%, rgba(65,182,204,.10), transparent 62%),
+    var(--bg);
+  color:var(--fg);font-family:var(--sans);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  padding-block:22px 56px;min-height:100vh;
+}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:60;opacity:.07;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+.wrap{max-width:1100px;margin:0 auto;display:grid;gap:22px}
+button,select,input{font:inherit}
+:focus-visible{outline:2px solid var(--hot);outline-offset:2px}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.logo{width:30px;height:30px;flex:none;filter:drop-shadow(0 4px 14px rgba(0,0,0,.5))}
+.mark{display:flex;align-items:center;gap:12px;font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase}
+.mark i{width:8px;height:8px;border-radius:50%;background:var(--warm);box-shadow:0 0 12px var(--warm)}
+.ctrls{display:flex;gap:8px;flex-wrap:wrap}
+.sel{appearance:none;-webkit-appearance:none;background:var(--inset) url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6'><path d='M1 1l4 4 4-4' fill='none' stroke='%238e99a1' stroke-width='1.5'/></svg>") no-repeat right 12px center;
+  border:1px solid var(--line);border-radius:999px;color:var(--fg);font-size:13px;font-weight:500;padding:7px 30px 7px 12px;max-width:200px;cursor:pointer}
+.sel option,.sel optgroup{background:#13181c;color:var(--fg)}
+
+/* hero */
+.hero{position:relative;display:grid;gap:10px;padding:28px clamp(16px,3vw,30px) 26px}
+.hero::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background:
+    linear-gradient(var(--line-2),var(--line-2)) top left/22px 1.5px no-repeat,
+    linear-gradient(var(--line-2),var(--line-2)) top left/1.5px 22px no-repeat,
+    linear-gradient(var(--line-2),var(--line-2)) top right/22px 1.5px no-repeat,
+    linear-gradient(var(--line-2),var(--line-2)) top right/1.5px 22px no-repeat,
+    linear-gradient(var(--line-2),var(--line-2)) bottom left/22px 1.5px no-repeat,
+    linear-gradient(var(--line-2),var(--line-2)) bottom left/1.5px 22px no-repeat,
+    linear-gradient(var(--line-2),var(--line-2)) bottom right/22px 1.5px no-repeat,
+    linear-gradient(var(--line-2),var(--line-2)) bottom right/1.5px 22px no-repeat}
+.eyebrow{margin:0;font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.price{display:flex;align-items:baseline;gap:18px;flex-wrap:wrap}
+.price b{font-family:var(--display);font-weight:900;font-size:clamp(80px,15vw,190px);line-height:.82;font-variant-numeric:tabular-nums;white-space:nowrap;
+  background-image:linear-gradient(180deg,#fff6dc 0%,var(--hot) 48%,#e39a33 100%);-webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 0 44px rgba(255,213,127,.3));padding-bottom:6px}
+.price span{font-family:var(--mono);font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.chainline{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;color:var(--muted)}
+.chainline em{font-style:normal;color:var(--fg);background:var(--panel);border:1px solid var(--line-2);border-radius:999px;padding:4px 10px;white-space:nowrap}
+.chainline em.w{color:var(--hot);border-color:rgba(240,160,60,.5)}
+
+.main{display:grid;grid-template-columns:minmax(0,380px) minmax(0,1fr);gap:18px;align-items:start}
+@media (max-width:900px){.main{grid-template-columns:minmax(0,1fr)}}
+.panel{background:linear-gradient(180deg,var(--panel-2),var(--panel));border:1px solid var(--line);border-radius:14px;min-width:0;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.04),0 24px 60px -28px rgba(0,0,0,.75)}
+.panel-head{padding:12px 16px;border-bottom:1px solid var(--line)}
+.panel-head h2{margin:0;font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.body{padding:20px 18px 22px;display:grid;gap:24px}
+
+.ctl{display:grid;gap:8px}
+.ctl-top{display:flex;justify-content:space-between;align-items:flex-end;gap:12px}
+.ctl label{font-weight:600;font-size:15px;line-height:1.3}
+.ctl .hint{display:block;font-weight:400;font-size:12.5px;color:var(--muted);margin-top:2px}
+.val{display:flex;align-items:baseline;gap:2px;font-family:var(--display);font-weight:700;font-size:38px;line-height:1;flex:none}
+.val .u{color:var(--faint);font-size:24px}
+.val input{width:7.4ch;font:inherit;color:var(--fg);background:transparent;border:0;border-bottom:1px dashed var(--line-2);text-align:right;padding:0 0 2px;font-variant-numeric:tabular-nums}
+.val input.short{width:3.2ch}
+.val input:focus{outline:none;border-bottom-color:var(--hot)}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:32px;background:transparent;margin:0;cursor:pointer}
+input[type=range]:focus-visible{outline:none}
+input[type=range]::-webkit-slider-runnable-track{height:4px;border-radius:4px;background:linear-gradient(90deg,var(--cold),var(--warm)) 0 0/var(--p,50%) 100% no-repeat,var(--line-2)}
+input[type=range]::-moz-range-track{height:4px;border-radius:4px;background:var(--line-2)}
+input[type=range]::-moz-range-progress{height:4px;border-radius:4px;background:linear-gradient(90deg,var(--cold),var(--warm))}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:30px;margin-top:-13px;border:0;border-radius:4px;
+  background:linear-gradient(180deg,#f3f5f7 0 45%,#272d34 45% 55%,#c6cdd3 55% 100%);box-shadow:0 2px 8px rgba(0,0,0,.6),0 0 0 1px rgba(0,0,0,.45)}
+input[type=range]::-moz-range-thumb{width:18px;height:30px;border:0;border-radius:4px;
+  background:linear-gradient(180deg,#f3f5f7 0 45%,#272d34 45% 55%,#c6cdd3 55% 100%);box-shadow:0 2px 8px rgba(0,0,0,.6),0 0 0 1px rgba(0,0,0,.45)}
+input[type=range]:focus-visible::-webkit-slider-thumb{box-shadow:0 0 0 3px var(--bg),0 0 0 5px var(--hot)}
+.ticks{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;color:var(--faint);margin-top:-4px}
+.toggle{display:flex;justify-content:space-between;align-items:center;gap:14px;padding-top:18px;border-top:1px solid var(--line)}
+.toggle label{font-size:14px;font-weight:500;flex:1;min-width:0}
+.toggle label span{display:block;font-size:12px;font-weight:400;color:var(--muted)}
+.switch{position:relative;width:46px;height:28px;flex:none}
+.switch input{position:absolute;inset:0;opacity:0;margin:0;cursor:pointer;z-index:1}
+.switch i{position:absolute;inset:0;background:var(--line-2);border-radius:28px;transition:background .2s}
+.switch i::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:var(--fg);transition:transform .2s}
+.switch input:checked + i{background:var(--warm)}
+.switch input:checked + i::after{transform:translateX(18px)}
+.switch input:focus-visible + i{outline:2px solid var(--hot);outline-offset:2px}
+
+/* right panel */
+.right .body{gap:22px}
+.mrow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 16px;align-items:baseline;padding-bottom:14px;border-bottom:1px solid var(--line)}
+.mrow:last-of-type{border-bottom:0;padding-bottom:0}
+.mrow .lbl{font-size:14px;color:var(--muted)}
+.mrow .res{font-family:var(--display);font-weight:800;font-size:36px;line-height:1;font-variant-numeric:tabular-nums;text-align:right}
+.mrow .eq{grid-column:1 / -1;font-family:var(--mono);font-size:11.5px;color:var(--faint)}
+.mrow.hl .res{color:var(--hot)}
+.mrow.c .res{color:var(--cold)}
+.proj{display:grid;gap:10px;padding:16px;border-radius:12px;background:var(--inset);border:1px solid var(--line)}
+.proj-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+.proj-top span{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.proj-top b{font-family:var(--display);font-weight:800;font-size:30px;line-height:1;font-variant-numeric:tabular-nums}
+.bar{display:flex;height:34px;border-radius:7px;overflow:hidden;background:var(--line)}
+.bar .cost{background:repeating-linear-gradient(90deg,var(--warm) 0 calc(var(--seg) - 2px),#b8661a calc(var(--seg) - 2px) var(--seg));transition:flex-basis .4s ease;min-width:4px}
+.bar .keep{flex:1;background:linear-gradient(90deg,rgba(65,182,204,.55),rgba(65,182,204,.25))}
+.legend{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:13px}
+.legend .a{color:var(--hot)} .legend .b{color:var(--cold);text-align:right}
+.legend small{display:block;font-family:var(--mono);font-size:11px;color:var(--faint)}
+.roi{display:flex;align-items:baseline;gap:10px}
+.roi b{font-family:var(--display);font-weight:900;font-size:44px;line-height:1;color:var(--cold)}
+.roi span{font-size:13px;color:var(--muted)}
+
+.say{display:grid;gap:12px;padding:20px clamp(16px,3vw,24px);border-radius:14px;border:1px solid rgba(240,160,60,.35);background:linear-gradient(180deg,rgba(240,160,60,.08),rgba(240,160,60,.02))}
+.say h2{margin:0;font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--warm)}
+.say p{margin:0;font-size:clamp(18px,2.2vw,23px);font-weight:500;line-height:1.4;text-wrap:balance;max-width:60ch}
+.copy{justify-self:start;font-size:13px;font-weight:600;color:var(--on-warm);background:var(--warm);border:0;border-radius:999px;padding:8px 16px;cursor:pointer}
+.copy:hover{background:var(--hot)}
+.foot{margin:0;font-size:12.5px;color:var(--faint);max-width:72ch}
+@media (prefers-reduced-motion:reduce){.bar .cost,.switch i,.switch i::after{transition:none}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top">
+    <div class="mark"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" class="logo" aria-hidden="true"><defs><radialGradient id="prc" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#fff3d1"/><stop offset=".5" stop-color="#ffd57f"/><stop offset="1" stop-color="#e08f2c"/></radialGradient><linearGradient id="prb" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1b2228"/><stop offset="1" stop-color="#0d1115"/></linearGradient></defs><rect x="1" y="1" width="46" height="46" rx="12" fill="url(#prb)" stroke="#2f3a43"/><circle cx="24" cy="24" r="17" fill="none" stroke="#41b6cc" stroke-width="1.6" stroke-dasharray="2.2 3.1" opacity=".75"/><circle cx="24" cy="24" r="12.5" fill="url(#prc)"/><circle cx="24" cy="24" r="10.2" fill="none" stroke="#1c1206" stroke-opacity=".22" stroke-width="1"/><path d="M26.2 15.5 18.6 25.6h4.9l-1.7 7 7.6-10.1h-4.9z" fill="#1c1206"/></svg><span data-i18n="brand">2-Second Meeting Pricer</span></div>
+    <div class="ctrls">
+      <label class="vh" for="lang" data-i18n="lang">Language</label><select id="lang" class="sel"></select>
+      <label class="vh" for="cur" data-i18n="cur">Currency</label><select id="cur" class="sel"></select>
+    </div>
+  </header>
+
+  <section class="hero" aria-live="polite">
+    <p class="eyebrow" data-i18n="eyebrow">What to charge per booked meeting</p>
+    <div class="price"><b id="h-price">300</b><span data-i18n="per">per meeting</span></div>
+    <div class="chainline" id="chain"></div>
+  </section>
+
+  <div class="main">
+    <section class="panel">
+      <div class="panel-head"><h2 data-i18n="inputs">Your numbers</h2></div>
+      <div class="body">
+        <div class="ctl">
+          <div class="ctl-top">
+            <label for="cutR"><span data-i18n="cut_l"></span><span class="hint" data-i18n="cut_h"></span></label>
+            <div class="val"><input id="cut" class="short" type="text" inputmode="decimal" value="10"><span class="u">%</span></div>
+          </div>
+          <input id="cutR" type="range" min="1" max="50" step="1" value="10">
+          <div class="ticks"><span>1%</span><span>50%</span></div>
+        </div>
+        <div class="ctl">
+          <div class="ctl-top">
+            <label for="closeR"><span data-i18n="close_l"></span><span class="hint" data-i18n="close_h"></span></label>
+            <div class="val"><input id="close" class="short" type="text" inputmode="decimal" value="20"><span class="u">%</span></div>
+          </div>
+          <input id="closeR" type="range" min="1" max="80" step="1" value="20">
+          <div class="ticks"><span>1%</span><span>80%</span></div>
+        </div>
+        <div class="ctl">
+          <div class="ctl-top">
+            <label for="dealR"><span data-i18n="deal_l"></span><span class="hint" data-i18n="deal_h"></span></label>
+            <div class="val"><span class="u cb"></span><input id="deal" type="text" inputmode="numeric" value="30000"><span class="u ca"></span></div>
+          </div>
+          <input id="dealR" type="range" min="0" max="1000" step="1">
+          <div class="ticks"><span id="deal-min"></span><span id="deal-max"></span></div>
+        </div>
+        <div class="toggle">
+          <label for="halve"><span data-i18n="halve" style="display:inline;color:inherit;font-size:inherit"></span><span data-i18n="halve_h"></span></label>
+          <div class="switch"><input id="halve" type="checkbox" role="switch" checked><i></i></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel right">
+      <div class="panel-head"><h2 data-i18n="math_title">The math</h2></div>
+      <div class="body">
+        <div class="mrow c"><span class="lbl" data-i18n="m_cold"></span><span class="res" id="r-cold"></span><span class="eq" id="e-cold"></span></div>
+        <div class="mrow"><span class="lbl" data-i18n="m_value"></span><span class="res" id="r-value"></span><span class="eq" id="e-value"></span></div>
+        <div class="mrow hl"><span class="lbl" data-i18n="m_price"></span><span class="res" id="r-price"></span><span class="eq" id="e-price"></span></div>
+        <div class="proj">
+          <div class="proj-top"><span data-i18n="bar_title">One signed project</span><b id="p-deal"></b></div>
+          <div class="bar" aria-hidden="true"><div class="cost" id="bar-cost"></div><div class="keep"></div></div>
+          <div class="legend">
+            <div class="a"><span id="l-cost"></span><small id="l-cost-eq"></small></div>
+            <div class="b"><span id="l-keep"></span></div>
+          </div>
+          <div class="roi"><b id="roi"></b><span data-i18n="roi_h"></span></div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <section class="say">
+    <h2 data-i18n="say">Line to say on the call</h2>
+    <p id="line"></p>
+    <button class="copy" id="copy" type="button" data-i18n="copy">Copy</button>
+  </section>
+
+  <p class="foot" id="foot"></p>
+</div>
+
+<script>
+(() => {
+const $ = id => document.getElementById(id);
+const I18N = {
+en:{name:"English",loc:"en-US",brand:"2-Second Meeting Pricer",lang:"Language",cur:"Currency",eyebrow:"What to charge per booked meeting",per:"per meeting",inputs:"Your numbers",
+cut_l:"Your cut",cut_h:"Share of what one meeting is worth to them",close_l:"Their close rate",close_h:"The rate they tell you",deal_l:"Average project",deal_h:"What one new client pays them",
+halve:"Halve the close rate for cold meetings",halve_h:"Cold meetings sign less often than referrals",math_title:"The math",m_cold:"Cold close rate",m_value:"One meeting is worth to them",m_price:"Your price",
+bar_title:"One signed project",bar_cost:"They spend {cost} in meetings",bar_keep:"They keep {keep}",roi_h:"return on what they pay you",say:"Line to say on the call",
+line:"{price} per meeting that shows up. No meeting, no bill. You pay about {cost} in meetings for every {deal} project you sign.",copy:"Copy the line",copied:"Copied",
+empty:"Enter all three numbers to see your price.",foot:"Formula: your cut × (close rate ÷ 2) × average project value. Cold meetings sign less often than referrals, so the close rate is halved.",foot_nohalve:"Formula: your cut × close rate × average project value.",
+popular:"Popular",all:"All currencies",meetings:"meetings"},
+fr:{name:"Français",loc:"fr-FR",brand:"2-Second Meeting Pricer",lang:"Langue",cur:"Devise",eyebrow:"Combien facturer par rendez-vous réservé",per:"par rendez-vous",inputs:"Vos chiffres",
+cut_l:"Votre part",cut_h:"Part de ce que vaut un rendez-vous pour lui",close_l:"Son taux de closing",close_h:"Celui qu'il vous annonce",deal_l:"Projet moyen",deal_h:"Ce que lui paie un nouveau client",
+halve:"Diviser le closing par 2 pour les rendez-vous à froid",halve_h:"Les rendez-vous à froid signent moins que les recommandations",math_title:"Le calcul",m_cold:"Closing à froid",m_value:"Ce que vaut un rendez-vous pour lui",m_price:"Votre prix",
+bar_title:"Un projet signé",bar_cost:"Il dépense {cost} en rendez-vous",bar_keep:"Il garde {keep}",roi_h:"de retour sur ce qu'il vous paie",say:"La phrase à dire en call",
+line:"{price} par rendez-vous qui se présente. Pas de rendez-vous, pas de facture. Vous payez environ {cost} de rendez-vous pour chaque projet de {deal} signé.",copy:"Copier la phrase",copied:"Copié",
+empty:"Entrez les trois chiffres pour voir votre prix.",foot:"Formule : votre part × (closing ÷ 2) × valeur moyenne d'un projet. Les rendez-vous à froid signent moins que les recommandations, donc le closing est divisé par deux.",foot_nohalve:"Formule : votre part × closing × valeur moyenne d'un projet.",
+popular:"Populaires",all:"Toutes les devises",meetings:"rendez-vous"},
+es:{name:"Español",loc:"es-ES",brand:"2-Second Meeting Pricer",lang:"Idioma",cur:"Moneda",eyebrow:"Cuánto cobrar por reunión agendada",per:"por reunión",inputs:"Tus números",
+cut_l:"Tu parte",cut_h:"Porcentaje de lo que vale una reunión para él",close_l:"Su tasa de cierre",close_h:"La que te dice",deal_l:"Proyecto medio",deal_h:"Lo que le paga un cliente nuevo",
+halve:"Dividir la tasa de cierre entre 2 para reuniones en frío",halve_h:"Las reuniones en frío firman menos que las recomendaciones",math_title:"El cálculo",m_cold:"Cierre en frío",m_value:"Lo que vale una reunión para él",m_price:"Tu precio",
+bar_title:"Un proyecto firmado",bar_cost:"Gasta {cost} en reuniones",bar_keep:"Se queda {keep}",roi_h:"de retorno sobre lo que te paga",say:"La frase para la llamada",
+line:"{price} por reunión a la que se presenten. Sin reunión, no hay factura. Pagas unos {cost} en reuniones por cada proyecto de {deal} que firmas.",copy:"Copiar la frase",copied:"Copiado",
+empty:"Introduce los tres números para ver tu precio.",foot:"Fórmula: tu parte × (tasa de cierre ÷ 2) × valor medio del proyecto. Las reuniones en frío firman menos que las recomendaciones, así que la tasa de cierre se divide entre dos.",foot_nohalve:"Fórmula: tu parte × tasa de cierre × valor medio del proyecto.",
+popular:"Populares",all:"Todas las monedas",meetings:"reuniones"},
+de:{name:"Deutsch",loc:"de-DE",brand:"2-Second Meeting Pricer",lang:"Sprache",cur:"Währung",eyebrow:"Was du pro gebuchtem Termin verlangst",per:"pro Termin",inputs:"Deine Zahlen",
+cut_l:"Dein Anteil",cut_h:"Anteil daran, was ein Termin für ihn wert ist",close_l:"Seine Abschlussquote",close_h:"Die, die er dir nennt",deal_l:"Durchschnittliches Projekt",deal_h:"Was ihm ein neuer Kunde zahlt",
+halve:"Abschlussquote für kalte Termine halbieren",halve_h:"Kalte Termine schließen seltener ab als Empfehlungen",math_title:"Die Rechnung",m_cold:"Kalte Abschlussquote",m_value:"So viel ist ein Termin für ihn wert",m_price:"Dein Preis",
+bar_title:"Ein unterschriebenes Projekt",bar_cost:"Er gibt {cost} für Termine aus",bar_keep:"Er behält {keep}",roi_h:"Rendite auf das, was er dir zahlt",say:"Der Satz fürs Gespräch",
+line:"{price} pro Termin, der stattfindet. Kein Termin, keine Rechnung. Du zahlst etwa {cost} an Terminen für jedes Projekt über {deal}, das du abschließt.",copy:"Satz kopieren",copied:"Kopiert",
+empty:"Gib alle drei Zahlen ein, um deinen Preis zu sehen.",foot:"Formel: dein Anteil × (Abschlussquote ÷ 2) × durchschnittlicher Projektwert. Kalte Termine schließen seltener ab als Empfehlungen, deshalb wird die Abschlussquote halbiert.",foot_nohalve:"Formel: dein Anteil × Abschlussquote × durchschnittlicher Projektwert.",
+popular:"Beliebt",all:"Alle Währungen",meetings:"Termine"},
+pt:{name:"Português",loc:"pt-BR",brand:"2-Second Meeting Pricer",lang:"Idioma",cur:"Moeda",eyebrow:"Quanto cobrar por reunião agendada",per:"por reunião",inputs:"Seus números",
+cut_l:"Sua parte",cut_h:"Fatia do que uma reunião vale para ele",close_l:"Taxa de fechamento dele",close_h:"A que ele te informa",deal_l:"Projeto médio",deal_h:"O que um cliente novo paga a ele",
+halve:"Dividir a taxa de fechamento por 2 em reuniões frias",halve_h:"Reuniões frias fecham menos que indicações",math_title:"O cálculo",m_cold:"Fechamento a frio",m_value:"Quanto uma reunião vale para ele",m_price:"Seu preço",
+bar_title:"Um projeto fechado",bar_cost:"Ele gasta {cost} em reuniões",bar_keep:"Ele fica com {keep}",roi_h:"de retorno sobre o que ele te paga",say:"A frase para a ligação",
+line:"{price} por reunião que acontecer. Sem reunião, sem cobrança. Você paga cerca de {cost} em reuniões para cada projeto de {deal} que fecha.",copy:"Copiar a frase",copied:"Copiado",
+empty:"Preencha os três números para ver seu preço.",foot:"Fórmula: sua parte × (taxa de fechamento ÷ 2) × valor médio do projeto. Reuniões frias fecham menos que indicações, então a taxa é dividida por dois.",foot_nohalve:"Fórmula: sua parte × taxa de fechamento × valor médio do projeto.",
+popular:"Populares",all:"Todas as moedas",meetings:"reuniões"},
+it:{name:"Italiano",loc:"it-IT",brand:"2-Second Meeting Pricer",lang:"Lingua",cur:"Valuta",eyebrow:"Quanto chiedere per appuntamento fissato",per:"per appuntamento",inputs:"I tuoi numeri",
+cut_l:"La tua quota",cut_h:"Quota di quanto vale un appuntamento per lui",close_l:"Il suo tasso di chiusura",close_h:"Quello che ti dice",deal_l:"Progetto medio",deal_h:"Quanto gli paga un nuovo cliente",
+halve:"Dimezza il tasso di chiusura per gli appuntamenti a freddo",halve_h:"Gli appuntamenti a freddo firmano meno dei referral",math_title:"Il calcolo",m_cold:"Chiusura a freddo",m_value:"Quanto vale per lui un appuntamento",m_price:"Il tuo prezzo",
+bar_title:"Un progetto firmato",bar_cost:"Spende {cost} in appuntamenti",bar_keep:"Gli restano {keep}",roi_h:"di ritorno su quello che ti paga",say:"La frase da dire in chiamata",
+line:"{price} per ogni appuntamento a cui si presentano. Niente appuntamento, niente fattura. Paghi circa {cost} di appuntamenti per ogni progetto da {deal} che firmi.",copy:"Copia la frase",copied:"Copiato",
+empty:"Inserisci i tre numeri per vedere il tuo prezzo.",foot:"Formula: la tua quota × (tasso di chiusura ÷ 2) × valore medio del progetto. Gli appuntamenti a freddo firmano meno dei referral, quindi il tasso viene dimezzato.",foot_nohalve:"Formula: la tua quota × tasso di chiusura × valore medio del progetto.",
+popular:"Popolari",all:"Tutte le valute",meetings:"appuntamenti"}
+};
+const store = { get(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }, set(k,v){ try{ localStorage.setItem(k,v); }catch(e){} } };
+const navLang=(navigator.language||"en").toLowerCase();
+let LANG=store.get("ppm-lang") || (I18N[navLang.slice(0,2)]?navLang.slice(0,2):"en"); if(!I18N[LANG]) LANG="en";
+const REGION_CUR={US:"USD",GB:"GBP",CA:"CAD",AU:"AUD",NZ:"NZD",CH:"CHF",JP:"JPY",IN:"INR",BR:"BRL",MX:"MXN",AE:"AED",SG:"SGD",ZA:"ZAR",NG:"NGN",MA:"MAD",SA:"SAR",SE:"SEK",NO:"NOK",DK:"DKK",PL:"PLN",FR:"EUR",DE:"EUR",ES:"EUR",IT:"EUR",PT:"EUR",NL:"EUR",BE:"EUR",IE:"EUR",AT:"EUR",FI:"EUR",GR:"EUR",LU:"EUR"};
+const region=((navigator.language||"").split("-")[1]||"").toUpperCase();
+let CUR=store.get("ppm-cur") || REGION_CUR[region] || (["fr","de","es","it"].includes(navLang.slice(0,2))?"EUR":"USD");
+const L=()=>I18N[LANG], LOC=()=>L().loc;
+const t=(k,v={})=>(L()[k] ?? I18N.en[k] ?? k).replace(/\{(\w+)\}/g,(_,x)=>v[x] ?? "");
+const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+const nf=o=>{ try{ return new Intl.NumberFormat(LOC(),o); }catch(e){ return new Intl.NumberFormat("en-US",o); } };
+const fmt=(n,d=0)=>nf({minimumFractionDigits:d,maximumFractionDigits:d}).format(n);
+const pct=x=>nf({style:"percent",maximumFractionDigits:1}).format(x);
+const money=n=>{ try{ return nf({style:"currency",currency:CUR,maximumFractionDigits:0,minimumFractionDigits:0}).format(Math.round(n)); }catch(e){ return fmt(n); } };
+const mC=n=>{ try{ return nf({style:"currency",currency:CUR,notation:"compact",maximumFractionDigits:1}).format(n); }catch(e){ return fmt(n); } };
+function curParts(){ try{ const p=nf({style:"currency",currency:CUR}).formatToParts(1); const ci=p.findIndex(x=>x.type==="currency"), ii=p.findIndex(x=>x.type==="integer"); return {sym:p[ci].value,before:ci<ii}; }catch(e){ return {sym:CUR,before:true}; } }
+const moneyDigits=s=>{ const v=parseFloat(String(s).replace(/[^0-9]/g,"")); return isFinite(v)&&v>0?v:0; };
+const pctNum=s=>{ const v=parseFloat(String(s).replace(",",".").replace(/[^0-9.]/g,"")); return isFinite(v)&&v>0?v:0; };
+const RANGE=[500,1000000];
+const toLog=tv=>RANGE[0]*Math.pow(RANGE[1]/RANGE[0],tv/1000);
+const fromLog=v=>Math.max(0,Math.min(1000,1000*Math.log(v/RANGE[0])/Math.log(RANGE[1]/RANGE[0])));
+const round2=v=>{ if(v<=0) return 0; const p=Math.pow(10,Math.floor(Math.log10(v))-1); return Math.round(v/p)*p; };
+
+const S={cut:10,close:20,deal:30000};
+let shownPrice;
+function tweenPrice(to){
+  const el=$("h-price"), from=shownPrice; shownPrice=to;
+  if(reduce||from===undefined||from===to){ el.textContent=money(to); return; }
+  cancelAnimationFrame(el._r); const t0=performance.now(), dur=420;
+  const step=tt=>{ const k=Math.min(1,(tt-t0)/dur), e=1-Math.pow(1-k,3); el.textContent=money(from+(to-from)*e); if(k<1) el._r=requestAnimationFrame(step); };
+  el._r=requestAnimationFrame(step);
+}
+function update(){
+  const halve=$("halve").checked, cut=S.cut/100, close=S.close/100, deal=S.deal;
+  const ok=cut>0&&close>0&&close<=1&&deal>0;
+  const cold=halve?close/2:close, value=cold*deal, price=cut*value, cost=cut*deal, keep=deal-cost, nMeet=1/cold;
+  if(!ok){
+    $("h-price").textContent="—"; shownPrice=undefined;
+    ["r-cold","r-value","r-price","p-deal","roi"].forEach(id=>$(id).textContent="—");
+    ["e-cold","e-value","e-price","l-cost","l-cost-eq","l-keep"].forEach(id=>$(id).textContent="");
+    $("chain").innerHTML=""; $("line").textContent=t("empty"); return;
+  }
+  tweenPrice(price);
+  $("chain").innerHTML = halve
+    ? `<em>${pct(close)}</em>÷ 2<em>${pct(cold)}</em>× ${mC(deal)} =<em>${money(value)}</em>× ${pct(cut)} =<em class="w">${money(price)}</em>`
+    : `<em>${pct(close)}</em>× ${mC(deal)} =<em>${money(value)}</em>× ${pct(cut)} =<em class="w">${money(price)}</em>`;
+  $("r-cold").textContent=pct(cold); $("e-cold").textContent = halve ? `${pct(close)} ÷ 2` : pct(close);
+  $("r-value").textContent=money(value); $("e-value").textContent=`${pct(cold)} × ${money(deal)}`;
+  $("r-price").textContent=money(price); $("e-price").textContent=`${pct(cut)} × ${money(value)}`;
+  $("p-deal").textContent=money(deal);
+  const share=Math.max(0.5,Math.min(100,cut*100));
+  const segs=Math.min(60,Math.max(1,Math.round(nMeet)));
+  const bc=$("bar-cost"); bc.style.flexBasis=share+"%"; bc.style.setProperty("--seg",(100/segs)+"%");
+  $("l-cost").textContent=t("bar_cost",{cost:money(cost)});
+  $("l-cost-eq").textContent=`≈ ${fmt(Math.round(nMeet*10)/10, Number.isInteger(Math.round(nMeet*10)/10)?0:1)} ${t("meetings")} × ${money(price)}`;
+  $("l-keep").textContent=t("bar_keep",{keep:money(keep)});
+  $("roi").textContent=fmt(Math.round(1/cut*10)/10, Number.isInteger(Math.round(1/cut*10)/10)?0:1)+"×";
+  $("line").textContent=t("line",{price:money(price),cost:money(cost),deal:money(deal)});
+  $("foot").textContent = halve ? t("foot") : t("foot_nohalve");
+}
+function paint(id){ const R=$(id); const p=(R.value-R.min)/(R.max-R.min)*100; R.style.setProperty("--p",Math.max(0,Math.min(100,p))+"%"); }
+function syncAll(){
+  $("cut").value=S.cut; $("cutR").value=Math.min(50,S.cut); paint("cutR");
+  $("close").value=S.close; $("closeR").value=Math.min(80,S.close); paint("closeR");
+  $("deal").value=fmt(S.deal); $("dealR").value=fromLog(Math.max(S.deal,RANGE[0])); paint("dealR");
+}
+[["cut",50],["close",80]].forEach(([k,max])=>{
+  $(k+"R").addEventListener("input",()=>{ S[k]=+$(k+"R").value; $(k).value=S[k]; paint(k+"R"); update(); });
+  $(k).addEventListener("input",()=>{ S[k]=Math.min(100,pctNum($(k).value)); if(S[k]){ $(k+"R").value=Math.min(max,S[k]); paint(k+"R"); } update(); });
+});
+$("dealR").addEventListener("input",()=>{ S.deal=round2(toLog(+$("dealR").value)); $("deal").value=fmt(S.deal); paint("dealR"); update(); });
+$("deal").addEventListener("input",()=>{ S.deal=moneyDigits($("deal").value); if(S.deal){ $("dealR").value=fromLog(Math.max(S.deal,RANGE[0])); paint("dealR"); } update(); });
+$("deal").addEventListener("blur",()=>{ if(S.deal) $("deal").value=fmt(S.deal); });
+$("halve").addEventListener("input",update);
+$("copy").addEventListener("click",()=>{
+  const txt=$("line").textContent, btn=$("copy");
+  const done=()=>{ btn.textContent=t("copied"); setTimeout(()=>btn.textContent=t("copy"),1500); };
+  const sel=()=>{ const r=document.createRange(); r.selectNodeContents($("line")); const s=getSelection(); s.removeAllRanges(); s.addRange(r); };
+  try{ navigator.clipboard.writeText(txt).then(done,sel); }catch(e){ sel(); }
+});
+function buildSelects(){
+  $("lang").innerHTML=Object.entries(I18N).map(([k,v])=>`<option value="${k}"${k===LANG?" selected":""}>${v.name}</option>`).join("");
+  let dn=null; try{ dn=new Intl.DisplayNames([LOC()],{type:"currency"}); }catch(e){}
+  const name=c=>{ try{ return dn?dn.of(c):c; }catch(e){ return c; } };
+  let all=[]; try{ all=Intl.supportedValuesOf("currency"); }catch(e){}
+  const popular=["USD","EUR","GBP","CAD","AUD","CHF","JPY","INR","BRL","MXN","AED","SGD","ZAR","NGN","MAD","SAR","SEK","PLN","NZD","HKD"];
+  const rest=all.filter(c=>!popular.includes(c)).sort();
+  const opt=c=>`<option value="${c}"${c===CUR?" selected":""}>${c} · ${name(c)}</option>`;
+  $("cur").innerHTML=`<optgroup label="${t("popular")}">${popular.map(opt).join("")}</optgroup>`+(rest.length?`<optgroup label="${t("all")}">${rest.map(opt).join("")}</optgroup>`:"");
+  if(!$("cur").value){ CUR="USD"; $("cur").value="USD"; }
+}
+function applyI18n(){
+  document.documentElement.lang=LANG;
+  document.querySelectorAll("[data-i18n]").forEach(el=>el.textContent=t(el.dataset.i18n));
+  const cp=curParts();
+  document.querySelectorAll(".val .cb").forEach(e=>e.textContent=cp.before?cp.sym:"");
+  document.querySelectorAll(".val .ca").forEach(e=>e.textContent=cp.before?"":cp.sym);
+  $("deal-min").textContent=mC(RANGE[0]); $("deal-max").textContent=mC(RANGE[1]);
+  buildSelects(); syncAll();
+}
+$("lang").addEventListener("change",e=>{ LANG=e.target.value; store.set("ppm-lang",LANG); shownPrice=undefined; applyI18n(); update(); });
+$("cur").addEventListener("change",e=>{ CUR=e.target.value; store.set("ppm-cur",CUR); shownPrice=undefined; applyI18n(); update(); });
+applyI18n(); update();
+})();
+</script>
+</body>
+</html>
